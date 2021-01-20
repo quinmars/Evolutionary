@@ -7,16 +7,20 @@ namespace Evolutionary
 {
     public class Enviroment<TIndividual, TDataSet>
     {
-        public TRandom Random { get; }
         public TDataSet DataSet { get; }
         public Func<TIndividual, TDataSet, double> Fitness { get; }
+        public TRandom Random { get; }
 
-        public Enviroment(TDataSet dataSet, Func<TIndividual, TDataSet, double> fitness, TRandom rnd)
+        public Enviroment(TDataSet dataSet, Func<TIndividual, TDataSet, double> fitness, TRandom random)
         {
-            Random = rnd;
+            if (fitness is null)
+                throw new ArgumentNullException(nameof(fitness));
+            if (random is null)
+                throw new ArgumentNullException(nameof(random));
 
             DataSet = dataSet;
             Fitness = fitness;
+            Random = random;
         }
     }
 }

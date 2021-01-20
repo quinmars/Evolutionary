@@ -14,12 +14,20 @@ namespace Evolutionary
 
         public Population(Enviroment<TIndividual, TDataSet> enviroment)
         {
+            if (enviroment is null)
+                throw new ArgumentNullException(nameof(enviroment));
+
             Enviroment = enviroment;
             Individuals = _emptyIndividuals;
         }
 
         public Population(Enviroment<TIndividual, TDataSet> enviroment, IEnumerable<TIndividual> individuals)
         {
+            if (enviroment is null)
+                throw new ArgumentNullException(nameof(enviroment));
+            if (individuals is null)
+                throw new ArgumentNullException(nameof(individuals));
+
             var fitness = enviroment.Fitness;
             var dataSet = enviroment.DataSet;
 

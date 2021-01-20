@@ -8,25 +8,41 @@ namespace Evolutionary
 {
     public static class Population
     {
-        public static Population<TIndividual, TDataSet> Create<TIndividual, TDataSet>(TDataSet dataSet, Func<TIndividual, TDataSet, double> fitness, TRandom rnd)
+        public static Population<TIndividual, TDataSet> Create<TIndividual, TDataSet>(TDataSet dataSet, Func<TIndividual, TDataSet, double> fitness, TRandom random)
         {
-            var enviroment = new Enviroment<TIndividual, TDataSet>(dataSet, fitness, rnd);
+            if (fitness is null)
+                throw new ArgumentNullException(nameof(fitness));
+            if (random is null)
+                throw new ArgumentNullException(nameof(random));
+
+            var enviroment = new Enviroment<TIndividual, TDataSet>(dataSet, fitness, random);
             return new Population<TIndividual, TDataSet>(enviroment);
         }
         
         public static Population<TIndividual, TDataSet> Create<TIndividual, TDataSet>(TDataSet dataSet, Func<TIndividual, TDataSet, double> fitness)
         {
+            if (fitness is null)
+                throw new ArgumentNullException(nameof(fitness));
+
             return Create(dataSet, fitness, new TRandom());
         }
 
         public static Offspring<TIndividual, TDataSet> SelectParentsByRank<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population)
         {
+            if (population is null)
+                throw new ArgumentNullException(nameof(population));
+
             var randomParents = population.GetRandomIndividualsByRank();
             return new Offspring<TIndividual, TDataSet>(population.Enviroment, population.Individuals, randomParents, Enumerable.Empty<TIndividual>());
         }
         
         public static Population<TIndividual, TDataSet> AddIndividuals<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population, IEnumerable<TIndividual> individuals)
         {
+            if (population is null)
+                throw new ArgumentNullException(nameof(population));
+            if (individuals is null)
+                throw new ArgumentNullException(nameof(individuals));
+
             var env = population.Enviroment;
             var allIndividuals = population.Individuals.Concat(individuals);
 
@@ -35,6 +51,11 @@ namespace Evolutionary
 
         public static Population<TIndividual, TDataSet> AddRandomIndividuals<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population, int count, Func<TDataSet, TRandom, TIndividual> randomIndividual)
         {
+            if (population is null)
+                throw new ArgumentNullException(nameof(population));
+            if (randomIndividual is null)
+                throw new ArgumentNullException(nameof(randomIndividual));
+
             var env = population.Enviroment;
 
             var individuals = Enumerable
