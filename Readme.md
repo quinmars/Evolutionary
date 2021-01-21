@@ -1,5 +1,8 @@
+# Evolutionary
 
-# TODO
+[![Actions Status](https://github.com/quinmars/evolutionary/workflows/Unit%20Tests/badge.svg)](https://github.com/quinmars/evolutionary/actions)
+
+## TODO
 
   - 99 % code coverage by unit tests
   - introduction in the readme file
