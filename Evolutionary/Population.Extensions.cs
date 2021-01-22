@@ -8,6 +8,15 @@ namespace Evolutionary
 {
     public static class Population
     {
+        /// <summary>
+        /// Creates a new population with zero individuals.
+        /// </summary>
+        /// <typeparam name="TIndividual">The individuals type.</typeparam>
+        /// <typeparam name="TDataSet">The data set type.</typeparam>
+        /// <param name="dataSet">The data set.</param>
+        /// <param name="fitness">The fitness function.</param>
+        /// <param name="random">The random generator.</param>
+        /// <returns>The population.</returns>
         public static Population<TIndividual, TDataSet> Create<TIndividual, TDataSet>(TDataSet dataSet, Func<TIndividual, TDataSet, double> fitness, TRandom random)
         {
             if (fitness is null)
@@ -19,6 +28,14 @@ namespace Evolutionary
             return new Population<TIndividual, TDataSet>(enviroment);
         }
         
+        /// <summary>
+        /// Creates a new population with zero individuals and the default random generator.
+        /// </summary>
+        /// <typeparam name="TIndividual">The individuals type.</typeparam>
+        /// <typeparam name="TDataSet">The data set type.</typeparam>
+        /// <param name="dataSet">The data set.</param>
+        /// <param name="fitness">The fitness function.</param>
+        /// <returns>The population.</returns>
         public static Population<TIndividual, TDataSet> Create<TIndividual, TDataSet>(TDataSet dataSet, Func<TIndividual, TDataSet, double> fitness)
         {
             if (fitness is null)
@@ -27,6 +44,14 @@ namespace Evolutionary
             return Create(dataSet, fitness, new TRandom());
         }
 
+        /// <summary>
+        /// Generates an initial offspring generation. The random parents are selected by
+        /// rank lineary.
+        /// </summary>
+        /// <typeparam name="TIndividual">The individuals type.</typeparam>
+        /// <typeparam name="TDataSet">The data set type.</typeparam>
+        /// <param name="population">The parent generation.</param>
+        /// <returns>The offspring.</returns>
         public static Offspring<TIndividual, TDataSet> SelectParentsByRank<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population)
         {
             if (population is null)
@@ -36,6 +61,14 @@ namespace Evolutionary
             return new Offspring<TIndividual, TDataSet>(population.Enviroment, population.Individuals, randomParents, Enumerable.Empty<TIndividual>());
         }
         
+        /// <summary>
+        /// Adds some individuals to the population.
+        /// </summary>
+        /// <typeparam name="TIndividual">The individuals type.</typeparam>
+        /// <typeparam name="TDataSet">The data set type.</typeparam>
+        /// <param name="population">The populations.</param>
+        /// <param name="individuals">The individuals.</param>
+        /// <returns>The extended population.</returns>
         public static Population<TIndividual, TDataSet> AddIndividuals<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population, IEnumerable<TIndividual> individuals)
         {
             if (population is null)
@@ -49,6 +82,15 @@ namespace Evolutionary
             return new Population<TIndividual, TDataSet>(env, allIndividuals);
         }
 
+        /// <summary>
+        /// Adds some random individuals to the population.
+        /// </summary>
+        /// <typeparam name="TIndividual">The individuals type.</typeparam>
+        /// <typeparam name="TDataSet">The data set type.</typeparam>
+        /// <param name="population">The populations.</param>
+        /// <param name="count">The count of individuals to add.</param>
+        /// <param name="randomIndividual">The function to generate the individuals.</param>
+        /// <returns>The extended population.</returns>
         public static Population<TIndividual, TDataSet> AddRandomIndividuals<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population, int count, Func<TDataSet, TRandom, TIndividual> randomIndividual)
         {
             if (population is null)
