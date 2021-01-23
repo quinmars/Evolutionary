@@ -8,7 +8,27 @@ namespace Evolutionary.Tests
 {
     public class PopulationTests
     {
-        private double Sq(double x) => x * x;
+        public Population<int, int> NullPopulation { get; } = null;
+        public Population<int, int> NonNullPopulation { get; } = Population.Create(32, (int x, int d) => Sq(x));
+
+        private static double Sq(double x) => x * x;
+        
+        [Fact]
+        public void New_NullChecks()
+        {
+            var env = new Enviroment<int, int>(0, (x, d) => 0.0, new TRandom());
+
+            Action act1 = () => new Population<int, int>(null);
+            Action act2 = () => new Population<int, int>(env, null);
+            Action act3 = () => new Population<int, int>(null, new[] { 0 });
+
+            act1
+                .Should().Throw<ArgumentNullException>();
+            act2
+                .Should().Throw<ArgumentNullException>();
+            act3
+                .Should().Throw<ArgumentNullException>();
+        }
 
         [Fact]
         public void Create1()
@@ -65,6 +85,21 @@ namespace Evolutionary.Tests
             population.Individuals
                 .Should().BeEmpty();
         }
+        
+        [Fact]
+        public void Create_NullChecks()
+        {
+            Action act1 = () => Population.Create(0, default(Func<int,int,double>), new TRandom());
+            Action act2 = () => Population.Create(0, (int a, int b) => 0.0, null);
+            Action act3 = () => Population.Create(0, default(Func<int,int,double>));
+
+            act1
+                .Should().Throw<ArgumentNullException>();
+            act2
+                .Should().Throw<ArgumentNullException>();
+            act3
+                .Should().Throw<ArgumentNullException>();
+        }
 
         [Fact]
         public void AddIndividuals1()
@@ -96,6 +131,18 @@ namespace Evolutionary.Tests
         }
         
         [Fact]
+        public void AddIndividuals_NullChecks()
+        {
+            Action act1 = () => NonNullPopulation.AddIndividuals(null);
+            Action act2 = () => NullPopulation.AddIndividuals(new[] { 1 });
+
+            act1
+                .Should().Throw<ArgumentNullException>();
+            act2
+                .Should().Throw<ArgumentNullException>();
+        }
+        
+        [Fact]
         public void AddRandomIndividuals1()
         {
             int dataSet = 1;
@@ -124,6 +171,18 @@ namespace Evolutionary.Tests
 
             population.Individuals
                 .Should().BeEquivalentTo(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        }
+        
+        [Fact]
+        public void AddRandomIndividuals_NullChecks()
+        {
+            Action act1 = () => NonNullPopulation.AddRandomIndividuals(200, null);
+            Action act2 = () => NullPopulation.AddRandomIndividuals(200, (a, rnd) => 0);
+
+            act1
+                .Should().Throw<ArgumentNullException>();
+            act2
+                .Should().Throw<ArgumentNullException>();
         }
         
         [Fact]
@@ -162,6 +221,15 @@ namespace Evolutionary.Tests
                 calc
                     .Should().BeApproximately(1.0, 0.1);
             }
+        }
+        
+        [Fact]
+        public void AddRandomIndividualsNulSelectParentsByRank_NulllChecks()
+        {
+            Action act = () => NullPopulation.SelectParentsByRank();
+
+            act
+                .Should().Throw<ArgumentNullException>();
         }
     }
 }

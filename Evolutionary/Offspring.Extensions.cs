@@ -69,6 +69,11 @@ namespace Evolutionary
 
         public static Offspring<TIndividual, TDataSet> Recombine<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring, int count, Func<TIndividual, TIndividual, TDataSet, TRandom, IEnumerable<TIndividual>> recombine)
         {
+            if (offspring is null)
+                throw new ArgumentNullException(nameof(offspring));
+            if (recombine is null)
+                throw new ArgumentNullException(nameof(recombine));
+
             var children = offspring.RandomParents
                 .Zip(offspring.RandomParents, (a, b) => recombine(a, b, offspring.Enviroment.DataSet, offspring.Enviroment.Random))
                 .SelectMany(x => x)
