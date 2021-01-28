@@ -38,7 +38,7 @@ for (int i = 0; i < 50; i++)
                 // infact lay in around 30% of the cases
                 // outside of the parents' range.
                 var mu = (a + b) / 2;
-                var sigma = (a == b) ? 1.0E-6 : Math.Abs(a - b);
+                var sigma = (a == b) ? 1.0E-6 : Math.Abs(a - b) / 2;
 
                 return Math.Abs(rnd.Normal(mu, sigma));
             })
