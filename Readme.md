@@ -61,7 +61,11 @@ for (int i = 0; i < 50; i++)
     var best = population.Individuals[0];
     var f = fitness(best, dataSet);
 
-    Console.WriteLine($"({i}) Best: {best:G17} Fitness: {f:G5} Expected: {Math.Sqrt(dataSet):G17}");
+    Console.WriteLine(
+        $"({i}) " +
+        $"Best: {best:G17} " + 
+        $"Fitness: {f:G5} " +
+        $"Expected: {Math.Sqrt(dataSet):G17}");
 }
 
 ```
