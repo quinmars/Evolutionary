@@ -9,14 +9,8 @@ namespace Evolutionary.Individuals
     {
         private void GetRandomIndexPair(TRandom random, out int a, out int b)
         {
-            if (IsCircular)
-            {
-                GetRandomIndexPair(random, _elements.Length, 1, out a, out b);
-            }
-            else
-            {
-                GetRandomIndexPair(random, _elements.Length, 0, out a, out b);
-            }
+            var start = IsCircular ? 1 : 0;
+            GetRandomIndexPair(random, _elements.Length, start, out a, out b);
         }
 
         private static void GetRandomIndexPair(TRandom random, int n, int start, out int a, out int b)

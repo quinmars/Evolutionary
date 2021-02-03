@@ -110,5 +110,23 @@ namespace Evolutionary.Individuals
                 }
             }
         }
+
+        public static void CutAndCrossfillCrossover(this ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, int position, Span<int> offspring)
+        {
+            var span = p1.Slice(0, position);
+            span.CopyTo(offspring);
+
+            int j = 0;
+            for (int i = position; i < offspring.Length; i++)
+            {
+                var element = p2[j];
+                while (j < p2.Length && span.IndexOf(p2[j]) != -1)
+                {
+                    j++;
+                }
+                offspring[i] = p2[j];
+                j++;
+            }
+        }
     }
 }

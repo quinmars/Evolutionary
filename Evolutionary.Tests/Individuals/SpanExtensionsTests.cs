@@ -72,5 +72,18 @@ namespace Evolutionary.Tests.Individuals
             offspring
                 .Should().Equal(9, 3, 2, 4, 5, 6, 7, 1, 8);
         }
+        
+        [Fact]
+        public void CutAndCrossfillCrossover()
+        {
+            var p1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var p2 = new int[] { 9, 3, 7, 8, 2, 6, 5, 1, 4 };
+            var offspring = new int[p1.Length];
+
+            SpanExtensions.CutAndCrossfillCrossover(p1, p2, 4, offspring);
+
+            offspring
+                .Should().Equal(1, 2, 3, 4, 9, 7, 8, 6, 5);
+        }
     }
 }
