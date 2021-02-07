@@ -8,19 +8,22 @@ namespace Evolutionary.Tests
 {
     public class PopulationTests
     {
-        public Population<int, int> NullPopulation { get; } = null;
-        public Population<int, int> NonNullPopulation { get; } = Population.Create(32, (int x, int d) => Sq(x));
+        public Population<int> NullPopulation { get; } = null;
+        public Population<int> NonNullPopulation { get; } = Population.Create((int x) => Sq(x));
 
         private static double Sq(double x) => x * x;
         
         [Fact]
         public void New_NullChecks()
         {
-            var env = new Enviroment<int, int>(0, (x, d) => 0.0, new TRandom());
+            Func<int, double> fitness = (x) => 0.0;
+            var random = new TRandom();
 
-            Action act1 = () => new Population<int, int>(null);
-            Action act2 = () => new Population<int, int>(env, null);
-            Action act3 = () => new Population<int, int>(null, new[] { 0 });
+            Action act1 = () => new Population<int>(null, random);
+            Action act2 = () => new Population<int>(fitness, null);
+            Action act3 = () => new Population<int>(fitness, random, null);
+            Action act4 = () => new Population<int>(fitness, null, new int[] { });
+            Action act5 = () => new Population<int>(null, random, new int[] { });
 
             act1
                 .Should().Throw<ArgumentNullException>();
@@ -28,28 +31,25 @@ namespace Evolutionary.Tests
                 .Should().Throw<ArgumentNullException>();
             act3
                 .Should().Throw<ArgumentNullException>();
+            act4
+                .Should().Throw<ArgumentNullException>();
+            act5
+                .Should().Throw<ArgumentNullException>();
         }
 
         [Fact]
         public void Create1()
         {
-            int dataSet = 13;
-            Func<double, int, double> fitness = (x, _) => Sq(x);
+            Func<double, double> fitness = x => Sq(x);
             var random = new TRandom();
 
-            var population = Population.Create(dataSet, fitness, random);
+            var population = Population.Create(fitness, random);
 
-            population.Enviroment
+            population.Fitness
                 .Should().NotBeNull();
 
-            population.Enviroment.DataSet
-                .Should().Be(dataSet);
-
-            population.Enviroment.Fitness
-                .Should().Be(fitness);
-
-            population.Enviroment.Random
-                .Should().Be(random);
+            population.Random
+                .Should().NotBeNull();
 
             population.Individuals
                 .Should().NotBeNull();
@@ -61,21 +61,14 @@ namespace Evolutionary.Tests
         [Fact]
         public void Create2()
         {
-            int dataSet = 13;
-            Func<double, int, double> fitness = (x, _) => Sq(x);
+            Func<double, double> fitness = x => Sq(x);
 
-            var population = Population.Create(dataSet, fitness);
+            var population = Population.Create(fitness);
 
-            population.Enviroment
-                .Should().NotBeNull();
-
-            population.Enviroment.DataSet
-                .Should().Be(dataSet);
-
-            population.Enviroment.Fitness
+            population.Fitness
                 .Should().Be(fitness);
 
-            population.Enviroment.Random
+            population.Random
                 .Should().NotBeNull();
 
             population.Individuals
@@ -89,9 +82,9 @@ namespace Evolutionary.Tests
         [Fact]
         public void Create_NullChecks()
         {
-            Action act1 = () => Population.Create(0, default(Func<int,int,double>), new TRandom());
-            Action act2 = () => Population.Create(0, (int a, int b) => 0.0, null);
-            Action act3 = () => Population.Create(0, default(Func<int,int,double>));
+            Action act1 = () => Population.Create(default(Func<int,double>), new TRandom());
+            Action act2 = () => Population.Create((int a) => 0.0, null);
+            Action act3 = () => Population.Create(default(Func<int,double>));
 
             act1
                 .Should().Throw<ArgumentNullException>();
@@ -104,11 +97,10 @@ namespace Evolutionary.Tests
         [Fact]
         public void AddIndividuals1()
         {
-            int dataSet = 1;
-            Func<int, int, double> fitness = (x, d) => Sq(x - d);
+            Func<int, double> fitness = x => Sq(x);
 
             var population = Population
-                .Create(dataSet, fitness)
+                .Create(fitness)
                 .AddIndividuals(new[] { 1, 2, 3, 4, 5, 6, 7, 9, 8, 10 });
 
             population.Individuals
@@ -118,11 +110,10 @@ namespace Evolutionary.Tests
         [Fact]
         public void AddIndividuals2()
         {
-            int dataSet = 1;
-            Func<int, int, double> fitness = (x, d) => Sq(x - d);
+            Func<int, double> fitness = x => Sq(x);
 
             var population = Population
-                .Create(dataSet, fitness)
+                .Create(fitness)
                 .AddIndividuals(new[] { 8, 10, 9 })
                 .AddIndividuals(new[] { 1, 2, 3, 4, 5, 6, 7 });
 
@@ -145,13 +136,12 @@ namespace Evolutionary.Tests
         [Fact]
         public void AddRandomIndividuals1()
         {
-            int dataSet = 1;
-            Func<int, int, double> fitness = (x, d) => Sq(x - d);
+            Func<int, double> fitness = x => Sq(x);
 
             int i = 1;
             var population = Population
-                .Create(dataSet, fitness)
-                .AddRandomIndividuals(10, (_, __) => i++);
+                .Create(fitness)
+                .AddRandomIndividuals(10, _ => i++);
 
             population.Individuals
                 .Should().BeEquivalentTo(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -160,14 +150,13 @@ namespace Evolutionary.Tests
         [Fact]
         public void AddRandomIndividuals2()
         {
-            int dataSet = 1;
-            Func<int, int, double> fitness = (x, d) => Sq(x - d);
+            Func<int, double> fitness = x => Sq(x);
 
             int i = 1;
             var population = Population
-                .Create(dataSet, fitness)
-                .AddRandomIndividuals(4, (_, __) => i++)
-                .AddRandomIndividuals(6, (_, __) => i++);
+                .Create(fitness)
+                .AddRandomIndividuals(4, _ => i++)
+                .AddRandomIndividuals(6, _ => i++);
 
             population.Individuals
                 .Should().BeEquivalentTo(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -177,7 +166,7 @@ namespace Evolutionary.Tests
         public void AddRandomIndividuals_NullChecks()
         {
             Action act1 = () => NonNullPopulation.AddRandomIndividuals(200, null);
-            Action act2 = () => NullPopulation.AddRandomIndividuals(200, (a, rnd) => 0);
+            Action act2 = () => NullPopulation.AddRandomIndividuals(200, rnd => 0);
 
             act1
                 .Should().Throw<ArgumentNullException>();
@@ -188,13 +177,12 @@ namespace Evolutionary.Tests
         [Fact]
         public void SelectParentsByRank()
         {
-            double dataSet = 0.5;
-            Func<int, double, double> fitness = (x, d) => Sq(x - d);
+            Func<int, double> fitness = x => Sq(x);
 
             var individuals = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
 
             var parents = Population
-                .Create(dataSet, fitness)
+                .Create(fitness)
                 .AddIndividuals(individuals)
                 .SelectParentsByRank()
                 .RandomParents;

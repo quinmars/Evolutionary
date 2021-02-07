@@ -12,109 +12,99 @@ namespace Evolutionary
         /// Creates a new population with zero individuals.
         /// </summary>
         /// <typeparam name="TIndividual">The individuals type.</typeparam>
-        /// <typeparam name="TDataSet">The data set type.</typeparam>
-        /// <param name="dataSet">The data set.</param>
         /// <param name="fitness">The fitness function.</param>
         /// <param name="random">The random generator.</param>
         /// <returns>The population.</returns>
-        public static Population<TIndividual, TDataSet> Create<TIndividual, TDataSet>(TDataSet dataSet, Func<TIndividual, TDataSet, double> fitness, TRandom random)
+        public static Population<TIndividual> Create<TIndividual>(Func<TIndividual, double> fitness, TRandom random)
         {
             if (fitness is null)
                 throw new ArgumentNullException(nameof(fitness));
-            if (random is null)
-                throw new ArgumentNullException(nameof(random));
 
-            var enviroment = new Enviroment<TIndividual, TDataSet>(dataSet, fitness, random);
-            return new Population<TIndividual, TDataSet>(enviroment);
+            return new Population<TIndividual>(fitness, random);
         }
         
         /// <summary>
-        /// Creates a new population with zero individuals and the default random generator.
+        /// Creates a new population with zero individuals.
         /// </summary>
         /// <typeparam name="TIndividual">The individuals type.</typeparam>
-        /// <typeparam name="TDataSet">The data set type.</typeparam>
-        /// <param name="dataSet">The data set.</param>
         /// <param name="fitness">The fitness function.</param>
         /// <returns>The population.</returns>
-        public static Population<TIndividual, TDataSet> Create<TIndividual, TDataSet>(TDataSet dataSet, Func<TIndividual, TDataSet, double> fitness)
+        public static Population<TIndividual> Create<TIndividual>(Func<TIndividual, double> fitness)
         {
             if (fitness is null)
                 throw new ArgumentNullException(nameof(fitness));
 
-            return Create(dataSet, fitness, new TRandom());
+            return new Population<TIndividual>(fitness, new TRandom());
         }
-
+        
         /// <summary>
         /// Generates an initial offspring generation. The random parents are selected by
         /// rank lineary.
         /// </summary>
         /// <typeparam name="TIndividual">The individuals type.</typeparam>
-        /// <typeparam name="TDataSet">The data set type.</typeparam>
         /// <param name="population">The parent generation.</param>
         /// <returns>The offspring.</returns>
-        public static Offspring<TIndividual, TDataSet> SelectParentsByRank<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population)
+        public static Offspring<TIndividual> SelectParentsByRank<TIndividual>(this Population<TIndividual> population)
         {
             if (population is null)
                 throw new ArgumentNullException(nameof(population));
 
-            var randomParents = population.GetRandomIndividualsByRank();
-            return new Offspring<TIndividual, TDataSet>(population.Enviroment, population.Individuals, randomParents, Enumerable.Empty<TIndividual>());
+            var random = population.Random;
+            var randomParents = population.GetRandomIndividualsByRank(random);
+
+            return new Offspring<TIndividual>(population, randomParents, Enumerable.Empty<TIndividual>());
         }
         
         /// <summary>
         /// Adds some individuals to the population.
         /// </summary>
         /// <typeparam name="TIndividual">The individuals type.</typeparam>
-        /// <typeparam name="TDataSet">The data set type.</typeparam>
         /// <param name="population">The populations.</param>
         /// <param name="individuals">The individuals.</param>
         /// <returns>The extended population.</returns>
-        public static Population<TIndividual, TDataSet> AddIndividuals<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population, IEnumerable<TIndividual> individuals)
+        public static Population<TIndividual> AddIndividuals<TIndividual>(this Population<TIndividual> population, IEnumerable<TIndividual> individuals)
         {
             if (population is null)
                 throw new ArgumentNullException(nameof(population));
             if (individuals is null)
                 throw new ArgumentNullException(nameof(individuals));
 
-            var env = population.Enviroment;
             var allIndividuals = population.Individuals.Concat(individuals);
 
-            return new Population<TIndividual, TDataSet>(env, allIndividuals);
+            return new Population<TIndividual>(population.Fitness, population.Random, allIndividuals);
         }
 
         /// <summary>
         /// Adds some random individuals to the population.
         /// </summary>
         /// <typeparam name="TIndividual">The individuals type.</typeparam>
-        /// <typeparam name="TDataSet">The data set type.</typeparam>
         /// <param name="population">The populations.</param>
         /// <param name="count">The count of individuals to add.</param>
         /// <param name="randomIndividual">The function to generate the individuals.</param>
         /// <returns>The extended population.</returns>
-        public static Population<TIndividual, TDataSet> AddRandomIndividuals<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population, int count, Func<TDataSet, TRandom, TIndividual> randomIndividual)
+        public static Population<TIndividual> AddRandomIndividuals<TIndividual>(this Population<TIndividual> population, int count, Func<TRandom, TIndividual> randomIndividual)
         {
             if (population is null)
                 throw new ArgumentNullException(nameof(population));
             if (randomIndividual is null)
                 throw new ArgumentNullException(nameof(randomIndividual));
 
-            var env = population.Enviroment;
+            var random = population.Random;
 
             var individuals = Enumerable
                 .Repeat(0, count)
-                .Select(_ => randomIndividual(env.DataSet, env.Random));
+                .Select(_ => randomIndividual(random));
 
             return population.AddIndividuals(individuals);
         }
 
-        private static IEnumerable<TIndividual> GetRandomIndividualsByRank<TIndividual, TDataSet>(this Population<TIndividual, TDataSet> population)
+        private static IEnumerable<TIndividual> GetRandomIndividualsByRank<TIndividual>(this Population<TIndividual> population, TRandom random)
         {
-            var rnd = population.Enviroment.Random;
             var individuals = population.Individuals;
 
             while (true)
             {
-                yield return GetRandomIndiviual(individuals, rnd);
+                yield return GetRandomIndiviual(individuals, random);
             }
         }
 

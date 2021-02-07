@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Troschuetz.Random;
 
 namespace Evolutionary
 {
@@ -9,15 +10,12 @@ namespace Evolutionary
     /// The population class.
     /// </summary>
     /// <typeparam name="TIndividual">The individuals type.</typeparam>
-    /// <typeparam name="TDataSet">The data set type.</typeparam>
-    public class Population<TIndividual, TDataSet>
+    public class Population<TIndividual>
     {
         private static readonly IReadOnlyList<TIndividual> _emptyIndividuals = new List<TIndividual>();
 
-        /// <summary>
-        /// The enviroment of the population.
-        /// </summary>
-        public Enviroment<TIndividual, TDataSet> Enviroment { get; }
+        public Func<TIndividual, double> Fitness { get; }
+        public TRandom Random { get; }
 
         /// <summary>
         /// The individuals of the population. The individuals are order by their fitness increasingly.
@@ -29,33 +27,36 @@ namespace Evolutionary
         /// Creates a new population with zero individuals.
         /// </summary>
         /// <param name="enviroment">The enviroment.</param>
-        public Population(Enviroment<TIndividual, TDataSet> enviroment)
+        public Population(Func<TIndividual, double> fitness, TRandom random)
         {
-            if (enviroment is null)
-                throw new ArgumentNullException(nameof(enviroment));
+            if (fitness is null)
+                throw new ArgumentNullException(nameof(fitness));
+            if (random is null)
+                throw new ArgumentNullException(nameof(random));
 
-            Enviroment = enviroment;
+            Fitness = fitness;
+            Random = random;
             Individuals = _emptyIndividuals;
         }
 
         /// <summary>
         /// Creates a new population with some individuals.
         /// </summary>
-        /// <param name="enviroment">The enviroment.</param>
+        /// <param name="fitness">The fitness function.</param>
         /// <param name="individuals">The individuals.</param>
-        public Population(Enviroment<TIndividual, TDataSet> enviroment, IEnumerable<TIndividual> individuals)
+        public Population(Func<TIndividual, double> fitness, TRandom random, IEnumerable<TIndividual> individuals)
         {
-            if (enviroment is null)
-                throw new ArgumentNullException(nameof(enviroment));
+            if (fitness is null)
+                throw new ArgumentNullException(nameof(fitness));
+            if (random is null)
+                throw new ArgumentNullException(nameof(random));
             if (individuals is null)
                 throw new ArgumentNullException(nameof(individuals));
 
-            var fitness = enviroment.Fitness;
-            var dataSet = enviroment.DataSet;
-
-            Enviroment = enviroment;
+            Fitness = fitness;
+            Random = random;
             Individuals = individuals
-                .OrderBy(x => fitness(x, dataSet))
+                .OrderBy(fitness)
                 .ToList();
         }
     }

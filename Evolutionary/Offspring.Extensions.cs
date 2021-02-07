@@ -8,17 +8,17 @@ namespace Evolutionary
 {
     public static class Offspring
     {
-        public static Offspring<TIndividual, TDataSet> WithChildren<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring, IEnumerable<TIndividual> children)
+        public static Offspring<TIndividual> WithChildren<TIndividual>(this Offspring<TIndividual> offspring, IEnumerable<TIndividual> children)
         {
             if (offspring is null)
                 throw new ArgumentNullException(nameof(offspring));
             if (children is null)
                 throw new ArgumentNullException(nameof(children));
 
-            return new Offspring<TIndividual, TDataSet>(offspring.Enviroment, offspring.Parents, offspring.RandomParents, children);
+            return new Offspring<TIndividual>(offspring.ParentPopulation, offspring.RandomParents, children);
         }
         
-        public static Offspring<TIndividual, TDataSet> AddChildren<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring, IEnumerable<TIndividual> children)
+        public static Offspring<TIndividual> AddChildren<TIndividual>(this Offspring<TIndividual> offspring, IEnumerable<TIndividual> children)
         {
             if (offspring is null)
                 throw new ArgumentNullException(nameof(offspring));
@@ -32,84 +32,94 @@ namespace Evolutionary
             return offspring.WithChildren(c);
         }
 
-        public static Population<TIndividual, TDataSet> ToPopulation<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring)
+        public static Population<TIndividual> ToPopulation<TIndividual>(this Offspring<TIndividual> offspring)
         {
             if (offspring is null)
                 throw new ArgumentNullException(nameof(offspring));
 
-            return new Population<TIndividual, TDataSet>(offspring.Enviroment, offspring.Children);
+            return new Population<TIndividual>(offspring.ParentPopulation.Fitness, offspring.ParentPopulation.Random, offspring.Children);
         }
 
-        public static Offspring<TIndividual, TDataSet> SelectElite<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring, int count)
+        public static Offspring<TIndividual> SelectElite<TIndividual>(this Offspring<TIndividual> offspring, int count)
         {
             if (offspring is null)
                 throw new ArgumentNullException(nameof(offspring));
 
+            var fitness = offspring.ParentPopulation.Fitness;
+
             var children = offspring
-                .Parents
-                .OrderBy(x => offspring.Enviroment.Fitness(x, offspring.Enviroment.DataSet))
+                .ParentPopulation
+                .Individuals
+                .OrderBy(fitness)
                 .Take(count);
 
             return offspring.AddChildren(children);
         }
 
-        public static Offspring<TIndividual, TDataSet> Recombine<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring, int count, Func<TIndividual, TIndividual, TDataSet, TRandom, TIndividual> recombine)
+        public static Offspring<TIndividual> Recombine<TIndividual>(this Offspring<TIndividual> offspring, int count, Func<TIndividual, TIndividual, TRandom, TIndividual> recombine)
         {
             if (offspring is null)
                 throw new ArgumentNullException(nameof(offspring));
             if (recombine is null)
                 throw new ArgumentNullException(nameof(recombine));
 
+            var random = offspring.ParentPopulation.Random;
+
             var children = offspring.RandomParents
-                .Zip(offspring.RandomParents, (a, b) => recombine(a, b, offspring.Enviroment.DataSet, offspring.Enviroment.Random))
+                .Zip(offspring.RandomParents, (a, b) => recombine(a, b, random))
                 .Take(count);
             
             return offspring.AddChildren(children);
         }
 
-        public static Offspring<TIndividual, TDataSet> Recombine<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring, int count, Func<TIndividual, TIndividual, TDataSet, TRandom, IEnumerable<TIndividual>> recombine)
+        public static Offspring<TIndividual> Recombine<TIndividual>(this Offspring<TIndividual> offspring, int count, Func<TIndividual, TIndividual, TRandom, IEnumerable<TIndividual>> recombine)
         {
             if (offspring is null)
                 throw new ArgumentNullException(nameof(offspring));
             if (recombine is null)
                 throw new ArgumentNullException(nameof(recombine));
 
+            var random = offspring.ParentPopulation.Random;
+
             var children = offspring.RandomParents
-                .Zip(offspring.RandomParents, (a, b) => recombine(a, b, offspring.Enviroment.DataSet, offspring.Enviroment.Random))
+                .Zip(offspring.RandomParents, (a, b) => recombine(a, b, random))
                 .SelectMany(x => x)
                 .Take(count);
             
             return offspring.AddChildren(children);
         }
 
-        public static Offspring<TIndividual, TDataSet> Mutate<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring, int count, Func<TIndividual, TDataSet, TRandom, TIndividual> mutate)
+        public static Offspring<TIndividual> Mutate<TIndividual>(this Offspring<TIndividual> offspring, int count, Func<TIndividual, TRandom, TIndividual> mutate)
         {
             if (offspring is null)
                 throw new ArgumentNullException(nameof(offspring));
             if (mutate is null)
                 throw new ArgumentNullException(nameof(mutate));
 
+            var random = offspring.ParentPopulation.Random;
+
             var children = offspring.RandomParents
-                .Select(p => mutate(p, offspring.Enviroment.DataSet, offspring.Enviroment.Random))
+                .Select(p => mutate(p, random))
                 .Take(count);
             
             return offspring.AddChildren(children);
         }
 
-        public static Offspring<TIndividual, TDataSet> SelectSurvivors<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring, int count)
+        public static Offspring<TIndividual> SelectSurvivors<TIndividual>(this Offspring<TIndividual> offspring, int count)
         {
             if (offspring is null)
                 throw new ArgumentNullException(nameof(offspring));
 
-            var env = offspring.Enviroment;
+            var fitness = offspring.ParentPopulation.Fitness;
+
             var children = offspring.Children
-                .OrderBy(c => env.Fitness(c, env.DataSet))
+                .OrderBy(fitness)
                 .Take(count);
             
             return offspring.WithChildren(children);
         }
         
-        public static Offspring<TIndividual, TDataSet> Eagerly<TIndividual, TDataSet>(this Offspring<TIndividual, TDataSet> offspring)
+        public static Offspring<TIndividual> Eagerly<TIndividual>(this Offspring<TIndividual> offspring)
         {
             if (offspring is null)
                 throw new ArgumentNullException(nameof(offspring));

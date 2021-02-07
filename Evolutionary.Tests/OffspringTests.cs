@@ -12,33 +12,27 @@ namespace Evolutionary.Tests
     {
         private static double Sq(double x) => x * x;
 
-        public Offspring<int, int> NullOffspring { get; } = null;
-        public Offspring<int, int> NonNullOffspring { get; } = Population
-            .Create(43, (int x, int _) => Sq(x))
+        public Offspring<int> NullOffspring { get; } = null;
+        public Offspring<int> NonNullOffspring { get; } = Population
+            .Create((int x) => Sq(x))
             .SelectParentsByRank();
 
         [Fact]
         public void New_NullCheck()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
-            var rnd = new TRandom();
             var array = new int[] { };
 
-            var env = new Enviroment<int, int>(dataSet, fitness, rnd);
+            var pop = Population.Create((int i) => 0.0);
 
-            Action act1 = () => new Offspring<int, int>(null, array, array, array);
-            Action act2 = () => new Offspring<int, int>(env, null, array, array);
-            Action act3 = () => new Offspring<int, int>(env, array, null, array);
-            Action act4 = () => new Offspring<int, int>(env, array, array, null);
+            Action act1 = () => new Offspring<int>(null, array, array);
+            Action act2 = () => new Offspring<int>(pop, null, array);
+            Action act3 = () => new Offspring<int>(pop, array, null);
 
             act1
                 .Should().Throw<ArgumentNullException>();
             act2
                 .Should().Throw<ArgumentNullException>();
             act3
-                .Should().Throw<ArgumentNullException>();
-            act4
                 .Should().Throw<ArgumentNullException>();
         }
         
@@ -57,10 +51,9 @@ namespace Evolutionary.Tests
         [Fact]
         public void WithChildren()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
+            Func<int, double> fitness = x => Sq(x);
 
-            var offspring = Population.Create(dataSet, fitness)
+            var offspring = Population.Create(fitness)
                 .SelectParentsByRank()
                 .WithChildren(new[] { 1, 2, 3 });
 
@@ -83,10 +76,9 @@ namespace Evolutionary.Tests
         [Fact]
         public void AddChildren()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
+            Func<int, double> fitness = x => Sq(x);
 
-            var offspring = Population.Create(dataSet, fitness)
+            var offspring = Population.Create(fitness)
                 .SelectParentsByRank()
                 .WithChildren(new[] { 1, 2, 3 })
                 .AddChildren(new[] { 7, 8, 9 });
@@ -107,18 +99,20 @@ namespace Evolutionary.Tests
         [Fact]
         public void ToPopulation()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
+            Func<int, double> fitness = x => Sq(x);
 
-            var firstGen = Population.Create(dataSet, fitness);
+            var firstGen = Population.Create(fitness);
 
             var secondGen = firstGen
                 .SelectParentsByRank()
                 .WithChildren(new[] { 1, 2, 3 })
                 .ToPopulation();
 
-            secondGen.Enviroment
-                .Should().Be(firstGen.Enviroment);
+            secondGen.Fitness
+                .Should().Be(firstGen.Fitness);
+
+            secondGen.Random
+                .Should().Be(firstGen.Random);
 
             secondGen.Individuals
                 .Should().BeEquivalentTo(1, 2, 3);
@@ -127,12 +121,11 @@ namespace Evolutionary.Tests
         [Fact]
         public void ToPopulationEagerness()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
+            Func<int, double> fitness = x => Sq(x);
 
             int i = 1;
             var population = Population
-                .Create(dataSet, fitness)
+                .Create(fitness)
                 .SelectParentsByRank()
                 .WithChildren(Enumerable.Repeat(0, 3).Select(_ => i++))
                 .ToPopulation();
@@ -156,13 +149,14 @@ namespace Evolutionary.Tests
         [Fact]
         public void SelectElite()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
-            TRandom rnd = new TRandom();
+            Func<int, double> fitness = x => Sq(x);
 
-            var offspring = new Offspring<int, int>(
-                new Enviroment<int, int>(dataSet, fitness, rnd),
-                new[] { 10, 11, 12, 3, 2, 1, 13, 14, 15, 4, 5, 6 },
+            var population = Population
+                .Create(fitness)
+                .AddIndividuals(new[] { 10, 11, 12, 3, 2, 1, 13, 14, 15, 4, 5, 6 });
+
+            var offspring = new Offspring<int>(
+                population,
                 new int [] { 30, 31, 32, 33, 30, 31 },
                 new int [] { 20, 21 })
                 .SelectElite(4);
@@ -174,10 +168,10 @@ namespace Evolutionary.Tests
         [Fact]
         public void Recombine_NullChecks()
         {
-            Action act1 = () => NonNullOffspring.Recombine(10, default(Func<int, int, int, TRandom, int>));
-            Action act2 = () => NonNullOffspring.Recombine(10, default(Func<int, int, int, TRandom, int[]>));
-            Action act3 = () => NullOffspring.Recombine(10, (a, b, d, rnd) => a);
-            Action act4 = () => NullOffspring.Recombine(10, (a, b, d, rnd) => new [] { a, b });
+            Action act1 = () => NonNullOffspring.Recombine(10, default(Func<int, int, TRandom, int>));
+            Action act2 = () => NonNullOffspring.Recombine(10, default(Func<int, int, TRandom, int[]>));
+            Action act3 = () => NullOffspring.Recombine(10, (a, b, rnd) => a);
+            Action act4 = () => NullOffspring.Recombine(10, (a, b, rnd) => new [] { a, b });
             
             act1
                 .Should().Throw<ArgumentNullException>();
@@ -192,17 +186,17 @@ namespace Evolutionary.Tests
         [Fact]
         public void Recombine1()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
-            TRandom rnd = new TRandom();
+            Func<int, double> fitness = x => Sq(x);
 
-            var offspring = new Offspring<int, int>(
-                    new Enviroment<int, int>(dataSet, fitness, rnd),
-                    parents: new[] { 10, 11, 12, 3, 2, 1, 13, 14, 15, 4, 5, 6 },
-                    randomParents: new int [] { 30, 31, 32, 33, 30, 31 },
-                    children: new int [] { 100 }
-                )
-                .Recombine(3, (a, b, d, r) => a + b);
+            var population = Population
+                .Create(fitness)
+                .AddIndividuals(new[] { 10, 11, 12, 3, 2, 1, 13, 14, 15, 4, 5, 6 });
+
+            var offspring = new Offspring<int>(
+                population,
+                new int [] { 30, 31, 32, 33, 30, 31 },
+                new int [] { 100 })
+                .Recombine(3, (a, b, r) => a + b);
 
             offspring.Children
                 .Should().Equal(100, 60, 62, 64);
@@ -211,17 +205,17 @@ namespace Evolutionary.Tests
         [Fact]
         public void Recombine2()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
-            TRandom rnd = new TRandom();
+            Func<int, double> fitness = x => Sq(x);
 
-            var offspring = new Offspring<int, int>(
-                    new Enviroment<int, int>(dataSet, fitness, rnd),
-                    parents: new[] { 10, 11, 12, 3, 2, 1, 13, 14, 15, 4, 5, 6 },
-                    randomParents: new int [] { 30, 31, 32, 33, 30, 31 },
-                    children: new int [] { 100 }
-                )
-                .Recombine(3, (a, b, d, r) => new [] { a, b });
+            var population = Population
+                .Create(fitness)
+                .AddIndividuals(new[] { 10, 11, 12, 3, 2, 1, 13, 14, 15, 4, 5, 6 });
+
+            var offspring = new Offspring<int>(
+                population,
+                new int [] { 30, 31, 32, 33, 30, 31 },
+                new int [] { 100 })
+                .Recombine(3, (a, b, r) => new [] { a, b });
 
             offspring.Children
                 .Should().Equal(100, 30, 30, 31);
@@ -230,8 +224,8 @@ namespace Evolutionary.Tests
         [Fact]
         public void Mutate_NullChecks()
         {
-            Action act1 = () => NonNullOffspring.Mutate(10, default(Func<int, int, TRandom, int>));
-            Action act2 = () => NullOffspring.Mutate(10, (a, d, rnd) => a);
+            Action act1 = () => NonNullOffspring.Mutate(10, default(Func<int, TRandom, int>));
+            Action act2 = () => NullOffspring.Mutate(10, (a, rnd) => a);
             
             act1
                 .Should().Throw<ArgumentNullException>();
@@ -242,17 +236,17 @@ namespace Evolutionary.Tests
         [Fact]
         public void Mutate()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
-            TRandom rnd = new TRandom();
+            Func<int, double> fitness = x => Sq(x);
 
-            var offspring = new Offspring<int, int>(
-                    new Enviroment<int, int>(dataSet, fitness, rnd),
-                    parents: new[] { 10, 11, 12, 3, 2, 1, 13, 14, 15, 4, 5, 6 },
-                    randomParents: new int [] { 30, 31, 32, 33, 30, 31 },
-                    children: new int [] { 100 }
-                )
-                .Mutate(3, (a, d, r) => a + 100);
+            var population = Population
+                .Create(fitness)
+                .AddIndividuals(new[] { 10, 11, 12, 3, 2, 1, 13, 14, 15, 4, 5, 6 });
+
+            var offspring = new Offspring<int>(
+                population,
+                new int [] { 30, 31, 32, 33, 30, 31 },
+                new int [] { 100 })
+                .Mutate(3, (a, r) => a + 100);
 
             offspring.Children
                 .Should().Equal(100, 130, 131, 132);
@@ -270,10 +264,9 @@ namespace Evolutionary.Tests
         [Fact]
         public void SelectSurvivors()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
+            Func<int, double> fitness = x => Sq(x);
 
-            var offspring = Population.Create(dataSet, fitness)
+            var offspring = Population.Create(fitness)
                 .SelectParentsByRank()
                 .WithChildren(new[] { 6, 5, 3, 1, 8, 2 })
                 .SelectSurvivors(3);
@@ -294,12 +287,11 @@ namespace Evolutionary.Tests
         [Fact]
         public void Eagerly_Eagerness()
         {
-            int dataSet = 13;
-            Func<int, int, double> fitness = (x, _) => Sq(x);
+            Func<int, double> fitness = x => Sq(x);
 
             int i = 1;
             var offspring = Population
-                .Create(dataSet, fitness)
+                .Create(fitness)
                 .SelectParentsByRank()
                 .WithChildren(Enumerable.Repeat(0, 3).Select(_ => i++))
                 .Eagerly();
