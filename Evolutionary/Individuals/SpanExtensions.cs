@@ -63,8 +63,14 @@ namespace Evolutionary.Individuals
             // that segment of the second parent that have not been copied.
             for (int i = start; i < start + length; i++)
             {
-                // Step 3: For each of these (say i), look in the offspring to
-                // see what element (say j) has been copied in its place from
+                var e = p2[i];
+                if (segment1.IndexOf(e) != -1)
+                {
+                    continue;
+                }
+
+                // Step 3: For each of these (say e), look in the offspring to
+                // see what element (say f) has been copied in its place from
                 // p1.
                 //
                 //  123456789
@@ -72,32 +78,29 @@ namespace Evolutionary.Individuals
                 //  937826514
                 //     ^    ^
                 //     i    j
-                var element = p2[i];
-                var j = p2.IndexOf(p1[i]);
 
-                // Step 4: Place i into the position occupied by j in p2,
-                // since we know that we will not be putting j there.
-                if (offspring[j] == -1)
+                // Step 4: Place e into the position occupied by f in p2,
+                // since we know that we will not be putting f there.
+                //
+                // Step5: If the place occupied by j in p2 has already been
+                // filled in the offspring by an element f, put i in the
+                // position occupied by f in p2.
+                //
+                //        f
+                //  123456789
+                //               -->  __24567_8
+                //  937826514
+                //    f ^ ^
+                //      i j
+                var j = i;
+                do
                 {
-                    offspring[j] = element;
-                }
-                else
-                {
-                    // Step5: If the place occupied by j in p2 has already been
-                    // filled in the offspring by an element f, put i in the
-                    // position occupied by f in p2.
-                    //
-                    //        f
-                    //  123456789
-                    //               -->  __24567_8
-                    //  937826514
-                    //    f ^ ^
-                    //      i j
                     var f = offspring[j];
-                    var k = p2.IndexOf(f);
-
-                    offspring[k] = element;
+                    j = p2.IndexOf(f);
                 }
+                while (offspring[j] != -1);
+
+                offspring[j] = e;
             }
 
             // Step 6: The remaining positions in this offspring can be filled
