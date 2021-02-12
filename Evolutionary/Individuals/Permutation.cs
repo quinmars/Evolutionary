@@ -35,10 +35,10 @@ namespace Evolutionary.Individuals
             IsCircular = isCircular;
         }
         
-        public Permutation(int[] array, bool omitCircularPermutation)
+        public Permutation(int[] array, bool isCircular)
         {
             _elements = array;
-            IsCircular = omitCircularPermutation;
+            IsCircular = isCircular;
         }
         
         public int[] ToArray()
