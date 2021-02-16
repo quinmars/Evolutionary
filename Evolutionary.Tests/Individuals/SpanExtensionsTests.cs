@@ -99,5 +99,18 @@ namespace Evolutionary.Tests.Individuals
             offspring
                 .Should().Equal(1, 2, 3, 4, 9, 7, 8, 6, 5);
         }
+        
+        [Fact]
+        public void CycleCrossover()
+        {
+            var p1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var p2 = new int[] { 9, 3, 7, 8, 2, 6, 5, 1, 4 };
+            var offspring = new int[p1.Length];
+
+            SpanExtensions.CycleCrossover(p1, p2, offspring);
+
+            offspring
+                .Should().Equal(1, 3, 7, 4, 2, 6, 5, 8, 9);
+        }
     }
 }

@@ -60,5 +60,27 @@ namespace Evolutionary.Individuals
 
             return new Permutation(array, p1.IsCircular);
         }
+        
+        public static Permutation CycleCrossover(Permutation p1, Permutation p2)
+        {
+            if (p1.Count != p2.Count)
+            {
+                throw new ArgumentException("The element count differs.", nameof(p2));
+            }
+
+            if (p1.IsCircular != p2.IsCircular)
+            {
+                throw new ArgumentException("The circularity differs.", nameof(p2));
+            }
+
+            var array = new int[p1.Count];
+            
+            SpanExtensions.CycleCrossover(p1, p2, array);
+
+            return new Permutation(array, p1.IsCircular);
+        }
+
+        public static Permutation CycleCrossover(Permutation p1, Permutation p2, TRandom random)
+            => CycleCrossover(p1, p2);
     }
 }

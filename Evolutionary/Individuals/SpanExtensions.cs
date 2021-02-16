@@ -113,6 +113,35 @@ namespace Evolutionary.Individuals
                 }
             }
         }
+        
+        public static void CycleCrossover(this ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, Span<int> offspring)
+        {
+            offspring.Fill(-1);
+
+            var main = p1;
+            var compliment = p2;
+
+            for (var i = 0; i < offspring.Length; i++)
+            {
+                if (offspring[i] != -1)
+                {
+                    continue;
+                }
+
+                var j = i;
+
+                do
+                {
+                    offspring[j] = main[j];
+                    j = main.IndexOf(compliment[j]);
+                }
+                while (j != i);
+
+                var tmp = main;
+                main = compliment;
+                compliment = tmp;
+            }
+        }
 
         public static void CutAndCrossfillCrossover(this ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, int position, Span<int> offspring)
         {
