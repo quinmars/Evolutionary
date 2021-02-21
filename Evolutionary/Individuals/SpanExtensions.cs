@@ -14,7 +14,7 @@ namespace Evolutionary.Individuals
             span[b] = tmp;
         }
 
-        public static void RightShift(this Span<int> span)
+        public static void RightRotate(this Span<int> span)
         {
             var lastIndex = span.Length - 1;
 
@@ -30,6 +30,71 @@ namespace Evolutionary.Individuals
             }
 
             span[0] = tmp;
+        }
+
+        public static void RightRotate(this Span<int> span, int k)
+        {
+            k %= span.Length;
+
+            if (k < 0)
+            {
+                k = span.Length + k;
+            }
+
+            switch (k)
+            {
+                case 0:
+                    return;
+                case 1:
+                    span.RightRotate();
+                    return;
+                case 2:
+                    span.RightRotate();
+                    span.RightRotate();
+                    return;
+                default:
+                    span.Reverse();
+                    span.Slice(0, k).Reverse();
+                    span.Slice(k).Reverse();
+                    return;
+            }
+        }
+        
+        public static void LeftRotate(this Span<int> span)
+        {
+            if (span.Length < 2)
+            {
+                return;
+            }
+
+            int first = span[0];
+            for (int i = 1; i < span.Length; i++)
+            {
+                span[i - 1] = span[i];
+            }
+
+            span[span.Length - 1] = first;
+        }
+
+        public static void LeftRotate(this Span<int> span, int k)
+        {
+            k %= span.Length;
+
+            switch (k)
+            {
+                case 0:
+                    return;
+                case 1:
+                    span.LeftRotate();
+                    return;
+                case 2:
+                    span.LeftRotate();
+                    span.LeftRotate();
+                    return;
+                default:
+                    span.RightRotate(span.Length - k);
+                    return;
+            }
         }
 
         public static void Scramble(this Span<int> span, TRandom random)

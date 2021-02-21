@@ -24,7 +24,7 @@ namespace Evolutionary.Individuals
             var array = permutation.ToArray();
             permutation.GetRandomIndexPair(random, out var a, out var b);
 
-            array.AsSpan(a, b - a).RightShift();
+            array.AsSpan(a, b - a).RightRotate();
             return new Permutation(array, permutation.IsCircular);
         }
 

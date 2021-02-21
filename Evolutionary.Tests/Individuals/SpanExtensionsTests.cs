@@ -21,33 +21,92 @@ namespace Evolutionary.Tests.Individuals
         }
         
         [Fact]
-        public void RightShift()
+        public void RightRotate()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan(3, 4).RightShift();
+            array.AsSpan(3, 4).RightRotate();
 
             array
                 .Should().Equal(1, 2, 3, 7, 4, 5, 6, 8, 9);
         }
         
+        [InlineData(0, new int[] { 1, 2, 3, 4, 5 })]
+        [InlineData(1, new int[] { 5, 1, 2, 3, 4 })]
+        [InlineData(2, new int[] { 4, 5, 1, 2, 3 })]
+        [InlineData(3, new int[] { 3, 4, 5, 1, 2 })]
+        [InlineData(4, new int[] { 2, 3, 4, 5, 1 })]
+        [InlineData(5, new int[] { 1, 2, 3, 4, 5 })]
+        [InlineData(6, new int[] { 5, 1, 2, 3, 4 })]
+        [InlineData(7, new int[] { 4, 5, 1, 2, 3 })]
+        [InlineData(8, new int[] { 3, 4, 5, 1, 2 })]
+        [InlineData(-1, new int[] { 2, 3, 4, 5, 1 })]
+        [InlineData(-2, new int[] { 3, 4, 5, 1, 2 })]
+        [InlineData(-3, new int[] { 4, 5, 1, 2, 3 })]
+        [InlineData(-4, new int[] { 5, 1, 2, 3, 4 })]
+        [InlineData(-5, new int[] { 1, 2, 3, 4, 5 })]
+        [Theory]
+        public void RightRotateWithArgument(int k, int[] expect)
+        {
+            var array = new int[] { 1, 2, 3, 4, 5 };
+            array.AsSpan().RightRotate(k);
+
+            array
+                .Should().Equal(expect);
+        }
+        
         [Fact]
-        public void RightShift_Single()
+        public void RightRotate_Single()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan(3, 1).RightShift();
+            array.AsSpan(3, 1).RightRotate();
 
             array
                 .Should().Equal(1, 2, 3, 4, 5, 6, 7, 8, 9);
         }
         
         [Fact]
-        public void RightShift_Empty()
+        public void RightRotate_Empty()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan(3, 0).RightShift();
+            array.AsSpan(3, 0).RightRotate();
 
             array
                 .Should().Equal(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        }
+        
+        [Fact]
+        public void LeftRotate()
+        {
+            var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            array.AsSpan(3, 4).LeftRotate();
+
+            array
+                .Should().Equal(1, 2, 3, 5, 6, 7, 4, 8, 9);
+        }
+        
+        [InlineData(0, new int[] { 1, 2, 3, 4, 5 })]
+        [InlineData(1, new int[] { 2, 3, 4, 5, 1 })]
+        [InlineData(2, new int[] { 3, 4, 5, 1, 2 })]
+        [InlineData(3, new int[] { 4, 5, 1, 2, 3 })]
+        [InlineData(4, new int[] { 5, 1, 2, 3, 4 })]
+        [InlineData(5, new int[] { 1, 2, 3, 4, 5 })]
+        [InlineData(6, new int[] { 2, 3, 4, 5, 1 })]
+        [InlineData(7, new int[] { 3, 4, 5, 1, 2 })]
+        [InlineData(8, new int[] { 4, 5, 1, 2, 3 })]
+        [InlineData(-1, new int[] { 5, 1, 2, 3, 4 })]
+        [InlineData(-2, new int[] { 4, 5, 1, 2, 3 })]
+        [InlineData(-3, new int[] { 3, 4, 5, 1, 2 })]
+        [InlineData(-4, new int[] { 2, 3, 4, 5, 1 })]
+        [InlineData(-5, new int[] { 1, 2, 3, 4, 5 })]
+        [InlineData(-6, new int[] { 5, 1, 2, 3, 4 })]
+        [Theory]
+        public void LeftRotateWithArgument(int k, int[] expect)
+        {
+            var array = new int[] { 1, 2, 3, 4, 5 };
+            array.AsSpan().LeftRotate(k);
+
+            array
+                .Should().Equal(expect);
         }
 
         [Fact]
