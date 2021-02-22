@@ -269,7 +269,7 @@ namespace Evolutionary.Tests.Individuals
             var p1 = new Permutation(a1, true);
             var p2 = new Permutation(a2, true);
 
-            var offspring = Permutation.PartiallyMappedCrossover(p1, p2, new TRandom());
+            var offspring = Permutation.CutAndCrossfillCrossover(p1, p2, new TRandom());
 
             offspring
                 .Should().BeEquivalentTo(a1);
