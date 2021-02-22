@@ -34,6 +34,11 @@ namespace Evolutionary.Individuals
 
         public static void RightRotate(this Span<int> span, int k)
         {
+            if (span.Length < 2)
+            {
+                return;
+            }
+
             k %= span.Length;
 
             if (k < 0)
@@ -78,6 +83,11 @@ namespace Evolutionary.Individuals
 
         public static void LeftRotate(this Span<int> span, int k)
         {
+            if (span.Length < 2)
+            {
+                return;
+            }
+
             k %= span.Length;
 
             switch (k)

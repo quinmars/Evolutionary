@@ -57,21 +57,49 @@ namespace Evolutionary.Tests.Individuals
         [Fact]
         public void RightRotate_Single()
         {
-            var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan(3, 1).RightRotate();
+            var array = new int[] { 2 };
+            array.AsSpan().RightRotate();
 
             array
-                .Should().Equal(1, 2, 3, 4, 5, 6, 7, 8, 9);
+                .Should().Equal(2);
+        }
+        
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(-1)]
+        [Theory]
+        public void RightRotate_Single_WithArgument(int n)
+        {
+            var array = new int[] { 2 };
+            array.AsSpan().RightRotate(n);
+
+            array
+                .Should().Equal(2);
         }
         
         [Fact]
         public void RightRotate_Empty()
         {
-            var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan(3, 0).RightRotate();
+            var array = new int[] { };
+            array.AsSpan().RightRotate();
 
             array
-                .Should().Equal(1, 2, 3, 4, 5, 6, 7, 8, 9);
+                .Should().Equal();
+        }
+        
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(-1)]
+        [Theory]
+        public void RightRotate_Empty_WithArgument(int n)
+        {
+            var array = new int[] { };
+            array.AsSpan().RightRotate(n);
+
+            array
+                .Should().Equal();
         }
         
         [Fact]
@@ -107,6 +135,54 @@ namespace Evolutionary.Tests.Individuals
 
             array
                 .Should().Equal(expect);
+        }
+        
+        [Fact]
+        public void LeftRotate_Single()
+        {
+            var array = new int[] { 2 };
+            array.AsSpan().LeftRotate();
+
+            array
+                .Should().Equal(2);
+        }
+        
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(-1)]
+        [Theory]
+        public void LeftRotate_Single_WithArgument(int n)
+        {
+            var array = new int[] { 2 };
+            array.AsSpan().RightRotate(n);
+
+            array
+                .Should().Equal(2);
+        }
+        
+        [Fact]
+        public void LeftRotate_Empty()
+        {
+            var array = new int[] { };
+            array.AsSpan().RightRotate();
+
+            array
+                .Should().Equal();
+        }
+        
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(-1)]
+        [Theory]
+        public void LeftRotate_Empty_WithArgument(int n)
+        {
+            var array = new int[] { };
+            array.AsSpan().RightRotate(n);
+
+            array
+                .Should().Equal();
         }
 
         [Fact]
