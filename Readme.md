@@ -2,6 +2,10 @@
 
 [![Actions Status](https://github.com/quinmars/evolutionary/workflows/Unit%20Tests/badge.svg)](https://github.com/quinmars/evolutionary/actions)
 
+Evolutionary algorithms come in many different flavors. The representation of the population's individuals highly depends on the problem space. There are many selection, mutation and recombination mechanism and strategies to choose from. And there are even more possibilities to parameterize them. Even the termination of the population evolution can happen on different aspects. There are libraries (for example the great [GeneticSharp](https://github.com/giacomelli/GeneticSharp)) that try to put all those requirements into one procedure, that can be parametrized from outside. The `Evolutionary` library goes another approach in that it does not implement one or more evolutionary algorithms for you, but gives you the data types and operators at hand to write it yourself.
+
+Therefore `Evolutionary` uses for the main logic only two immutable types that are transformed  by operators. All operators are implemented as extensions method. Hence, it is easy to add custom operators. The `Population<TIndividual>` class comprises the collection of all individuals, the fitness function and a random number generator. The `Offspring<TIndividual>` generation happens with the offspring class. Besides a reference to the parent populations, it offers a random enumeration of the parent individuals and an enumerations of the children generated so far. Once the generation phase is finished, a new population will be generated from the offspring.
+
 ## A complete example
 
 In this example the square root of 2 is calculated. Of course, there are better methods to do this, but it gives a good impression how the `Evolutionary` library is be used.
@@ -72,7 +76,6 @@ for (int i = 0; i < 50; i++)
 
 ## TODO
 
-  - introduction in the readme file
   - API code documentation
   - generate documentation with docfx
   - add examples
