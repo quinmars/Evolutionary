@@ -282,24 +282,19 @@ namespace Evolutionary.Tests.Individuals
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
             var a2 = new int[] { 1, 2, 3, 4, 5 };
             var a3 = new int[] { 1, 2, 3, 4, 6, 5 };
-            var a4 = new int[] { 2, 3 };
 
             var p1 = new Permutation(a1, false);
             var p2 = new Permutation(a2, false);
             var p3 = new Permutation(a1, true);
             var p4 = new Permutation(a3, false);
-            var p5 = new Permutation(a4, true);
 
             Action act1 = () => Permutation.CycleCrossover(p1, p2, new TRandom());
             Action act2 = () => Permutation.CycleCrossover(p3, p4, new TRandom());
-            Action act3 = () => Permutation.CycleCrossover(p5, p5, new TRandom());
 
             act1
                 .Should().Throw<ArgumentException>();
             act2
                 .Should().Throw<ArgumentException>();
-            act3
-                .Should().Throw<InvalidOperationException>();
         }
         
         [InlineData(true)]
