@@ -17,6 +17,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
+    - name: Exclude windows only examples
+      run: dotnet sln remove examples/EightQueens/EightQueens.csproj
     - name: Build with dotnet
       run: dotnet build --configuration Release
     - name: Run unit tests
