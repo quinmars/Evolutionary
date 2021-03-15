@@ -8,6 +8,9 @@ using System.Reactive.Linq;
 using System.Reactive;
 using Evolutionary;
 using Evolutionary.Individuals;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Series;
 
 namespace EightQueens
 {
@@ -33,6 +36,13 @@ namespace EightQueens
         private readonly ObservableAsPropertyHelper<RunResult> _lastRun;
         public RunResult LastRun => _lastRun.Value;
 
+        private RunResult[] _runResults = new RunResult[] { };
+        public RunResult[] RunResults
+        {
+            get => _runResults;
+            set => this.RaiseAndSetIfChanged(ref _runResults, value);
+        }
+
         private readonly ObservableAsPropertyHelper<Boardfield[]> _currentQueens;
         public Boardfield[] CurrentQueens => _currentQueens.Value;
 
@@ -42,8 +52,30 @@ namespace EightQueens
         public ReactiveCommand<Parameters, IEnumerable<RunResult>> Run { get; }
         public ReactiveCommand<Unit, Unit> Cancel { get; }
 
+        public PlotModel FitnessEvolution { get; }
+
         public RunViewModel()
         {
+            FitnessEvolution = new PlotModel
+            {
+                Axes =
+                {
+                    new LinearAxis
+                    {
+                        Title = "Generation",
+                        Position = AxisPosition.Bottom,
+                        MaximumPadding = 0.0,
+                        MinimumPadding = 0.0
+                    },
+                    new LinearAxis
+                    {
+                        Title = "Fitness",
+                        Position = AxisPosition.Left,
+                        Minimum = 0.0,
+                    }
+                }
+            };
+
             this.WhenAnyValue(x => x.Parameters)
                 .Where(x => x != null)
                 .Select(p =>
@@ -59,7 +91,11 @@ namespace EightQueens
                 .Select(b => b.ToArray())
                 .ToProperty(this, x => x.Board, out _board);
 
-            Run = ReactiveCommand.CreateFromObservable((Parameters p) => RunPopulation(p).TakeUntil(Cancel));
+            Run = ReactiveCommand.CreateFromObservable((Parameters p) =>
+            {
+                RunResults = new RunResult[] { };
+                return RunPopulation(p).TakeUntil(Cancel);
+            });
             Run.Select(r => r.Last())
                 .ToProperty(this, x => x.LastRun, out _lastRun, default(RunResult));
             Run.IsExecuting
@@ -67,6 +103,39 @@ namespace EightQueens
                 .ToProperty(this, x => x.IsNotRunning, out _isNotRunning);
 
             Cancel = ReactiveCommand.Create(() => { }, Run.IsExecuting);
+
+            Run
+                .Subscribe(x => RunResults = RunResults.Concat(x).ToArray());
+
+            this.WhenAnyValue(x => x.RunResults)
+                .Subscribe(results =>
+                {
+                    FitnessEvolution.Series.Clear();
+
+                    if (results != null)
+                    {
+                        var area = new AreaSeries
+                        {
+                            Fill = OxyColors.WhiteSmoke,
+                            Color = OxyColors.Gray,
+                            Color2 = OxyColors.Crimson
+                        };
+                        area.Points.AddRange(results.Select(r => new DataPoint(r.Run, r.WorstFitness)));
+                        area.Points2.AddRange(results.Select(r => new DataPoint(r.Run, r.BestFitness)));
+                        FitnessEvolution.Series.Add(area);
+
+                        var median = new LineSeries
+                        {
+                            Color = OxyColors.Silver,
+                            LineJoin = LineJoin.Round
+                        };
+                        median.Points.AddRange(results.Select(r => new DataPoint(r.Run, r.MedianFitness)));
+                        FitnessEvolution.Series.Add(median);
+                    }
+
+                    FitnessEvolution.ResetAllAxes();
+                    FitnessEvolution.InvalidatePlot(true);
+                });
 
             this.WhenAnyValue(x => x.LastRun)
                 .Where(x => x != null)
@@ -116,8 +185,10 @@ namespace EightQueens
                 .Select((p, i) => new RunResult
                 {
                     Run = i,
+                    BestIndividual = p.Individuals[0],
                     BestFitness = fitness(p.Individuals[0]),
-                    BestIndividual = p.Individuals[0]
+                    MedianFitness = fitness(p.Individuals[p.Individuals.Count/2]),
+                    WorstFitness = fitness(p.Individuals.Last()),
                 })
                 .Do(r => Console.WriteLine($"{r.Run}: {r.BestFitness}"))
                 .TakeUntil(r => r.BestFitness == 0.0)

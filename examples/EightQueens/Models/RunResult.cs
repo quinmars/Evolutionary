@@ -10,7 +10,9 @@ namespace EightQueens
     public class RunResult
     {
         public int Run { get; set; }
-        public double BestFitness { get; set; }
         public Permutation BestIndividual { get; set; }
+        public double BestFitness { get; set; }
+        public double MedianFitness { get; set; }
+        public double WorstFitness { get; set; }
     }
 }

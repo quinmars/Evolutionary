@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:localc="clr-namespace:EightQueens.Controls"
         xmlns:local="clr-namespace:EightQueens"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="EightQueens" Height="450" Width="800">
     <Grid x:Name="LayoutRoot">
@@ -12,73 +13,81 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="340" />
         </Grid.ColumnDefinitions>
-        <Viewbox Stretch="Uniform">
-            <Grid>
-                <ItemsControl ItemsSource="{Binding RunViewModel.Board}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Grid localc:GridEx.ColumnCount="{Binding RunViewModel.Parameters.QueenCount}"
-                                  localc:GridEx.RowCount="{Binding RunViewModel.Parameters.QueenCount}"
-                                  localc:GridEx.ColumnWidth="30"
-                                  localc:GridEx.RowHeight="30"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style>
-                            <Setter Property="Grid.Column" Value="{Binding Column}" />
-                            <Setter Property="Grid.Row" Value="{Binding Row}" />
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Rectangle>
-                                <Rectangle.Style>
-                                    <Style TargetType="Rectangle">
-                                        <Setter Property="Fill" Value="WhiteSmoke" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
-                                                <Setter Property="Fill" Value="LightGray" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Rectangle.Style>
-                            </Rectangle>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <ItemsControl ItemsSource="{Binding RunViewModel.CurrentQueens}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <Grid localc:GridEx.ColumnCount="{Binding RunViewModel.Parameters.QueenCount}"
-                                  localc:GridEx.RowCount="{Binding RunViewModel.Parameters.QueenCount}"
-                                  localc:GridEx.ColumnWidth="30"
-                                  localc:GridEx.RowHeight="30"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style>
-                            <Setter Property="Grid.Column" Value="{Binding Column}" />
-                            <Setter Property="Grid.Row" Value="{Binding Row}" />
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="&#x2655;" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
-                                                <Setter Property="Foreground" Value="Crimson" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-                            </TextBlock>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
-        </Viewbox>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="140" />
+            </Grid.RowDefinitions>
+            <Viewbox Stretch="Uniform">
+                <Grid>
+                    <ItemsControl ItemsSource="{Binding RunViewModel.Board}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Grid localc:GridEx.ColumnCount="{Binding RunViewModel.Parameters.QueenCount}"
+                                      localc:GridEx.RowCount="{Binding RunViewModel.Parameters.QueenCount}"
+                                      localc:GridEx.ColumnWidth="30"
+                                      localc:GridEx.RowHeight="30"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Grid.Column" Value="{Binding Column}" />
+                                <Setter Property="Grid.Row" Value="{Binding Row}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Rectangle>
+                                    <Rectangle.Style>
+                                        <Style TargetType="Rectangle">
+                                            <Setter Property="Fill" Value="WhiteSmoke" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                                                    <Setter Property="Fill" Value="LightGray" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Rectangle.Style>
+                                </Rectangle>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <ItemsControl ItemsSource="{Binding RunViewModel.CurrentQueens}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Grid localc:GridEx.ColumnCount="{Binding RunViewModel.Parameters.QueenCount}"
+                                      localc:GridEx.RowCount="{Binding RunViewModel.Parameters.QueenCount}"
+                                      localc:GridEx.ColumnWidth="30"
+                                      localc:GridEx.RowHeight="30"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style>
+                                <Setter Property="Grid.Column" Value="{Binding Column}" />
+                                <Setter Property="Grid.Row" Value="{Binding Row}" />
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="&#x2655;" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                                                    <Setter Property="Foreground" Value="Crimson" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </Viewbox>
+            <oxy:PlotView Grid.Row="1"
+                          Model="{Binding RunViewModel.FitnessEvolution}" />
+        </Grid>
         <StackPanel Grid.Column="1" 
                     Margin="5">
             <ContentControl IsEnabled="{Binding RunViewModel.IsNotRunning}">
