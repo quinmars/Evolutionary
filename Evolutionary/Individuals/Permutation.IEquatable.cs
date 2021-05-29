@@ -27,7 +27,7 @@ namespace Evolutionary.Individuals
         public static bool operator !=(Permutation lhs, Permutation rhs)
             => !lhs.Equals(rhs);
         
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is Permutation other && this.Equals(other);
 
         public override int GetHashCode()
