@@ -14,8 +14,8 @@ namespace Evolutionary.Tests.Individuals
         public static IEnumerable<Func<Permutation>> Permutations { get; } = new Func<Permutation>[]
         {
             () => new Permutation(),
-            () => new Permutation(new int[]{ }, true),
-            () => new Permutation(new int[]{ }, false),
+            () => new Permutation(Array.Empty<int>(), true),
+            () => new Permutation(Array.Empty<int>(), false),
             () => new Permutation(new int[]{ 2, 1 }, true),
             () => new Permutation(new int[]{ 1, 2 }, true),
             () => new Permutation(new int[]{ 2, 1 }, false),
@@ -100,7 +100,7 @@ namespace Evolutionary.Tests.Individuals
 
         [MemberData(nameof(EqualityNullData))]
         [Theory]
-        public void EqualityNull(Permutation val)
+        public void EqualityNull(Permutation? val)
         {
             (val == null)
                 .Should().BeFalse();
