@@ -1,17 +1,12 @@
 ﻿using Evolutionary.Individuals;
-using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using NUnit.Framework;
 using Troschuetz.Random;
-using Xunit;
 
 namespace Evolutionary.Tests.Individuals
 {
     public partial class PermutationTests
     {
-        [Fact]
+        [Test]
         public void SwapMutation()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -19,11 +14,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.SwapMutation(permutation, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(array);
+            Assert.That(offspring, Is.EquivalentTo(array));
         }
-        
-        [Fact]
+
+        [Test]
         public void SwapMutation_Circular()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -31,13 +25,11 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.SwapMutation(permutation, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(array);
-            offspring
-                .Should().HaveElementAt(0, 1);
+            Assert.That(offspring, Is.EquivalentTo(array));
+            Assert.That(offspring[0], Is.EqualTo(1));
         }
-        
-        [Fact]
+
+        [Test]
         public void InsertMutation()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -45,11 +37,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.InsertMutation(permutation, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(array);
+            Assert.That(offspring, Is.EquivalentTo(array));
         }
-        
-        [Fact]
+
+        [Test]
         public void InsertMutation_Circular()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -57,13 +48,11 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.InsertMutation(permutation, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(array);
-            offspring
-                .Should().HaveElementAt(0, 1);
+            Assert.That(offspring, Is.EquivalentTo(array));
+            Assert.That(offspring[0], Is.EqualTo(1));
         }
-        
-        [Fact]
+
+        [Test]
         public void ScrambleMutation()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -71,11 +60,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.ScrambleMutation(permutation, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(array);
+            Assert.That(offspring, Is.EquivalentTo(array));
         }
-        
-        [Fact]
+
+        [Test]
         public void ScrambleMutation_Circular()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -83,13 +71,11 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.ScrambleMutation(permutation, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(array);
-            offspring
-                .Should().HaveElementAt(0, 1);
+            Assert.That(offspring, Is.EquivalentTo(array));
+            Assert.That(offspring[0], Is.EqualTo(1));
         }
-        
-        [Fact]
+
+        [Test]
         public void InversionMutation()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -97,11 +83,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.InversionMutation(permutation, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(array);
+            Assert.That(offspring, Is.EquivalentTo(array));
         }
-        
-        [Fact]
+
+        [Test]
         public void InversionMutation_Circular()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -109,10 +94,8 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.InversionMutation(permutation, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(array);
-            offspring
-                .Should().HaveElementAt(0, 1);
+            Assert.That(offspring, Is.EquivalentTo(array));
+            Assert.That(offspring[0], Is.EqualTo(1));
         }
     }
 }

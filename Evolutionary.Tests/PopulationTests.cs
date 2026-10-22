@@ -1,8 +1,7 @@
-﻿using FluentAssertions;
-using System;
+﻿using System;
 using System.Linq;
+using NUnit.Framework;
 using Troschuetz.Random;
-using Xunit;
 
 namespace Evolutionary.Tests
 {
@@ -12,8 +11,8 @@ namespace Evolutionary.Tests
         public Population<int> NonNullPopulation { get; } = Population.Create((int x) => Sq(x));
 
         private static double Sq(double x) => x * x;
-        
-        [Fact]
+
+        [Test]
         public void New_NullChecks()
         {
             Func<int, double> fitness = (x) => 0.0;
@@ -25,19 +24,14 @@ namespace Evolutionary.Tests
             Action act4 = () => new Population<int>(fitness, null, new int[] { });
             Action act5 = () => new Population<int>(null, random, new int[] { });
 
-            act1
-                .Should().Throw<ArgumentNullException>();
-            act2
-                .Should().Throw<ArgumentNullException>();
-            act3
-                .Should().Throw<ArgumentNullException>();
-            act4
-                .Should().Throw<ArgumentNullException>();
-            act5
-                .Should().Throw<ArgumentNullException>();
+            Assert.That(act1, Throws.ArgumentNullException);
+            Assert.That(act2, Throws.ArgumentNullException);
+            Assert.That(act3, Throws.ArgumentNullException);
+            Assert.That(act4, Throws.ArgumentNullException);
+            Assert.That(act5, Throws.ArgumentNullException);
         }
 
-        [Fact]
+        [Test]
         public void Create1()
         {
             Func<double, double> fitness = x => Sq(x);
@@ -45,56 +39,38 @@ namespace Evolutionary.Tests
 
             var population = Population.Create(fitness, random);
 
-            population.Fitness
-                .Should().NotBeNull();
-
-            population.Random
-                .Should().NotBeNull();
-
-            population.Individuals
-                .Should().NotBeNull();
-
-            population.Individuals
-                .Should().BeEmpty();
+            Assert.That(population.Fitness, Is.Not.Null);
+            Assert.That(population.Random, Is.Not.Null);
+            Assert.That(population.Individuals, Is.Not.Null);
+            Assert.That(population.Individuals, Is.Empty);
         }
-        
-        [Fact]
+
+        [Test]
         public void Create2()
         {
             Func<double, double> fitness = x => Sq(x);
 
             var population = Population.Create(fitness);
 
-            population.Fitness
-                .Should().Be(fitness);
-
-            population.Random
-                .Should().NotBeNull();
-
-            population.Individuals
-                .Should().NotBeNull()
-                .And.BeEmpty();
-
-            population.Individuals
-                .Should().BeEmpty();
+            Assert.That(population.Fitness, Is.EqualTo(fitness));
+            Assert.That(population.Random, Is.Not.Null);
+            Assert.That(population.Individuals, Is.Not.Null);
+            Assert.That(population.Individuals, Is.Empty);
         }
-        
-        [Fact]
+
+        [Test]
         public void Create_NullChecks()
         {
             Action act1 = () => Population.Create(default(Func<int,double>), new TRandom());
             Action act2 = () => Population.Create((int a) => 0.0, null);
             Action act3 = () => Population.Create(default(Func<int,double>));
 
-            act1
-                .Should().Throw<ArgumentNullException>();
-            act2
-                .Should().Throw<ArgumentNullException>();
-            act3
-                .Should().Throw<ArgumentNullException>();
+            Assert.That(act1, Throws.ArgumentNullException);
+            Assert.That(act2, Throws.ArgumentNullException);
+            Assert.That(act3, Throws.ArgumentNullException);
         }
 
-        [Fact]
+        [Test]
         public void AddIndividuals1()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -103,11 +79,10 @@ namespace Evolutionary.Tests
                 .Create(fitness)
                 .AddIndividuals(new[] { 1, 2, 3, 4, 5, 6, 7, 9, 8, 10 });
 
-            population.Individuals
-                .Should().BeEquivalentTo(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void AddIndividuals2()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -117,23 +92,20 @@ namespace Evolutionary.Tests
                 .AddIndividuals(new[] { 8, 10, 9 })
                 .AddIndividuals(new[] { 1, 2, 3, 4, 5, 6, 7 });
 
-            population.Individuals
-                .Should().BeEquivalentTo(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void AddIndividuals_NullChecks()
         {
             Action act1 = () => NonNullPopulation.AddIndividuals(null);
             Action act2 = () => NullPopulation.AddIndividuals(new[] { 1 });
 
-            act1
-                .Should().Throw<ArgumentNullException>();
-            act2
-                .Should().Throw<ArgumentNullException>();
+            Assert.That(act1, Throws.ArgumentNullException);
+            Assert.That(act2, Throws.ArgumentNullException);
         }
-        
-        [Fact]
+
+        [Test]
         public void AddRandomIndividuals1()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -143,11 +115,10 @@ namespace Evolutionary.Tests
                 .Create(fitness)
                 .AddRandomIndividuals(10, _ => i++);
 
-            population.Individuals
-                .Should().BeEquivalentTo(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void AddRandomIndividuals2()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -158,23 +129,20 @@ namespace Evolutionary.Tests
                 .AddRandomIndividuals(4, _ => i++)
                 .AddRandomIndividuals(6, _ => i++);
 
-            population.Individuals
-                .Should().BeEquivalentTo(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void AddRandomIndividuals_NullChecks()
         {
             Action act1 = () => NonNullPopulation.AddRandomIndividuals(200, null);
             Action act2 = () => NullPopulation.AddRandomIndividuals(200, rnd => 0);
 
-            act1
-                .Should().Throw<ArgumentNullException>();
-            act2
-                .Should().Throw<ArgumentNullException>();
+            Assert.That(act1, Throws.ArgumentNullException);
+            Assert.That(act2, Throws.ArgumentNullException);
         }
-        
-        [Fact]
+
+        [Test]
         public void SelectParentsByRank()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -199,25 +167,22 @@ namespace Evolutionary.Tests
                 .Select((x, i) => new { Value = x.Key, Count = x.Count(), Index = i })
                 .ToArray();
 
-            stats
-                .Should().HaveCount(10);
+            Assert.That(stats, Has.Length.EqualTo(10));
 
             foreach (var s in stats)
             {
                 var calc = s.Count / (count - (double)s.Index) * q;
 
-                calc
-                    .Should().BeApproximately(1.0, 0.1);
+                Assert.That(calc, Is.EqualTo(1.0).Within(0.1));
             }
         }
-        
-        [Fact]
-        public void AddRandomIndividualsNulSelectParentsByRank_NulllChecks()
+
+        [Test]
+        public void SelectParentsByRank_NullChecks()
         {
             Action act = () => NullPopulation.SelectParentsByRank();
 
-            act
-                .Should().Throw<ArgumentNullException>();
+            Assert.That(act, Throws.ArgumentNullException);
         }
     }
 }

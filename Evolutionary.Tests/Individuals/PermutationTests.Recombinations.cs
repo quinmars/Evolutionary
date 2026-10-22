@@ -1,17 +1,13 @@
-﻿using Evolutionary.Individuals;
-using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
+using Evolutionary.Individuals;
+using NUnit.Framework;
 using Troschuetz.Random;
-using Xunit;
 
 namespace Evolutionary.Tests.Individuals
 {
     public partial class PermutationTests
     {
-        [Fact]
+        [Test]
         public void PartiallyMappedCrossover_ArgumentChecks()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -26,13 +22,11 @@ namespace Evolutionary.Tests.Individuals
             Action act1 = () => Permutation.PartiallyMappedCrossover(p1, p2, new TRandom());
             Action act2 = () => Permutation.PartiallyMappedCrossover(p3, p4, new TRandom());
 
-            act1
-                .Should().Throw<ArgumentException>();
-            act2
-                .Should().Throw<ArgumentException>();
+            Assert.That(act1, Throws.ArgumentException);
+            Assert.That(act2, Throws.ArgumentException);
         }
-        
-        [Fact]
+
+        [Test]
         public void PartiallyMappedCrossover()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -42,11 +36,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.PartiallyMappedCrossover(p1, p2, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(a1);
+            Assert.That(offspring, Is.EquivalentTo(a1));
         }
-        
-        [Fact]
+
+        [Test]
         public void PartiallyMappedCrossover_Circular()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -56,13 +49,12 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.PartiallyMappedCrossover(p1, p2, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(a1);
+            Assert.That(offspring, Is.EquivalentTo(a1));
         }
-        
-        [InlineData(true)]
-        [InlineData(false)]
-        [Theory]
+
+        [TestCase(true)]
+        [TestCase(false)]
+        [Test]
         public void PartiallyMappedCrossover_Identity(bool circular)
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -70,11 +62,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.PartiallyMappedCrossover(p1, p1, new TRandom());
 
-            offspring
-                .Should().Equal(a1);
+            Assert.That(offspring, Is.EqualTo(a1));
         }
-        
-        [Fact]
+
+        [Test]
         public void CycleCrossover()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -84,11 +75,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.CycleCrossover(p1, p2, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(a1);
+            Assert.That(offspring, Is.EquivalentTo(a1));
         }
-        
-        [Fact]
+
+        [Test]
         public void CycleCrossover_Circular()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -98,11 +88,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.CycleCrossover(p1, p2, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(a1);
+            Assert.That(offspring, Is.EquivalentTo(a1));
         }
-        
-        [Fact]
+
+        [Test]
         public void CycleCrossover_ArgumentChecks()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -117,15 +106,13 @@ namespace Evolutionary.Tests.Individuals
             Action act1 = () => Permutation.CycleCrossover(p1, p2, new TRandom());
             Action act2 = () => Permutation.CycleCrossover(p3, p4, new TRandom());
 
-            act1
-                .Should().Throw<ArgumentException>();
-            act2
-                .Should().Throw<ArgumentException>();
+            Assert.That(act1, Throws.ArgumentException);
+            Assert.That(act2, Throws.ArgumentException);
         }
-        
-        [InlineData(true)]
-        [InlineData(false)]
-        [Theory]
+
+        [TestCase(true)]
+        [TestCase(false)]
+        [Test]
         public void CycleCrossover_Identity(bool circular)
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -133,12 +120,11 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.CycleCrossover(p1, p1, new TRandom());
 
-            offspring
-                .Should().Equal(a1);
+            Assert.That(offspring, Is.EqualTo(a1));
         }
 
-        
-        [Fact]
+
+        [Test]
         public void CutAndCrossfillCrossover()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -148,11 +134,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.CutAndCrossfillCrossover(p1, p2, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(a1);
+            Assert.That(offspring, Is.EquivalentTo(a1));
         }
-        
-        [Fact]
+
+        [Test]
         public void CutAndCrossfillCrossover_Circular()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -162,11 +147,10 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.CutAndCrossfillCrossover(p1, p2, new TRandom());
 
-            offspring
-                .Should().BeEquivalentTo(a1);
+            Assert.That(offspring, Is.EquivalentTo(a1));
         }
-        
-        [Fact]
+
+        [Test]
         public void CutAndCrossfillCrossover_ArgumentChecks()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -184,17 +168,14 @@ namespace Evolutionary.Tests.Individuals
             Action act2 = () => Permutation.CutAndCrossfillCrossover(p3, p4, new TRandom());
             Action act3 = () => Permutation.CutAndCrossfillCrossover(p5, p5, new TRandom());
 
-            act1
-                .Should().Throw<ArgumentException>();
-            act2
-                .Should().Throw<ArgumentException>();
-            act3
-                .Should().Throw<InvalidOperationException>();
+            Assert.That(act1, Throws.ArgumentException);
+            Assert.That(act2, Throws.ArgumentException);
+            Assert.That(act3, Throws.InvalidOperationException);
         }
-        
-        [InlineData(true)]
-        [InlineData(false)]
-        [Theory]
+
+        [TestCase(true)]
+        [TestCase(false)]
+        [Test]
         public void CutAndCrossfillCrossover_Identity(bool circular)
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
@@ -202,8 +183,7 @@ namespace Evolutionary.Tests.Individuals
 
             var offspring = Permutation.CutAndCrossfillCrossover(p1, p1, new TRandom());
 
-            offspring
-                .Should().Equal(a1);
+            Assert.That(offspring, Is.EqualTo(a1));
         }
     }
 }

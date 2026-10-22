@@ -1,11 +1,8 @@
-﻿using Evolutionary.Individuals;
-using FluentAssertions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Troschuetz.Random;
-using Xunit;
+using Evolutionary.Individuals;
+using NUnit.Framework;
 
 namespace Evolutionary.Tests.Individuals
 {
@@ -42,78 +39,61 @@ namespace Evolutionary.Tests.Individuals
             }
         }
 
-        [MemberData(nameof(ValueEqualityData))]
-        [MemberData(nameof(ReferenceEqualityData))]
-        [Theory]
+        [TestCaseSource(nameof(ValueEqualityData))]
+        [TestCaseSource(nameof(ReferenceEqualityData))]
+        [Test]
         public void Equality(Permutation a, Permutation b, bool shouldBeEqual)
         {
             if (shouldBeEqual)
             {
                 // Test Equal(object)
-                a.Equals((object)b)
-                    .Should().BeTrue();
-                a.Equals("string")
-                    .Should().BeFalse();
+                Assert.That(a.Equals((object)b), Is.True);
+                Assert.That(a.Equals("string"), Is.False);
 
                 // Test Equal(Permutation)
-                a.Equals(b)
-                    .Should().BeTrue();
+                Assert.That(a.Equals(b), Is.True);
 
                 // operator
-                (a == b)
-                    .Should().BeTrue();
-                (a != b)
-                    .Should().BeFalse();
+                Assert.That(a == b, Is.True);
+                Assert.That(a != b, Is.False);
 
-                a.GetHashCode()
-                    .Should().Be(b.GetHashCode());
+                Assert.That(a.GetHashCode(), Is.EqualTo(b.GetHashCode()));
             }
             else
             {
                 // Test Equal(object)
-                a.Equals((object)b)
-                    .Should().BeFalse();
-                a.Equals("string")
-                    .Should().BeFalse();
+                Assert.That(a.Equals((object)b), Is.False);
+                Assert.That(a.Equals("string"), Is.False);
 
                 // Test Equal(Permutation)
-                a.Equals(b)
-                    .Should().BeFalse();
+                Assert.That(a.Equals(b), Is.False);
 
                 // operator
-                (a != b)
-                    .Should().BeTrue();
-                (a == b)
-                    .Should().BeFalse();
+                Assert.That(a != b, Is.True);
+                Assert.That(a == b, Is.False);
 
                 // This is technically not required but the current
                 // implementation fulfills this. If this should ever
                 // fail it could be bad luck or the the implementation
                 // is really broken.
-                a.GetHashCode()
-                    .Should().NotBe(b.GetHashCode());
+                Assert.That(a.GetHashCode(), Is.Not.EqualTo(b.GetHashCode()));
             }
         }
 
         public static IEnumerable<object[]> EqualityNullData =>
             Permutations.Select(f => new object[] { f() });
 
-        [MemberData(nameof(EqualityNullData))]
-        [Theory]
+        [TestCaseSource(nameof(EqualityNullData))]
+        [Test]
         public void EqualityNull(Permutation? val)
         {
-            (val == null)
-                .Should().BeFalse();
-            (val != null)
-                .Should().BeTrue();
-            (null == val)
-                .Should().BeFalse();
-            (null != val)
-                .Should().BeTrue();
+            Assert.That(val == null, Is.False);
+            Assert.That(val != null, Is.True);
+            Assert.That(null == val, Is.False);
+            Assert.That(null != val, Is.True);
 
             // This is using Equals(object)
-            val.Should()
-                .NotBeNull();
+            Assert.That(val, Is.Not.Null);
         }
     }
 }

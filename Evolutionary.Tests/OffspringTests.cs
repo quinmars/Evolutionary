@@ -1,10 +1,7 @@
-﻿using FluentAssertions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
+using NUnit.Framework;
 using Troschuetz.Random;
-using Xunit;
 
 namespace Evolutionary.Tests
 {
@@ -17,7 +14,7 @@ namespace Evolutionary.Tests
             .Create((int x) => Sq(x))
             .SelectParentsByRank();
 
-        [Fact]
+        [Test]
         public void New_NullCheck()
         {
             var array = new int[] { };
@@ -28,27 +25,22 @@ namespace Evolutionary.Tests
             Action act2 = () => new Offspring<int>(pop, null, array);
             Action act3 = () => new Offspring<int>(pop, array, null);
 
-            act1
-                .Should().Throw<ArgumentNullException>();
-            act2
-                .Should().Throw<ArgumentNullException>();
-            act3
-                .Should().Throw<ArgumentNullException>();
+            Assert.That(act1, Throws.ArgumentNullException);
+            Assert.That(act2, Throws.ArgumentNullException);
+            Assert.That(act3, Throws.ArgumentNullException);
         }
-        
-        [Fact]
+
+        [Test]
         public void WithChildren_NullChecks()
         {
             Action act1 = () => NonNullOffspring.WithChildren(null);
             Action act2 = () => NullOffspring.WithChildren(new [] { 0, 1, 2 });
-            
-            act1
-                .Should().Throw<ArgumentNullException>();
-            act2
-                .Should().Throw<ArgumentNullException>();
+
+            Assert.That(act1, Throws.ArgumentNullException);
+            Assert.That(act2, Throws.ArgumentNullException);
         }
 
-        [Fact]
+        [Test]
         public void WithChildren()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -57,23 +49,20 @@ namespace Evolutionary.Tests
                 .SelectParentsByRank()
                 .WithChildren(new[] { 1, 2, 3 });
 
-            offspring.Children
-                .Should().BeEquivalentTo(1, 2, 3);
+            Assert.That(offspring.Children, Is.EquivalentTo(new[] { 1, 2, 3 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void AddChildren_NullChecks()
         {
             Action act1 = () => NonNullOffspring.AddChildren(null);
             Action act2 = () => NullOffspring.AddChildren(new [] { 0, 1, 2 });
-            
-            act1
-                .Should().Throw<ArgumentNullException>();
-            act2
-                .Should().Throw<ArgumentNullException>();
+
+            Assert.That(act1, Throws.ArgumentNullException);
+            Assert.That(act2, Throws.ArgumentNullException);
         }
 
-        [Fact]
+        [Test]
         public void AddChildren()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -83,20 +72,18 @@ namespace Evolutionary.Tests
                 .WithChildren(new[] { 1, 2, 3 })
                 .AddChildren(new[] { 7, 8, 9 });
 
-            offspring.Children
-                .Should().BeEquivalentTo(1, 2, 3, 7, 8, 9);
+            Assert.That(offspring.Children, Is.EquivalentTo(new[] { 1, 2, 3, 7, 8, 9 }));
         }
 
-        [Fact]
+        [Test]
         public void ToPopulation_NullChecks()
         {
             Action act = () => NullOffspring.ToPopulation();
-            
-            act
-                .Should().Throw<ArgumentNullException>();
+
+            Assert.That(act, Throws.ArgumentNullException);
         }
 
-        [Fact]
+        [Test]
         public void ToPopulation()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -108,17 +95,12 @@ namespace Evolutionary.Tests
                 .WithChildren(new[] { 1, 2, 3 })
                 .ToPopulation();
 
-            secondGen.Fitness
-                .Should().Be(firstGen.Fitness);
-
-            secondGen.Random
-                .Should().Be(firstGen.Random);
-
-            secondGen.Individuals
-                .Should().BeEquivalentTo(1, 2, 3);
+            Assert.That(secondGen.Fitness, Is.EqualTo(firstGen.Fitness));
+            Assert.That(secondGen.Random, Is.EqualTo(firstGen.Random));
+            Assert.That(secondGen.Individuals, Is.EquivalentTo(new[] { 1, 2, 3 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void ToPopulationEagerness()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -130,23 +112,20 @@ namespace Evolutionary.Tests
                 .WithChildren(Enumerable.Repeat(0, 3).Select(_ => i++))
                 .ToPopulation();
 
-            population.Individuals
-                .Should().BeEquivalentTo(1, 2, 3);
+            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3 }));
 
-            population.Individuals
-                .Should().BeEquivalentTo(1, 2, 3);
+            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void SelectElite_NullChecks()
         {
             Action act = () => NullOffspring.SelectElite(2);
-            
-            act
-                .Should().Throw<ArgumentNullException>();
+
+            Assert.That(act, Throws.ArgumentNullException);
         }
 
-        [Fact]
+        [Test]
         public void SelectElite()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -161,29 +140,24 @@ namespace Evolutionary.Tests
                 new int [] { 20, 21 })
                 .SelectElite(4);
 
-            offspring.Children
-                .Should().BeEquivalentTo(1, 2, 3, 4, 20, 21);
+            Assert.That(offspring.Children, Is.EquivalentTo(new[] { 1, 2, 3, 4, 20, 21 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void Recombine_NullChecks()
         {
             Action act1 = () => NonNullOffspring.Recombine(10, default(Func<int, int, TRandom, int>));
             Action act2 = () => NonNullOffspring.Recombine(10, default(Func<int, int, TRandom, int[]>));
             Action act3 = () => NullOffspring.Recombine(10, (a, b, rnd) => a);
             Action act4 = () => NullOffspring.Recombine(10, (a, b, rnd) => new [] { a, b });
-            
-            act1
-                .Should().Throw<ArgumentNullException>();
-            act2
-                .Should().Throw<ArgumentNullException>();
-            act3
-                .Should().Throw<ArgumentNullException>();
-            act4
-                .Should().Throw<ArgumentNullException>();
+
+            Assert.That(act1, Throws.ArgumentNullException);
+            Assert.That(act2, Throws.ArgumentNullException);
+            Assert.That(act3, Throws.ArgumentNullException);
+            Assert.That(act4, Throws.ArgumentNullException);
         }
 
-        [Fact]
+        [Test]
         public void Recombine1()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -198,11 +172,10 @@ namespace Evolutionary.Tests
                 new int [] { 100 })
                 .Recombine(3, (a, b, r) => a + b);
 
-            offspring.Children
-                .Should().Equal(100, 60, 62, 64);
+            Assert.That(offspring.Children, Is.EqualTo(new[] { 100, 60, 62, 64 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void Recombine2()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -217,23 +190,20 @@ namespace Evolutionary.Tests
                 new int [] { 100 })
                 .Recombine(3, (a, b, r) => new [] { a, b });
 
-            offspring.Children
-                .Should().Equal(100, 30, 30, 31);
+            Assert.That(offspring.Children, Is.EqualTo(new[] { 100, 30, 30, 31 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void Mutate_NullChecks()
         {
             Action act1 = () => NonNullOffspring.Mutate(10, default(Func<int, TRandom, int>));
             Action act2 = () => NullOffspring.Mutate(10, (a, rnd) => a);
-            
-            act1
-                .Should().Throw<ArgumentNullException>();
-            act2
-                .Should().Throw<ArgumentNullException>();
+
+            Assert.That(act1, Throws.ArgumentNullException);
+            Assert.That(act2, Throws.ArgumentNullException);
         }
-        
-        [Fact]
+
+        [Test]
         public void Mutate()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -248,20 +218,18 @@ namespace Evolutionary.Tests
                 new int [] { 100 })
                 .Mutate(3, (a, r) => a + 100);
 
-            offspring.Children
-                .Should().Equal(100, 130, 131, 132);
+            Assert.That(offspring.Children, Is.EqualTo(new[] { 100, 130, 131, 132 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void SelectSurvivors_NullChecks()
         {
             Action act = () => NullOffspring.SelectSurvivors(10);
-            
-            act
-                .Should().Throw<ArgumentNullException>();
+
+            Assert.That(act, Throws.ArgumentNullException);
         }
-        
-        [Fact]
+
+        [Test]
         public void SelectSurvivors()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -271,20 +239,18 @@ namespace Evolutionary.Tests
                 .WithChildren(new[] { 6, 5, 3, 1, 8, 2 })
                 .SelectSurvivors(3);
 
-            offspring.Children
-                .Should().BeEquivalentTo(1, 2, 3);
+            Assert.That(offspring.Children, Is.EquivalentTo(new[] { 1, 2, 3 }));
         }
-        
-        [Fact]
+
+        [Test]
         public void Eagerly_NullChecks()
         {
             Action act = () => NullOffspring.Eagerly();
-            
-            act
-                .Should().Throw<ArgumentNullException>();
+
+            Assert.That(act, Throws.ArgumentNullException);
         }
-        
-        [Fact]
+
+        [Test]
         public void Eagerly_Eagerness()
         {
             Func<int, double> fitness = x => Sq(x);
@@ -296,11 +262,9 @@ namespace Evolutionary.Tests
                 .WithChildren(Enumerable.Repeat(0, 3).Select(_ => i++))
                 .Eagerly();
 
-            offspring.Children
-                .Should().BeEquivalentTo(1, 2, 3);
+            Assert.That(offspring.Children, Is.EquivalentTo(new[] { 1, 2, 3 }));
 
-            offspring.Children
-                .Should().BeEquivalentTo(1, 2, 3);
+            Assert.That(offspring.Children, Is.EquivalentTo(new[] { 1, 2, 3 }));
         }
     }
 }

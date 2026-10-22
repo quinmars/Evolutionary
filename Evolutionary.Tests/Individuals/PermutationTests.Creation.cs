@@ -1,38 +1,28 @@
 ﻿using Evolutionary.Individuals;
-using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using NUnit.Framework;
 using Troschuetz.Random;
-using Xunit;
 
 namespace Evolutionary.Tests.Individuals
 {
     public partial class PermutationTests
     {
-        [Fact]
+        [Test]
         public void CreateRandomly()
         {
             var permutation = Permutation.CreateRandomly(5, new TRandom());
 
-            permutation
-                .Should().BeEquivalentTo(0, 1, 2, 3, 4);
-            permutation.IsCircular
-                .Should().BeFalse();
+            Assert.That(permutation, Is.EquivalentTo(new[] { 0, 1, 2, 3, 4 }));
+            Assert.That(permutation.IsCircular, Is.False);
         }
-        
-        [Fact]
+
+        [Test]
         public void CreateRandomlyCircular()
         {
             var permutation = Permutation.CreateCircularRandomly(5, new TRandom());
 
-            permutation
-                .Should().BeEquivalentTo(0, 1, 2, 3, 4);
-            permutation.IsCircular
-                .Should().BeTrue();
-            permutation
-                .Should().HaveElementAt(0, 0);
+            Assert.That(permutation, Is.EquivalentTo(new[] { 0, 1, 2, 3, 4 }));
+            Assert.That(permutation.IsCircular, Is.True);
+            Assert.That(permutation[0], Is.EqualTo(0));
         }
     }
 }

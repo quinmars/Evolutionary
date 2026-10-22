@@ -1,60 +1,45 @@
-﻿using Evolutionary.Individuals;
-using FluentAssertions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Troschuetz.Random;
-using Xunit;
+﻿using System;
+using Evolutionary.Individuals;
+using NUnit.Framework;
 
 namespace Evolutionary.Tests.Individuals
 {
     public partial class PermutationTests
     {
-        [Fact]
+        [Test]
         public void New_Count()
         {
             var permutation = new Permutation(5);
 
-            permutation
-                .Should().Equal(0, 1, 2, 3, 4);
-
-            permutation.IsCircular
-                .Should().BeFalse();
+            Assert.That(permutation, Is.EqualTo(new[] { 0, 1, 2, 3, 4 }));
+            Assert.That(permutation.IsCircular, Is.False);
         }
-        
-        [Fact]
+
+        [Test]
         public void New_Count_Circular()
         {
             var permutation = new Permutation(5, true);
 
-            permutation
-                .Should().Equal(0, 1, 2, 3, 4);
-
-            permutation.IsCircular
-                .Should().BeTrue();
+            Assert.That(permutation, Is.EqualTo(new[] { 0, 1, 2, 3, 4 }));
+            Assert.That(permutation.IsCircular, Is.True);
         }
-        
-        [Fact]
+
+        [Test]
         public void New_Array()
         {
             var permutation = new Permutation(new int[] { 3, 4, 1, 2}, false);
 
-            permutation
-                .Should().Equal(3, 4, 1, 2);
-            permutation.IsCircular
-                .Should().BeFalse();
+            Assert.That(permutation, Is.EqualTo(new[] { 3, 4, 1, 2 }));
+            Assert.That(permutation.IsCircular, Is.False);
         }
-        
-        [Fact]
+
+        [Test]
         public void New_Array_Circular()
         {
             var permutation = new Permutation(new int[] { 5, 2, 3, 4}, true);
 
-            permutation
-                .Should().Equal(5, 2, 3, 4);
-            permutation.IsCircular
-                .Should().BeTrue();
+            Assert.That(permutation, Is.EqualTo(new[] { 5, 2, 3, 4 }));
+            Assert.That(permutation.IsCircular, Is.True);
         }
     }
 }
