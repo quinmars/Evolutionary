@@ -1,34 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Troschuetz.Random;
+﻿namespace Evolutionary.Individuals;
 
-namespace Evolutionary.Individuals
+public readonly partial struct Permutation
 {
-    public readonly partial struct Permutation
+    private (int a, int b) GetRandomIndexPair(TRandom random)
     {
-        private void GetRandomIndexPair(TRandom random, out int a, out int b)
+        var start = IsCircular ? 1 : 0;
+        return GetRandomIndexPair(random, _elements.Length, start);
+    }
+
+    private static (int a, int b) GetRandomIndexPair(TRandom random, int n, int start)
+    {
+        var a = random.Next(start, n);
+
+        int b;
+        do
         {
-            var start = IsCircular ? 1 : 0;
-            GetRandomIndexPair(random, _elements.Length, start, out a, out b);
+            b = random.Next(start, n);
         }
+        while (a == b);
 
-        private static void GetRandomIndexPair(TRandom random, int n, int start, out int a, out int b)
-        {
-            a = random.Next(start, n);
-
-            do
-            {
-                b = random.Next(start, n);
-            }
-            while (a == b);
-
-            if (b < a)
-            {
-                var tmp = a;
-                a = b;
-                b = tmp;
-            }
-        }
+        return a < b ? (a, b) : (b, a);
     }
 }

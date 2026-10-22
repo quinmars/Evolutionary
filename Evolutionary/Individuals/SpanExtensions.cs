@@ -1,239 +1,228 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Troschuetz.Random;
+﻿namespace Evolutionary.Individuals;
 
-namespace Evolutionary.Individuals
+public static class SpanExtensions
 {
-    public static class SpanExtensions
+    public static void Swap(this Span<int> span, int a, int b)
     {
-        public static void Swap(this Span<int> span, int a, int b)
+        (span[a], span[b]) = (span[b], span[a]);
+    }
+
+    public static void RightRotate(this Span<int> span)
+    {
+        var lastIndex = span.Length - 1;
+
+        if (lastIndex < 1)
         {
-            int tmp = span[a];
-            span[a] = span[b];
-            span[b] = tmp;
+            return;
         }
 
-        public static void RightRotate(this Span<int> span)
+        var tmp = span[lastIndex];
+        for (var i = lastIndex; i > 0; i--)
         {
-            var lastIndex = span.Length - 1;
+            span[i] = span[i - 1];
+        }
 
-            if (lastIndex < 1)
-            {
+        span[0] = tmp;
+    }
+
+    public static void RightRotate(this Span<int> span, int k)
+    {
+        if (span.Length < 2)
+        {
+            return;
+        }
+
+        k %= span.Length;
+
+        if (k < 0)
+        {
+            k = span.Length + k;
+        }
+
+        switch (k)
+        {
+            case 0:
                 return;
-            }
-
-            int tmp = span[lastIndex];
-            for (int i = lastIndex; i > 0; i--)
-            {
-                span[i] = span[i - 1];
-            }
-
-            span[0] = tmp;
-        }
-
-        public static void RightRotate(this Span<int> span, int k)
-        {
-            if (span.Length < 2)
-            {
+            case 1:
+                span.RightRotate();
                 return;
-            }
-
-            k %= span.Length;
-
-            if (k < 0)
-            {
-                k = span.Length + k;
-            }
-
-            switch (k)
-            {
-                case 0:
-                    return;
-                case 1:
-                    span.RightRotate();
-                    return;
-                case 2:
-                    span.RightRotate();
-                    span.RightRotate();
-                    return;
-                default:
-                    span.Reverse();
-                    span.Slice(0, k).Reverse();
-                    span.Slice(k).Reverse();
-                    return;
-            }
-        }
-        
-        public static void LeftRotate(this Span<int> span)
-        {
-            if (span.Length < 2)
-            {
+            case 2:
+                span.RightRotate();
+                span.RightRotate();
                 return;
-            }
-
-            int first = span[0];
-            for (int i = 1; i < span.Length; i++)
-            {
-                span[i - 1] = span[i];
-            }
-
-            span[span.Length - 1] = first;
-        }
-
-        public static void LeftRotate(this Span<int> span, int k)
-        {
-            if (span.Length < 2)
-            {
+            default:
+                span.Reverse();
+                span.Slice(0, k).Reverse();
+                span.Slice(k).Reverse();
                 return;
-            }
+        }
+    }
 
-            k %= span.Length;
-
-            switch (k)
-            {
-                case 0:
-                    return;
-                case 1:
-                    span.LeftRotate();
-                    return;
-                case 2:
-                    span.LeftRotate();
-                    span.LeftRotate();
-                    return;
-                default:
-                    span.RightRotate(span.Length - k);
-                    return;
-            }
+    public static void LeftRotate(this Span<int> span)
+    {
+        if (span.Length < 2)
+        {
+            return;
         }
 
-        public static void Scramble(this Span<int> span, TRandom random)
+        var first = span[0];
+        for (var i = 1; i < span.Length; i++)
         {
-            var n = span.Length;
-            for (int i = 0; i < n - 1; i++)
-            {
-                var j = random.Next(i + 1, n);
-                span.Swap(i, j);
-            }
+            span[i - 1] = span[i];
         }
 
-        public static void PartiallyMappedCrossover(this ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, int start, int length, Span<int> offspring)
+        span[span.Length - 1] = first;
+    }
+
+    public static void LeftRotate(this Span<int> span, int k)
+    {
+        if (span.Length < 2)
         {
-            // The following description is taken from the book
-            // A.E. Eiben and J.E. Smith: "Introduction to Evolutionary Computing", 2015 (2nd Edition)
-            // 
-            offspring.Fill(-1);
+            return;
+        }
 
-            var segment1 = p1.Slice(start, length);
+        k %= span.Length;
 
-            // Step 1: copy the segment from the first parent into the offspring
+        switch (k)
+        {
+            case 0:
+                return;
+            case 1:
+                span.LeftRotate();
+                return;
+            case 2:
+                span.LeftRotate();
+                span.LeftRotate();
+                return;
+            default:
+                span.RightRotate(span.Length - k);
+                return;
+        }
+    }
+
+    public static void Scramble(this Span<int> span, TRandom random)
+    {
+        var n = span.Length;
+        for (var i = 0; i < n - 1; i++)
+        {
+            var j = random.Next(i + 1, n);
+            span.Swap(i, j);
+        }
+    }
+
+    public static void PartiallyMappedCrossover(this ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, int start, int length, Span<int> offspring)
+    {
+        // The following description is taken from the book
+        // A.E. Eiben and J.E. Smith: "Introduction to Evolutionary Computing", 2015 (2nd Edition)
+        //
+        offspring.Fill(-1);
+
+        var segment1 = p1.Slice(start, length);
+
+        // Step 1: copy the segment from the first parent into the offspring
+        //
+        //      123456789
+        //                   -->  ___4567__
+        //      937826514
+        //
+        segment1.CopyTo(offspring.Slice(start, length));
+
+        // Step 2: Starting from the crossover point look for elements in
+        // that segment of the second parent that have not been copied.
+        for (var i = start; i < start + length; i++)
+        {
+            var e = p2[i];
+            if (segment1.IndexOf(e) != -1)
+            {
+                continue;
+            }
+
+            // Step 3: For each of these (say e), look in the offspring to
+            // see what element (say f) has been copied in its place from
+            // p1.
             //
-            //      123456789
-            //                   -->  ___4567__
-            //      937826514
+            //  123456789
+            //               -->  ___4567_8
+            //  937826514
+            //     ^    ^
+            //     i    j
+
+            // Step 4: Place e into the position occupied by f in p2,
+            // since we know that we will not be putting f there.
             //
-            segment1.CopyTo(offspring.Slice(start, length));
-
-            // Step 2: Starting from the crossover point look for elements in
-            // that segment of the second parent that have not been copied.
-            for (int i = start; i < start + length; i++)
+            // Step5: If the place occupied by j in p2 has already been
+            // filled in the offspring by an element f, put i in the
+            // position occupied by f in p2.
+            //
+            //        f
+            //  123456789
+            //               -->  __24567_8
+            //  937826514
+            //    f ^ ^
+            //      i j
+            var j = i;
+            do
             {
-                var e = p2[i];
-                if (segment1.IndexOf(e) != -1)
-                {
-                    continue;
-                }
-
-                // Step 3: For each of these (say e), look in the offspring to
-                // see what element (say f) has been copied in its place from
-                // p1.
-                //
-                //  123456789
-                //               -->  ___4567_8
-                //  937826514
-                //     ^    ^
-                //     i    j
-
-                // Step 4: Place e into the position occupied by f in p2,
-                // since we know that we will not be putting f there.
-                //
-                // Step5: If the place occupied by j in p2 has already been
-                // filled in the offspring by an element f, put i in the
-                // position occupied by f in p2.
-                //
-                //        f
-                //  123456789
-                //               -->  __24567_8
-                //  937826514
-                //    f ^ ^
-                //      i j
-                var j = i;
-                do
-                {
-                    var f = offspring[j];
-                    j = p2.IndexOf(f);
-                }
-                while (offspring[j] != -1);
-
-                offspring[j] = e;
+                var f = offspring[j];
+                j = p2.IndexOf(f);
             }
+            while (offspring[j] != -1);
 
-            // Step 6: The remaining positions in this offspring can be filled
-            // from p2.
-            for (int i = 0; i < offspring.Length; i++)
-            {
-                if (offspring[i] == -1)
-                {
-                    offspring[i] = p2[i];
-                }
-            }
-        }
-        
-        public static void CycleCrossover(this ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, Span<int> offspring)
-        {
-            offspring.Fill(-1);
-
-            var main = p1;
-            var compliment = p2;
-
-            for (var i = 0; i < offspring.Length; i++)
-            {
-                if (offspring[i] != -1)
-                {
-                    continue;
-                }
-
-                var j = i;
-
-                do
-                {
-                    offspring[j] = main[j];
-                    j = main.IndexOf(compliment[j]);
-                }
-                while (j != i);
-
-                var tmp = main;
-                main = compliment;
-                compliment = tmp;
-            }
+            offspring[j] = e;
         }
 
-        public static void CutAndCrossfillCrossover(this ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, int position, Span<int> offspring)
+        // Step 6: The remaining positions in this offspring can be filled
+        // from p2.
+        for (var i = 0; i < offspring.Length; i++)
         {
-            var span = p1.Slice(0, position);
-            span.CopyTo(offspring);
-
-            int j = 0;
-            for (int i = position; i < offspring.Length; i++)
+            if (offspring[i] == -1)
             {
-                var element = p2[j];
-                while (j < p2.Length && span.IndexOf(p2[j]) != -1)
-                {
-                    j++;
-                }
-                offspring[i] = p2[j];
+                offspring[i] = p2[i];
+            }
+        }
+    }
+
+    public static void CycleCrossover(this ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, Span<int> offspring)
+    {
+        offspring.Fill(-1);
+
+        var main = p1;
+        var compliment = p2;
+
+        for (var i = 0; i < offspring.Length; i++)
+        {
+            if (offspring[i] != -1)
+            {
+                continue;
+            }
+
+            var j = i;
+
+            do
+            {
+                offspring[j] = main[j];
+                j = main.IndexOf(compliment[j]);
+            }
+            while (j != i);
+
+            (main, compliment) = (compliment, main);
+        }
+    }
+
+    public static void CutAndCrossfillCrossover(this ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, int position, Span<int> offspring)
+    {
+        var span = p1.Slice(0, position);
+        span.CopyTo(offspring);
+
+        var j = 0;
+        for (var i = position; i < offspring.Length; i++)
+        {
+            while (j < p2.Length && span.IndexOf(p2[j]) != -1)
+            {
                 j++;
             }
+            offspring[i] = p2[j];
+            j++;
         }
     }
 }
