@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reactive.Linq;
 using System.Reactive;
+using System.Reactive.Concurrency;
 using Evolutionary;
 using Evolutionary.Individuals;
 using OxyPlot;
@@ -50,7 +51,7 @@ namespace EightQueens
         public bool IsNotRunning => _isNotRunning.Value;
 
         public ReactiveCommand<Parameters, IEnumerable<RunResult>> Run { get; }
-        public ReactiveCommand<Unit, Unit> Cancel { get; }
+        public ReactiveCommand<ReactiveUI.Primitives.RxVoid, ReactiveUI.Primitives.RxVoid> Cancel { get; }
 
         public PlotModel FitnessEvolution { get; }
 
@@ -167,7 +168,7 @@ namespace EightQueens
             var n = param.QueenCount;
 
             return Observable
-                .Repeat(Unit.Default, RxApp.TaskpoolScheduler)
+                .Repeat(Unit.Default, Scheduler.Default)
                 .Scan(
                     seed: Population
                         .Create(fitness)
@@ -192,7 +193,7 @@ namespace EightQueens
                 })
                 .Do(r => Console.WriteLine($"{r.Run}: {r.BestFitness}"))
                 .TakeUntil(r => r.BestFitness == 0.0)
-                .Buffer(TimeSpan.FromSeconds(0.5), RxApp.MainThreadScheduler)
+                .Buffer(TimeSpan.FromSeconds(0.5), DispatcherScheduler.Current)
                 .Where(b => b.Any());
         }
     }
