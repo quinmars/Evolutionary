@@ -104,11 +104,11 @@ namespace Evolutionary
 
             while (true)
             {
-                yield return GetRandomIndiviual(individuals, random);
+                yield return GetRandomIndividual(individuals, random);
             }
         }
 
-        private static TIndividual GetRandomIndiviual<TIndividual>(IReadOnlyList<TIndividual> individuals, TRandom rnd)
+        private static TIndividual GetRandomIndividual<TIndividual>(IReadOnlyList<TIndividual> individuals, TRandom rnd)
         {
             double count = individuals.Count;
             double p(int index)
