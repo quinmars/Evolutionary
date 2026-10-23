@@ -1,18 +1,12 @@
 ﻿using Evolutionary.Individuals;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EightQueens
+namespace EightQueens;
+
+public record RunResult
 {
-    public class RunResult
-    {
-        public int Run { get; set; }
-        public Permutation BestIndividual { get; set; }
-        public double BestFitness { get; set; }
-        public double MedianFitness { get; set; }
-        public double WorstFitness { get; set; }
-    }
+    public int Run { get; init; }
+    public Permutation BestIndividual { get; init; }
+    public double BestFitness { get; init; }
+    public double MedianFitness { get; init; }
+    public double WorstFitness { get; init; }
 }

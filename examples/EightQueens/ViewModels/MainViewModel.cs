@@ -1,24 +1,17 @@
 ﻿using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EightQueens
+namespace EightQueens;
+
+public class MainViewModel : ReactiveObject
 {
-    public class MainViewModel : ReactiveObject
+    public ParametersViewModel ParametersViewModel { get; } = new();
+    public RunViewModel RunViewModel { get; } = new();
+
+    //public ReactiveCommand<Unit, Parameters> Start { get; }
+
+    public MainViewModel()
     {
-        public ParametersViewModel ParametersViewModel { get; } = new ParametersViewModel();
-        public RunViewModel RunViewModel { get; } = new RunViewModel();
-
-        //public ReactiveCommand<Unit, Parameters> Start { get; }
-
-        public MainViewModel()
-        {
-            //Start = ReactiveCommand.Create(() => ParametersViewModel.Parameters);
-            //Start.Subscribe(p => RunViewModel.Parameters = p);
-        }
+        //Start = ReactiveCommand.Create(() => ParametersViewModel.Parameters);
+        //Start.Subscribe(p => RunViewModel.Parameters = p);
     }
 }

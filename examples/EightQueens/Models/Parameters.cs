@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace EightQueens;
 
-namespace EightQueens
+public record Parameters
 {
-    public class Parameters
-    {
-        public int QueenCount { get; set; }
+    public int QueenCount { get; init; }
 
-        // Mutation
-        public int EliteSelection { get; set; }
-        public int InsertMutation { get; set; }
-        public int InversionMutation { get; set; }
+    // Mutation
+    public int EliteSelection { get; init; }
+    public int InsertMutation { get; init; }
+    public int InversionMutation { get; init; }
 
-        // Recombination
-        public int CycleCrossover { get; set; }
-        public int PartiallyMappedCrossover { get; set; }
-        public int CutAndCrossfillCrossover { get; set; }
-    }
+    // Recombination
+    public int CycleCrossover { get; init; }
+    public int PartiallyMappedCrossover { get; init; }
+    public int CutAndCrossfillCrossover { get; init; }
 }
