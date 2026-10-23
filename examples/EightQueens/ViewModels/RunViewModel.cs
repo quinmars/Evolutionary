@@ -24,8 +24,8 @@ namespace EightQueens
             public bool IsHighlighted { get; set; }
         }
 
-        private Parameters _parameters;
-        public Parameters Parameters
+        private Parameters? _parameters;
+        public Parameters? Parameters
         {
             get => _parameters;
             set => this.RaiseAndSetIfChanged(ref _parameters, value);
@@ -78,7 +78,7 @@ namespace EightQueens
             };
 
             this.WhenAnyValue(x => x.Parameters)
-                .Where(x => x != null)
+                .WhereNotNull()
                 .Select(p =>
                     from col in Enumerable.Range(0, p.QueenCount)
                     from row in Enumerable.Range(0, p.QueenCount)
@@ -95,10 +95,12 @@ namespace EightQueens
             Run = ReactiveCommand.CreateFromObservable((Parameters p) =>
             {
                 RunResults = new RunResult[] { };
-                return RunPopulation(p).TakeUntil(Cancel);
+                // Cancel is assigned directly after this command is created,
+                // before the command can ever be executed.
+                return RunPopulation(p).TakeUntil(Cancel!);
             });
             Run.Select(r => r.Last())
-                .ToProperty(this, x => x.LastRun, out _lastRun, default(RunResult));
+                .ToProperty(this, x => x.LastRun, out _lastRun);
             Run.IsExecuting
                 .Select(x => !x)
                 .ToProperty(this, x => x.IsNotRunning, out _isNotRunning);
