@@ -12,7 +12,7 @@ namespace Evolutionary.Tests
         [Test]
         public void NextStandardNormal_NullChecks()
         {
-            Random rnd = null;
+            Random rnd = null!;
 
             Action act = () => rnd.NextNormal();
 
@@ -22,7 +22,7 @@ namespace Evolutionary.Tests
         [Test]
         public void NextNormal_NullChecks()
         {
-            Random rnd = null;
+            Random rnd = null!;
 
             Action act = () => rnd.NextNormal(0.0, 1.0);
 

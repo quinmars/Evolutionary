@@ -9,7 +9,7 @@ namespace Evolutionary.Tests
     {
         private static double Sq(double x) => x * x;
 
-        public Offspring<int> NullOffspring { get; } = null;
+        public Offspring<int> NullOffspring { get; } = null!;
         public Offspring<int> NonNullOffspring { get; } = Population
             .Create((int x) => Sq(x))
             .SelectParentsByRank();
@@ -21,9 +21,9 @@ namespace Evolutionary.Tests
 
             var pop = Population.Create((int i) => 0.0);
 
-            Action act1 = () => new Offspring<int>(null, array, array);
-            Action act2 = () => new Offspring<int>(pop, null, array);
-            Action act3 = () => new Offspring<int>(pop, array, null);
+            Action act1 = () => new Offspring<int>(null!, array, array);
+            Action act2 = () => new Offspring<int>(pop, null!, array);
+            Action act3 = () => new Offspring<int>(pop, array, null!);
 
             Assert.That(act1, Throws.ArgumentNullException);
             Assert.That(act2, Throws.ArgumentNullException);
@@ -33,7 +33,7 @@ namespace Evolutionary.Tests
         [Test]
         public void WithChildren_NullChecks()
         {
-            Action act1 = () => NonNullOffspring.WithChildren(null);
+            Action act1 = () => NonNullOffspring.WithChildren(null!);
             Action act2 = () => NullOffspring.WithChildren(new [] { 0, 1, 2 });
 
             Assert.That(act1, Throws.ArgumentNullException);
@@ -55,7 +55,7 @@ namespace Evolutionary.Tests
         [Test]
         public void AddChildren_NullChecks()
         {
-            Action act1 = () => NonNullOffspring.AddChildren(null);
+            Action act1 = () => NonNullOffspring.AddChildren(null!);
             Action act2 = () => NullOffspring.AddChildren(new [] { 0, 1, 2 });
 
             Assert.That(act1, Throws.ArgumentNullException);
@@ -146,8 +146,8 @@ namespace Evolutionary.Tests
         [Test]
         public void Recombine_NullChecks()
         {
-            Action act1 = () => NonNullOffspring.Recombine(10, default(Func<int, int, Random, int>));
-            Action act2 = () => NonNullOffspring.Recombine(10, default(Func<int, int, Random, int[]>));
+            Action act1 = () => NonNullOffspring.Recombine(10, (Func<int, int, Random, int>)null!);
+            Action act2 = () => NonNullOffspring.Recombine(10, (Func<int, int, Random, int[]>)null!);
             Action act3 = () => NullOffspring.Recombine(10, (a, b, rnd) => a);
             Action act4 = () => NullOffspring.Recombine(10, (a, b, rnd) => new [] { a, b });
 
@@ -196,7 +196,7 @@ namespace Evolutionary.Tests
         [Test]
         public void Mutate_NullChecks()
         {
-            Action act1 = () => NonNullOffspring.Mutate(10, default(Func<int, Random, int>));
+            Action act1 = () => NonNullOffspring.Mutate(10, (Func<int, Random, int>)null!);
             Action act2 = () => NullOffspring.Mutate(10, (a, rnd) => a);
 
             Assert.That(act1, Throws.ArgumentNullException);
