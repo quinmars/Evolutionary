@@ -40,7 +40,7 @@ for (int i = 0; i < 50; i++)
                 var mu = (a + b) / 2;
                 var sigma = (a == b) ? 1.0E-6 : Math.Abs(a - b) / 2;
 
-                return Math.Abs(rnd.Normal(mu, sigma));
+                return Math.Abs(rnd.NextNormal(mu, sigma));
             })
         .SelectElite(2)         // We preserve the two best individuals
                                 // of the parent generation.

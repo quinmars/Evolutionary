@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Troschuetz.Random;
+
 
 namespace Evolutionary.Tests
 {
@@ -146,8 +146,8 @@ namespace Evolutionary.Tests
         [Test]
         public void Recombine_NullChecks()
         {
-            Action act1 = () => NonNullOffspring.Recombine(10, default(Func<int, int, TRandom, int>));
-            Action act2 = () => NonNullOffspring.Recombine(10, default(Func<int, int, TRandom, int[]>));
+            Action act1 = () => NonNullOffspring.Recombine(10, default(Func<int, int, Random, int>));
+            Action act2 = () => NonNullOffspring.Recombine(10, default(Func<int, int, Random, int[]>));
             Action act3 = () => NullOffspring.Recombine(10, (a, b, rnd) => a);
             Action act4 = () => NullOffspring.Recombine(10, (a, b, rnd) => new [] { a, b });
 
@@ -196,7 +196,7 @@ namespace Evolutionary.Tests
         [Test]
         public void Mutate_NullChecks()
         {
-            Action act1 = () => NonNullOffspring.Mutate(10, default(Func<int, TRandom, int>));
+            Action act1 = () => NonNullOffspring.Mutate(10, default(Func<int, Random, int>));
             Action act2 = () => NullOffspring.Mutate(10, (a, rnd) => a);
 
             Assert.That(act1, Throws.ArgumentNullException);

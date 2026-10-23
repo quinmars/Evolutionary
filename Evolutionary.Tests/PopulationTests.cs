@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Troschuetz.Random;
+
 
 namespace Evolutionary.Tests
 {
@@ -16,7 +16,7 @@ namespace Evolutionary.Tests
         public void New_NullChecks()
         {
             Func<int, double> fitness = (x) => 0.0;
-            var random = new TRandom();
+            var random = new Random();
 
             Action act1 = () => new Population<int>(null, random);
             Action act2 = () => new Population<int>(fitness, null);
@@ -35,7 +35,7 @@ namespace Evolutionary.Tests
         public void Create1()
         {
             Func<double, double> fitness = x => Sq(x);
-            var random = new TRandom();
+            var random = new Random();
 
             var population = Population.Create(fitness, random);
 
@@ -61,7 +61,7 @@ namespace Evolutionary.Tests
         [Test]
         public void Create_NullChecks()
         {
-            Action act1 = () => Population.Create(default(Func<int,double>), new TRandom());
+            Action act1 = () => Population.Create(default(Func<int,double>), new Random());
             Action act2 = () => Population.Create((int a) => 0.0, null);
             Action act3 = () => Population.Create(default(Func<int,double>));
 

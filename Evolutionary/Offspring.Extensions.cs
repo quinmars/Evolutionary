@@ -44,7 +44,7 @@ public static class Offspring
         return offspring.AddChildren(children);
     }
 
-    public static Offspring<TIndividual> Recombine<TIndividual>(this Offspring<TIndividual> offspring, int count, Func<TIndividual, TIndividual, TRandom, TIndividual> recombine)
+    public static Offspring<TIndividual> Recombine<TIndividual>(this Offspring<TIndividual> offspring, int count, Func<TIndividual, TIndividual, Random, TIndividual> recombine)
     {
         ArgumentNullException.ThrowIfNull(offspring);
         ArgumentNullException.ThrowIfNull(recombine);
@@ -58,7 +58,7 @@ public static class Offspring
         return offspring.AddChildren(children);
     }
 
-    public static Offspring<TIndividual> Recombine<TIndividual>(this Offspring<TIndividual> offspring, int count, Func<TIndividual, TIndividual, TRandom, IEnumerable<TIndividual>> recombine)
+    public static Offspring<TIndividual> Recombine<TIndividual>(this Offspring<TIndividual> offspring, int count, Func<TIndividual, TIndividual, Random, IEnumerable<TIndividual>> recombine)
     {
         ArgumentNullException.ThrowIfNull(offspring);
         ArgumentNullException.ThrowIfNull(recombine);
@@ -73,7 +73,7 @@ public static class Offspring
         return offspring.AddChildren(children);
     }
 
-    public static Offspring<TIndividual> Mutate<TIndividual>(this Offspring<TIndividual> offspring, int count, Func<TIndividual, TRandom, TIndividual> mutate)
+    public static Offspring<TIndividual> Mutate<TIndividual>(this Offspring<TIndividual> offspring, int count, Func<TIndividual, Random, TIndividual> mutate)
     {
         ArgumentNullException.ThrowIfNull(offspring);
         ArgumentNullException.ThrowIfNull(mutate);

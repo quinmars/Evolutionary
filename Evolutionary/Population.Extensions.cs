@@ -9,7 +9,7 @@ public static class Population
     /// <param name="fitness">The fitness function.</param>
     /// <param name="random">The random generator.</param>
     /// <returns>The population.</returns>
-    public static Population<TIndividual> Create<TIndividual>(Func<TIndividual, double> fitness, TRandom random)
+    public static Population<TIndividual> Create<TIndividual>(Func<TIndividual, double> fitness, Random random)
     {
         ArgumentNullException.ThrowIfNull(fitness);
 
@@ -26,7 +26,7 @@ public static class Population
     {
         ArgumentNullException.ThrowIfNull(fitness);
 
-        return new Population<TIndividual>(fitness, new TRandom());
+        return new Population<TIndividual>(fitness, new Random());
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public static class Population
     /// <param name="count">The count of individuals to add.</param>
     /// <param name="randomIndividual">The function to generate the individuals.</param>
     /// <returns>The extended population.</returns>
-    public static Population<TIndividual> AddRandomIndividuals<TIndividual>(this Population<TIndividual> population, int count, Func<TRandom, TIndividual> randomIndividual)
+    public static Population<TIndividual> AddRandomIndividuals<TIndividual>(this Population<TIndividual> population, int count, Func<Random, TIndividual> randomIndividual)
     {
         ArgumentNullException.ThrowIfNull(population);
         ArgumentNullException.ThrowIfNull(randomIndividual);
@@ -85,7 +85,7 @@ public static class Population
         return population.AddIndividuals(individuals);
     }
 
-    private static IEnumerable<TIndividual> GetRandomIndividualsByRank<TIndividual>(this Population<TIndividual> population, TRandom random)
+    private static IEnumerable<TIndividual> GetRandomIndividualsByRank<TIndividual>(this Population<TIndividual> population, Random random)
     {
         var individuals = population.Individuals;
 
@@ -95,7 +95,7 @@ public static class Population
         }
     }
 
-    private static TIndividual GetRandomIndividual<TIndividual>(IReadOnlyList<TIndividual> individuals, TRandom rnd)
+    private static TIndividual GetRandomIndividual<TIndividual>(IReadOnlyList<TIndividual> individuals, Random rnd)
     {
         var count = (double)individuals.Count;
         double p(int index)
@@ -104,7 +104,7 @@ public static class Population
             return 2 * rank / (count * (count + 1.0));
         }
 
-        var r = rnd.NextDouble(0, 1);
+        var r = rnd.NextDouble();
 
         var minP = 0.0;
         var i = 0;

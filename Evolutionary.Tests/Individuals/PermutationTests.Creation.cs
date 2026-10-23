@@ -1,6 +1,7 @@
-﻿using Evolutionary.Individuals;
+﻿using System;
+using Evolutionary.Individuals;
 using NUnit.Framework;
-using Troschuetz.Random;
+
 
 namespace Evolutionary.Tests.Individuals
 {
@@ -9,7 +10,7 @@ namespace Evolutionary.Tests.Individuals
         [Test]
         public void CreateRandomly()
         {
-            var permutation = Permutation.CreateRandomly(5, new TRandom());
+            var permutation = Permutation.CreateRandomly(5, new Random());
 
             Assert.That(permutation, Is.EquivalentTo(new[] { 0, 1, 2, 3, 4 }));
             Assert.That(permutation.IsCircular, Is.False);
@@ -18,7 +19,7 @@ namespace Evolutionary.Tests.Individuals
         [Test]
         public void CreateRandomlyCircular()
         {
-            var permutation = Permutation.CreateCircularRandomly(5, new TRandom());
+            var permutation = Permutation.CreateCircularRandomly(5, new Random());
 
             Assert.That(permutation, Is.EquivalentTo(new[] { 0, 1, 2, 3, 4 }));
             Assert.That(permutation.IsCircular, Is.True);

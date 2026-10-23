@@ -1,6 +1,7 @@
-﻿using Evolutionary.Individuals;
+﻿using System;
+using Evolutionary.Individuals;
 using NUnit.Framework;
-using Troschuetz.Random;
+
 
 namespace Evolutionary.Tests.Individuals
 {
@@ -12,7 +13,7 @@ namespace Evolutionary.Tests.Individuals
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
             var permutation = new Permutation(array, false);
 
-            var offspring = Permutation.SwapMutation(permutation, new TRandom());
+            var offspring = Permutation.SwapMutation(permutation, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(array));
         }
@@ -23,7 +24,7 @@ namespace Evolutionary.Tests.Individuals
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
             var permutation = new Permutation(array, true);
 
-            var offspring = Permutation.SwapMutation(permutation, new TRandom());
+            var offspring = Permutation.SwapMutation(permutation, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(array));
             Assert.That(offspring[0], Is.EqualTo(1));
@@ -35,7 +36,7 @@ namespace Evolutionary.Tests.Individuals
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
             var permutation = new Permutation(array, false);
 
-            var offspring = Permutation.InsertMutation(permutation, new TRandom());
+            var offspring = Permutation.InsertMutation(permutation, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(array));
         }
@@ -46,7 +47,7 @@ namespace Evolutionary.Tests.Individuals
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
             var permutation = new Permutation(array, true);
 
-            var offspring = Permutation.InsertMutation(permutation, new TRandom());
+            var offspring = Permutation.InsertMutation(permutation, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(array));
             Assert.That(offspring[0], Is.EqualTo(1));
@@ -58,7 +59,7 @@ namespace Evolutionary.Tests.Individuals
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
             var permutation = new Permutation(array, false);
 
-            var offspring = Permutation.ScrambleMutation(permutation, new TRandom());
+            var offspring = Permutation.ScrambleMutation(permutation, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(array));
         }
@@ -69,7 +70,7 @@ namespace Evolutionary.Tests.Individuals
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
             var permutation = new Permutation(array, true);
 
-            var offspring = Permutation.ScrambleMutation(permutation, new TRandom());
+            var offspring = Permutation.ScrambleMutation(permutation, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(array));
             Assert.That(offspring[0], Is.EqualTo(1));
@@ -81,7 +82,7 @@ namespace Evolutionary.Tests.Individuals
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
             var permutation = new Permutation(array, false);
 
-            var offspring = Permutation.InversionMutation(permutation, new TRandom());
+            var offspring = Permutation.InversionMutation(permutation, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(array));
         }
@@ -92,7 +93,7 @@ namespace Evolutionary.Tests.Individuals
             var array = new int[] { 1, 2, 3, 4, 5, 6 };
             var permutation = new Permutation(array, true);
 
-            var offspring = Permutation.InversionMutation(permutation, new TRandom());
+            var offspring = Permutation.InversionMutation(permutation, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(array));
             Assert.That(offspring[0], Is.EqualTo(1));

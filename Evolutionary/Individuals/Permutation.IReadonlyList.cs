@@ -11,7 +11,7 @@ public readonly partial struct Permutation : IReadOnlyList<int>
         return ((IEnumerable<int>)_elements).GetEnumerator();
     }
 
-    IEnumerator IEnumerable.GetEnumerator()
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
     {
         return _elements.GetEnumerator();
     }

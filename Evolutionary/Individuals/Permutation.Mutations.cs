@@ -5,7 +5,7 @@ public readonly partial struct Permutation
     /*
      * Mutations
      */
-    public static Permutation SwapMutation(Permutation permutation, TRandom random)
+    public static Permutation SwapMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
         var (a, b) = permutation.GetRandomIndexPair(random);
@@ -14,7 +14,7 @@ public readonly partial struct Permutation
         return new Permutation(array, permutation.IsCircular);
     }
 
-    public static Permutation InsertMutation(Permutation permutation, TRandom random)
+    public static Permutation InsertMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
         var (a, b) = permutation.GetRandomIndexPair(random);
@@ -23,7 +23,7 @@ public readonly partial struct Permutation
         return new Permutation(array, permutation.IsCircular);
     }
 
-    public static Permutation ScrambleMutation(Permutation permutation, TRandom random)
+    public static Permutation ScrambleMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
         var (a, b) = permutation.GetRandomIndexPair(random);
@@ -32,7 +32,7 @@ public readonly partial struct Permutation
         return new Permutation(array, permutation.IsCircular);
     }
 
-    public static Permutation InversionMutation(Permutation permutation, TRandom random)
+    public static Permutation InversionMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
         var (a, b) = permutation.GetRandomIndexPair(random);

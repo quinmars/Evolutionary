@@ -2,7 +2,7 @@
 
 public readonly partial struct Permutation
 {
-    public static Permutation CreateRandomly(int n, TRandom random)
+    public static Permutation CreateRandomly(int n, Random random)
     {
         var permutation = new Permutation(n, false);
         var array = permutation.ToArray();
@@ -11,7 +11,7 @@ public readonly partial struct Permutation
         return new Permutation(array, permutation.IsCircular);
     }
 
-    public static Permutation CreateCircularRandomly(int n, TRandom random)
+    public static Permutation CreateCircularRandomly(int n, Random random)
     {
         var permutation = new Permutation(n, true);
         var array = permutation.ToArray();

@@ -100,7 +100,7 @@ public static class SpanExtensions
         }
     }
 
-    public static void Scramble(this Span<int> span, TRandom random)
+    public static void Scramble(this Span<int> span, Random random)
     {
         var n = span.Length;
         for (var i = 0; i < n - 1; i++)
@@ -205,7 +205,9 @@ public static class SpanExtensions
             }
             while (j != i);
 
-            (main, compliment) = (compliment, main);
+            var tmp = main;
+            main = compliment;
+            compliment = tmp;
         }
     }
 

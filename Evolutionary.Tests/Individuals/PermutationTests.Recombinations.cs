@@ -1,7 +1,7 @@
 ﻿using System;
 using Evolutionary.Individuals;
 using NUnit.Framework;
-using Troschuetz.Random;
+
 
 namespace Evolutionary.Tests.Individuals
 {
@@ -19,8 +19,8 @@ namespace Evolutionary.Tests.Individuals
             var p3 = new Permutation(a1, true);
             var p4 = new Permutation(a3, false);
 
-            Action act1 = () => Permutation.PartiallyMappedCrossover(p1, p2, new TRandom());
-            Action act2 = () => Permutation.PartiallyMappedCrossover(p3, p4, new TRandom());
+            Action act1 = () => Permutation.PartiallyMappedCrossover(p1, p2, new Random());
+            Action act2 = () => Permutation.PartiallyMappedCrossover(p3, p4, new Random());
 
             Assert.That(act1, Throws.ArgumentException);
             Assert.That(act2, Throws.ArgumentException);
@@ -34,7 +34,7 @@ namespace Evolutionary.Tests.Individuals
             var p1 = new Permutation(a1, false);
             var p2 = new Permutation(a2, false);
 
-            var offspring = Permutation.PartiallyMappedCrossover(p1, p2, new TRandom());
+            var offspring = Permutation.PartiallyMappedCrossover(p1, p2, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(a1));
         }
@@ -47,7 +47,7 @@ namespace Evolutionary.Tests.Individuals
             var p1 = new Permutation(a1, true);
             var p2 = new Permutation(a2, true);
 
-            var offspring = Permutation.PartiallyMappedCrossover(p1, p2, new TRandom());
+            var offspring = Permutation.PartiallyMappedCrossover(p1, p2, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(a1));
         }
@@ -60,7 +60,7 @@ namespace Evolutionary.Tests.Individuals
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
             var p1 = new Permutation(a1, circular);
 
-            var offspring = Permutation.PartiallyMappedCrossover(p1, p1, new TRandom());
+            var offspring = Permutation.PartiallyMappedCrossover(p1, p1, new Random());
 
             Assert.That(offspring, Is.EqualTo(a1));
         }
@@ -73,7 +73,7 @@ namespace Evolutionary.Tests.Individuals
             var p1 = new Permutation(a1, false);
             var p2 = new Permutation(a2, false);
 
-            var offspring = Permutation.CycleCrossover(p1, p2, new TRandom());
+            var offspring = Permutation.CycleCrossover(p1, p2, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(a1));
         }
@@ -86,7 +86,7 @@ namespace Evolutionary.Tests.Individuals
             var p1 = new Permutation(a1, true);
             var p2 = new Permutation(a2, true);
 
-            var offspring = Permutation.CycleCrossover(p1, p2, new TRandom());
+            var offspring = Permutation.CycleCrossover(p1, p2, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(a1));
         }
@@ -103,8 +103,8 @@ namespace Evolutionary.Tests.Individuals
             var p3 = new Permutation(a1, true);
             var p4 = new Permutation(a3, false);
 
-            Action act1 = () => Permutation.CycleCrossover(p1, p2, new TRandom());
-            Action act2 = () => Permutation.CycleCrossover(p3, p4, new TRandom());
+            Action act1 = () => Permutation.CycleCrossover(p1, p2, new Random());
+            Action act2 = () => Permutation.CycleCrossover(p3, p4, new Random());
 
             Assert.That(act1, Throws.ArgumentException);
             Assert.That(act2, Throws.ArgumentException);
@@ -118,7 +118,7 @@ namespace Evolutionary.Tests.Individuals
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
             var p1 = new Permutation(a1, circular);
 
-            var offspring = Permutation.CycleCrossover(p1, p1, new TRandom());
+            var offspring = Permutation.CycleCrossover(p1, p1, new Random());
 
             Assert.That(offspring, Is.EqualTo(a1));
         }
@@ -132,7 +132,7 @@ namespace Evolutionary.Tests.Individuals
             var p1 = new Permutation(a1, false);
             var p2 = new Permutation(a2, false);
 
-            var offspring = Permutation.CutAndCrossfillCrossover(p1, p2, new TRandom());
+            var offspring = Permutation.CutAndCrossfillCrossover(p1, p2, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(a1));
         }
@@ -145,7 +145,7 @@ namespace Evolutionary.Tests.Individuals
             var p1 = new Permutation(a1, true);
             var p2 = new Permutation(a2, true);
 
-            var offspring = Permutation.CutAndCrossfillCrossover(p1, p2, new TRandom());
+            var offspring = Permutation.CutAndCrossfillCrossover(p1, p2, new Random());
 
             Assert.That(offspring, Is.EquivalentTo(a1));
         }
@@ -164,9 +164,9 @@ namespace Evolutionary.Tests.Individuals
             var p4 = new Permutation(a3, false);
             var p5 = new Permutation(a4, true);
 
-            Action act1 = () => Permutation.CutAndCrossfillCrossover(p1, p2, new TRandom());
-            Action act2 = () => Permutation.CutAndCrossfillCrossover(p3, p4, new TRandom());
-            Action act3 = () => Permutation.CutAndCrossfillCrossover(p5, p5, new TRandom());
+            Action act1 = () => Permutation.CutAndCrossfillCrossover(p1, p2, new Random());
+            Action act2 = () => Permutation.CutAndCrossfillCrossover(p3, p4, new Random());
+            Action act3 = () => Permutation.CutAndCrossfillCrossover(p5, p5, new Random());
 
             Assert.That(act1, Throws.ArgumentException);
             Assert.That(act2, Throws.ArgumentException);
@@ -181,7 +181,7 @@ namespace Evolutionary.Tests.Individuals
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
             var p1 = new Permutation(a1, circular);
 
-            var offspring = Permutation.CutAndCrossfillCrossover(p1, p1, new TRandom());
+            var offspring = Permutation.CutAndCrossfillCrossover(p1, p1, new Random());
 
             Assert.That(offspring, Is.EqualTo(a1));
         }

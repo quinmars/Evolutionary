@@ -9,7 +9,7 @@ public class Population<TIndividual>
     private static readonly IReadOnlyList<TIndividual> _emptyIndividuals = [];
 
     public Func<TIndividual, double> Fitness { get; }
-    public TRandom Random { get; }
+    public Random Random { get; }
 
     /// <summary>
     /// The individuals of the population. The individuals are order by their fitness increasingly.
@@ -22,7 +22,7 @@ public class Population<TIndividual>
     /// </summary>
     /// <param name="fitness">The fitness function.</param>
     /// <param name="random">The random generator.</param>
-    public Population(Func<TIndividual, double> fitness, TRandom random)
+    public Population(Func<TIndividual, double> fitness, Random random)
     {
         ArgumentNullException.ThrowIfNull(fitness);
         ArgumentNullException.ThrowIfNull(random);
@@ -37,7 +37,7 @@ public class Population<TIndividual>
     /// </summary>
     /// <param name="fitness">The fitness function.</param>
     /// <param name="individuals">The individuals.</param>
-    public Population(Func<TIndividual, double> fitness, TRandom random, IEnumerable<TIndividual> individuals)
+    public Population(Func<TIndividual, double> fitness, Random random, IEnumerable<TIndividual> individuals)
     {
         ArgumentNullException.ThrowIfNull(fitness);
         ArgumentNullException.ThrowIfNull(random);

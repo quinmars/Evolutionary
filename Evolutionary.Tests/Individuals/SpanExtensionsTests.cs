@@ -1,7 +1,7 @@
 ﻿using System;
 using Evolutionary.Individuals;
 using NUnit.Framework;
-using Troschuetz.Random;
+
 
 namespace Evolutionary.Tests.Individuals
 {
@@ -173,7 +173,7 @@ namespace Evolutionary.Tests.Individuals
         public void Scrumble()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan().Scramble(new TRandom());
+            array.AsSpan().Scramble(new Random());
 
             Assert.That(array, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }));
         }

@@ -5,7 +5,7 @@ public readonly partial struct Permutation
     /*
      * Recombinations
      */
-    public static Permutation PartiallyMappedCrossover(Permutation p1, Permutation p2, TRandom random)
+    public static Permutation PartiallyMappedCrossover(Permutation p1, Permutation p2, Random random)
     {
         if (p1.Count != p2.Count)
         {
@@ -25,7 +25,7 @@ public readonly partial struct Permutation
         return new Permutation(array, p1.IsCircular);
     }
 
-    public static Permutation CutAndCrossfillCrossover(Permutation p1, Permutation p2, TRandom random)
+    public static Permutation CutAndCrossfillCrossover(Permutation p1, Permutation p2, Random random)
     {
         if (p1.Count != p2.Count)
         {
@@ -75,6 +75,6 @@ public readonly partial struct Permutation
         return new Permutation(array, p1.IsCircular);
     }
 
-    public static Permutation CycleCrossover(Permutation p1, Permutation p2, TRandom random)
+    public static Permutation CycleCrossover(Permutation p1, Permutation p2, Random random)
         => CycleCrossover(p1, p2);
 }
