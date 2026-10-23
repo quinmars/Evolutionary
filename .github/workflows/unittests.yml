@@ -2,20 +2,41 @@ name: Unit Tests
 
 on: [pull_request, push]
 
-jobs:
-  build:
+# Minimal privileges for the GITHUB_TOKEN.
+permissions:
+  contents: read
 
+# Cancel superseded runs of the same branch or pull request.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Linux: build the library, the console example and run the unit tests.
+  test:
+    name: Test (Linux)
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v5
-    - name: Setup .NET 10
-      uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: '10.0.x'
-    - name: Exclude windows only examples
-      run: dotnet sln Evolutionary.slnx remove examples/EightQueens/EightQueens.csproj
-    - name: Build with dotnet
-      run: dotnet build Evolutionary.slnx --configuration Release
-    - name: Run unit tests
-      run: dotnet test Evolutionary.slnx
+      - uses: actions/checkout@v5
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Run unit tests
+        run: dotnet test Evolutionary.Tests/Evolutionary.Tests.csproj --configuration Release
+
+  # Windows: the WPF example targets net10.0-windows and therefore
+  # cannot be built on Linux. This job validates the full solution.
+  build:
+    name: Build (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build full solution including WPF example
+        run: dotnet build Evolutionary.slnx --configuration Release
