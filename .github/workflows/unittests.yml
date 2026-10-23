@@ -14,8 +14,8 @@ jobs:
       with:
         dotnet-version: '10.0.x'
     - name: Exclude windows only examples
-      run: dotnet sln remove examples/EightQueens/EightQueens.csproj
+      run: dotnet sln Evolutionary.slnx remove examples/EightQueens/EightQueens.csproj
     - name: Build with dotnet
-      run: dotnet build --configuration Release
+      run: dotnet build Evolutionary.slnx --configuration Release
     - name: Run unit tests
-      run: dotnet test
+      run: dotnet test Evolutionary.slnx

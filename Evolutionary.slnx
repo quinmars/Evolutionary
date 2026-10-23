@@ -1,0 +1,11 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+  </Configurations>
+  <Folder Name="/examples/">
+    <Project Path="examples/EightQueens/EightQueens.csproj" />
+    <Project Path="examples/SquareRoot/SquareRoot.csproj" />
+  </Folder>
+  <Project Path="Evolutionary.Tests/Evolutionary.Tests.csproj" />
+  <Project Path="Evolutionary/Evolutionary.csproj" />
+</Solution>
