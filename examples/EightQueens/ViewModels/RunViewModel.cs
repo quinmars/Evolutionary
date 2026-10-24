@@ -1,9 +1,8 @@
-﻿using ReactiveUI;
+using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using Evolutionary;
-using Evolutionary.Individuals;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;

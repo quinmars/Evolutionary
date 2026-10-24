@@ -1,4 +1,4 @@
-﻿namespace Evolutionary.Individuals;
+namespace Evolutionary;
 
 /// <summary>
 /// Represents a permutation of the numbers 0 to n-1. The permutation is an

@@ -1,4 +1,4 @@
-﻿namespace Evolutionary.Individuals;
+namespace Evolutionary;
 
 /// <summary>
 /// Provides span-based operators for permutation individuals.

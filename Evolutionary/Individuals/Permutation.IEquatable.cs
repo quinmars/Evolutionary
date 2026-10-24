@@ -1,4 +1,4 @@
-﻿namespace Evolutionary.Individuals;
+namespace Evolutionary;
 
 public readonly partial struct Permutation : IEquatable<Permutation>
 {

@@ -1,4 +1,4 @@
-﻿using Evolutionary.Individuals;
+using Evolutionary;
 
 namespace EightQueens;
 

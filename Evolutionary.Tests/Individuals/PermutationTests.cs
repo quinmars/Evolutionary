@@ -1,8 +1,8 @@
-﻿using System;
-using Evolutionary.Individuals;
+using System;
+using Evolutionary;
 using NUnit.Framework;
 
-namespace Evolutionary.Tests.Individuals
+namespace Evolutionary.Tests
 {
     public partial class PermutationTests
     {

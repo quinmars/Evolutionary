@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Evolutionary.Individuals;
 using NUnit.Framework;
 
-namespace Evolutionary.Tests.Individuals
+namespace Evolutionary.Tests
 {
     public partial class PermutationTests
     {
