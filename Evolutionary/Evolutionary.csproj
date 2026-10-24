@@ -1,4 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <PackageId>Evolutionary</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Peter Wehrfritz</Authors>
+    <Copyright>Copyright © 2021 Peter Wehrfritz</Copyright>
+    <Description>A small toolbox library for evolutionary algorithms. It provides the immutable data types and operators to write your own evolutionary algorithms.</Description>
+    <PackageTags>evolutionary;genetic;algorithm;optimization;permutation;csharp</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/quinmars/evolutionary</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/quinmars/evolutionary</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="\" />
+    <None Include="icon.png" Pack="true" PackagePath="\" />
+    <None Include="../brand/evolutionary-finch.svg" Pack="true" PackagePath="brand/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.402" PrivateAssets="all" />
+  </ItemGroup>
 
 </Project>

@@ -5,6 +5,13 @@ public readonly partial struct Permutation
     /*
      * Mutations
      */
+
+    /// <summary>
+    /// Swaps the elements at two randomly selected positions (swap mutation).
+    /// </summary>
+    /// <param name="permutation">The permutation to mutate.</param>
+    /// <param name="random">The random number generator.</param>
+    /// <returns>The mutated permutation.</returns>
     public static Permutation SwapMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
@@ -14,6 +21,14 @@ public readonly partial struct Permutation
         return new Permutation(array, permutation.IsCircular);
     }
 
+    /// <summary>
+    /// Removes a randomly selected element and reinserts it at another
+    /// randomly selected position. The elements in between are shifted
+    /// (insertion mutation).
+    /// </summary>
+    /// <param name="permutation">The permutation to mutate.</param>
+    /// <param name="random">The random number generator.</param>
+    /// <returns>The mutated permutation.</returns>
     public static Permutation InsertMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
@@ -23,6 +38,13 @@ public readonly partial struct Permutation
         return new Permutation(array, permutation.IsCircular);
     }
 
+    /// <summary>
+    /// Randomly shuffles the elements between two randomly selected positions
+    /// (scramble mutation).
+    /// </summary>
+    /// <param name="permutation">The permutation to mutate.</param>
+    /// <param name="random">The random number generator.</param>
+    /// <returns>The mutated permutation.</returns>
     public static Permutation ScrambleMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
@@ -32,6 +54,13 @@ public readonly partial struct Permutation
         return new Permutation(array, permutation.IsCircular);
     }
 
+    /// <summary>
+    /// Reverses the elements between two randomly selected positions
+    /// (inversion mutation).
+    /// </summary>
+    /// <param name="permutation">The permutation to mutate.</param>
+    /// <param name="random">The random number generator.</param>
+    /// <returns>The mutated permutation.</returns>
     public static Permutation InversionMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();

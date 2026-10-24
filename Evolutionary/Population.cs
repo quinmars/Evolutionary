@@ -8,7 +8,14 @@ public class Population<TIndividual>
 {
     private static readonly IReadOnlyList<TIndividual> _emptyIndividuals = [];
 
+    /// <summary>
+    /// Gets the fitness function that is used to rank the individuals.
+    /// </summary>
     public Func<TIndividual, double> Fitness { get; }
+
+    /// <summary>
+    /// Gets the random number generator that is used by the operators.
+    /// </summary>
     public Random Random { get; }
 
     /// <summary>
@@ -36,6 +43,7 @@ public class Population<TIndividual>
     /// Creates a new population with some individuals.
     /// </summary>
     /// <param name="fitness">The fitness function.</param>
+    /// <param name="random">The random generator.</param>
     /// <param name="individuals">The individuals.</param>
     public Population(Func<TIndividual, double> fitness, Random random, IEnumerable<TIndividual> individuals)
     {

@@ -1,5 +1,9 @@
 ﻿namespace Evolutionary;
 
+/// <summary>
+/// Provides creation and selection operators for the
+/// <see cref="Population{TIndividual}"/> class.
+/// </summary>
 public static class Population
 {
     /// <summary>

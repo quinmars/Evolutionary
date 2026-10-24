@@ -2,9 +2,12 @@
 
 [![Actions Status](https://github.com/quinmars/evolutionary/workflows/Unit%20Tests/badge.svg)](https://github.com/quinmars/evolutionary/actions)
 
+<img src="brand/evolutionary-finch.svg" width="96" align="right" alt="Evolutionary – Darwinfink, in Kohle">
+
 Evolutionary algorithms come in many different flavors. The representation of the population's individuals highly depends on the problem space. There are many selection, mutation and recombination mechanism and strategies to choose from. And there are even more possibilities to parameterize them. Even the termination of the population evolution can happen on different aspects. There are libraries (for example the great [GeneticSharp](https://github.com/giacomelli/GeneticSharp)) that try to put all those requirements into one procedure, that can be parametrized from outside. The `Evolutionary` library goes another approach in that it does not implement one or more evolutionary algorithms for you, but gives you the data types and operators at hand to write it yourself.
 
 Therefore `Evolutionary` uses for the main logic only two immutable types that are transformed  by operators. All operators are implemented as extensions method. Hence, it is easy to add custom operators. The `Population<TIndividual>` class comprises the collection of all individuals, the fitness function and a random number generator. The `Offspring<TIndividual>` generation happens with the offspring class. Besides a reference to the parent populations, it offers a random enumeration of the parent individuals and an enumerations of the children generated so far. Once the generation phase is finished, a new population will be generated from the offspring.
+The library requires [.NET 10](https://dotnet.microsoft.com/download/dotnet/10.0).
 
 ## A complete example
 
@@ -50,7 +53,7 @@ for (int i = 0; i < 50; i++)
                 var mu = (a + b) / 2;
                 var sigma = (a == b) ? 1.0E-6 : Math.Abs(a - b) / 2;
 
-                return Math.Abs(rnd.Normal(mu, sigma));
+                return Math.Abs(rnd.NextNormal(mu, sigma));
             })
         .SelectElite(2)         // We preserve the two best individuals
                                 // of the parent generation.
@@ -76,7 +79,6 @@ for (int i = 0; i < 50; i++)
 
 ## TODO
 
-  - API code documentation
-  - generate documentation with docfx
-  - add examples
-  - add basic Individuals (Floating point string, etc.)
+  - generate documentation with docfx and publish to GitHub Pages
+  - publish NuGet package
+  - add basic Individuals (floating point string, etc.)
