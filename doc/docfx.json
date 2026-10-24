@@ -35,6 +35,7 @@
       "_appName": "Evolutionary",
       "_appLogoPath": "brand/evolutionary-finch-header.svg",
       "_appLogoTitle": "Evolutionary",
+      "_disableContribution": true,
       "_gitContribute": {
         "repo": "https://github.com/quinmars/evolutionary",
         "branch": "master"

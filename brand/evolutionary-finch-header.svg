@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 128 128" role="img" aria-label="Evolutionary – Darwinfink">
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F7F2E8"/>
+      <stop offset="1" stop-color="#E9E0CE"/>
+    </linearGradient>
+    <!-- Papierkorn -->
+    <filter id="paper-grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.42  0 0 0 0 0.38  0 0 0 0 0.32  0 0 0 0.06 0" result="pc"/>
+      <feComposite in="pc" in2="SourceGraphic" operator="in"/>
+    </filter>
+    <!-- Kohle: gewackelte Kante + körnige Textur -->
+    <filter id="charcoal" x="-15%" y="-15%" width="130%" height="130%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.07 0.11" numOctaves="3" seed="7" result="w"/>
+      <feDisplacementMap in="SourceGraphic" in2="w" scale="4" result="rough"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" result="g"/>
+      <feColorMatrix in="g" type="matrix" values="0 0 0 0 0.96  0 0 0 0 0.94  0 0 0 0 0.9  0 0 0 0.3 0" result="gw"/>
+      <feComposite in="gw" in2="rough" operator="in" result="grain"/>
+      <feMerge>
+        <feMergeNode in="rough"/>
+        <feMergeNode in="grain"/>
+      </feMerge>
+    </filter>
+    <filter id="rough" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.09 0.13" numOctaves="3" seed="9" result="w2"/>
+      <feDisplacementMap in="SourceGraphic" in2="w2" scale="5"/>
+    </filter>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
+    <filter id="soft2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
+  </defs>
+
+  <!-- Papier -->
+  <rect width="128" height="128" rx="26" fill="url(#paper)"/>
+  <rect width="128" height="128" rx="26" filter="url(#paper-grain)" opacity="0.8"/>
+
+  <!-- Kohleschmierereien am Rand -->
+  <g filter="url(#soft)" opacity="0.55">
+    <path d="M12 114 Q38 104 68 110" stroke="#8A7E68" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M74 16 Q94 10 116 18" stroke="#8A7E68" stroke-width="9" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Ast -->
+  <g filter="url(#rough)">
+    <path d="M20 101 C44 96 76 101 100 97" stroke="#332C25" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+  </g>
+
+  <!-- Beine -->
+  <g filter="url(#rough)" stroke="#2A2521" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <path d="M63 72 L61 95"/>
+    <path d="M61 95 L55 99 M61 95 L61 101 M61 95 L67 99"/>
+    <path d="M71 74 L73 96"/>
+    <path d="M73 96 L68 99 M73 96 L75 101 M73 96 L80 98"/>
+  </g>
+
+  <!-- Fink (Kohlsilhouette) -->
+  <g filter="url(#charcoal)">
+    <g fill="#26221E">
+      <circle cx="47" cy="40" r="13.5"/>
+      <ellipse cx="65" cy="59" rx="24" ry="15" transform="rotate(-18 65 59)"/>
+      <path d="M84 48 L108 40 L88 62 Z"/>
+      <path d="M41 35 L23 46 L42 55 Z" fill="#1C1915"/>
+      <ellipse cx="72" cy="56" rx="15" ry="9.5" transform="rotate(-22 72 56)" fill="#17130F" opacity="0.55"/>
+    </g>
+  </g>
+
+  <!-- Auge: Papier wird ausgespart, pupilschwarz -->
+  <circle cx="44" cy="38" r="3.2" fill="#F6F1E7"/>
+  <circle cx="44.6" cy="38.4" r="1.7" fill="#1C1915"/>
+
+  <!-- lose Skizzenstriche -->
+  <g filter="url(#rough)" stroke="#26221E" fill="none" stroke-linecap="round">
+    <path d="M34 72 Q44 81 57 83" stroke-width="2.4" opacity="0.42"/>
+  </g>
+
+  <!-- Lichtkante Brust -->
+  <ellipse cx="52" cy="66" rx="9" ry="6" fill="#F6F1E7" opacity="0.2" filter="url(#soft2)"/>
+</svg>
