@@ -64,7 +64,9 @@ public readonly partial struct Permutation : IEquatable<Permutation>
         {
             hash.Add(0);
             foreach (var e in _elements)
+            {
                 hash.Add(e);
+            }
         }
 
         return hash.ToHashCode();

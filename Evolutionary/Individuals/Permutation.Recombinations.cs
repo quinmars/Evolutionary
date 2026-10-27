@@ -2,10 +2,6 @@ namespace Evolutionary;
 
 public readonly partial struct Permutation
 {
-    /*
-     * Recombinations
-     */
-
     /// <summary>
     /// Creates a child by a partially mapped crossover (PMX). A randomly
     /// selected segment of the first parent is copied into the child, and

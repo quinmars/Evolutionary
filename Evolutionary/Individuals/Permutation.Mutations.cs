@@ -2,10 +2,6 @@ namespace Evolutionary;
 
 public readonly partial struct Permutation
 {
-    /*
-     * Mutations
-     */
-
     /// <summary>
     /// Swaps the elements at two randomly selected positions (swap mutation).
     /// </summary>
