@@ -7,6 +7,19 @@ namespace Evolutionary;
 public static class RandomExtensions
 {
     /// <summary>
+    /// Returns a random <see cref="bool"/> value. <see langword="true"/> and
+    /// <see langword="false"/> are equally probable.
+    /// </summary>
+    /// <param name="random">The random number generator.</param>
+    /// <returns>A random <see cref="bool"/> value.</returns>
+    public static bool NextBoolean(this Random random)
+    {
+        ArgumentNullException.ThrowIfNull(random);
+
+        return random.Next(2) == 0;
+    }
+
+    /// <summary>
     /// Returns a standard normally distributed random number, that is a
     /// random number with a mean of 0 and a standard deviation of 1.
     /// </summary>

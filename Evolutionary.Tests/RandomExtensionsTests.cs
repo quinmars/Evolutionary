@@ -10,6 +10,34 @@ namespace Evolutionary.Tests
         private const int N = 1000000;
 
         [Test]
+        public void NextBoolean_NullChecks()
+        {
+            Random rnd = null!;
+
+            Action act = () => rnd.NextBoolean();
+
+            Assert.That(act, Throws.ArgumentNullException);
+        }
+
+        [Test]
+        public void NextBoolean_IsFair()
+        {
+            var rnd = new Random(42);
+            const int count = 10000;
+
+            var trues = 0;
+            for (var i = 0; i < count; i++)
+            {
+                if (rnd.NextBoolean())
+                {
+                    trues++;
+                }
+            }
+
+            Assert.That(trues / (double)count, Is.EqualTo(0.5).Within(0.02));
+        }
+
+        [Test]
         public void NextStandardNormal_NullChecks()
         {
             Random rnd = null!;
