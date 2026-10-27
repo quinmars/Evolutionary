@@ -3,7 +3,7 @@ namespace Evolutionary;
 /// <summary>
 /// Provides span-based operators for permutation individuals.
 /// </summary>
-public static class SpanExtensions
+internal static class SpanExtensions
 {
     /// <summary>
     /// Swaps the elements at the given positions.

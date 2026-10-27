@@ -30,4 +30,10 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.402" PrivateAssets="all" />
   </ItemGroup>
 
+  <!-- The span-based permutation operators are internal; the test project
+       tests them directly. -->
+  <ItemGroup>
+    <InternalsVisibleTo Include="Evolutionary.Tests" />
+  </ItemGroup>
+
 </Project>
