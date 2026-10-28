@@ -66,6 +66,33 @@ namespace Evolutionary.Tests
         }
 
         [Test]
+        public void PartiallyMappedCrossover_Indexed1()
+        {
+            var a1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var a2 = new int[] { 9, 3, 7, 8, 2, 6, 5, 1, 4 };
+            var p1 = new Permutation(a1, true);
+            var p2 = new Permutation(a2, true);
+
+            var offspring = Permutation.PartiallyMappedCrossover(p1, p2, 3, 4);
+
+            Assert.That(offspring.ToArray(), Is.EqualTo(new[] { 9, 3, 2, 4, 5, 6, 7, 1, 8 }));
+        }
+
+        [Test]
+        public void PartiallyMappedCrossover_Indexed2()
+        {
+            var a1 = new int[] { 5, 7, 6, 2, 1, 4, 0, 3 };
+            var a2 = new int[] { 4, 6, 5, 0, 2, 1, 7, 3 };
+            var p1 = new Permutation(a1, true);
+            var p2 = new Permutation(a2, true);
+
+            var offspring = Permutation.PartiallyMappedCrossover(p1, p2, 1, 7);
+
+            Assert.That(offspring.ToArray(), Is.EqualTo(new[] { 5, 7, 6, 2, 1, 4, 0, 3 }));
+        }
+
+
+        [Test]
         public void CycleCrossover()
         {
             var a1 = new int[] { 1, 2, 3, 4, 5, 6 };

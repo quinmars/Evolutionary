@@ -178,30 +178,6 @@ namespace Evolutionary.Tests
             Assert.That(array, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }));
         }
 
-        [Test]
-        public void PartiallyMappedCrossover1()
-        {
-            var p1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            var p2 = new int[] { 9, 3, 7, 8, 2, 6, 5, 1, 4 };
-            var offspring = new int[p1.Length];
-
-            SpanExtensions.PartiallyMappedCrossover(p1, p2, 3, 4, offspring);
-
-            Assert.That(offspring, Is.EqualTo(new[] { 9, 3, 2, 4, 5, 6, 7, 1, 8 }));
-        }
-
-        [Test]
-        public void PartiallyMappedCrossover2()
-        {
-            var p1 = new int[] { 5, 7, 6, 2, 1, 4, 0, 3 };
-            var p2 = new int[] { 4, 6, 5, 0, 2, 1, 7, 3 };
-            var offspring = new int[p1.Length];
-
-            SpanExtensions.PartiallyMappedCrossover(p1, p2, 1, 7, offspring);
-
-            Assert.That(offspring, Is.EqualTo(new[] { 5, 7, 6, 2, 1, 4, 0, 3 }));
-        }
-
 
         [Test]
         public void CutAndCrossfillCrossover()
