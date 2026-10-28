@@ -150,6 +150,19 @@ namespace Evolutionary.Tests
             Assert.That(offspring, Is.EqualTo(a1));
         }
 
+        [Test]
+        public void CycleCrossover_Offspring()
+        {
+            var a1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var a2 = new int[] { 9, 3, 7, 8, 2, 6, 5, 1, 4 };
+            var p1 = new Permutation(a1, false);
+            var p2 = new Permutation(a2, false);
+
+            var offspring = Permutation.CycleCrossover(p1, p2);
+
+            Assert.That(offspring.ToArray(), Is.EqualTo(new[] { 1, 3, 7, 4, 2, 6, 5, 8, 9 }));
+        }
+
 
         [Test]
         public void CutAndCrossfillCrossover()
@@ -211,6 +224,59 @@ namespace Evolutionary.Tests
             var offspring = Permutation.CutAndCrossfillCrossover(p1, p1, new Random());
 
             Assert.That(offspring, Is.EqualTo(a1));
+        }
+
+        [Test]
+        public void CutAndCrossfillCrossover_Indexed1()
+        {
+            var a1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var a2 = new int[] { 9, 3, 7, 8, 2, 6, 5, 1, 4 };
+            var p1 = new Permutation(a1, true);
+            var p2 = new Permutation(a2, true);
+
+            var offspring = Permutation.CutAndCrossfillCrossover(p1, p2, 4);
+
+            Assert.That(offspring.ToArray(), Is.EqualTo(new[] { 1, 2, 3, 4, 9, 7, 8, 6, 5 }));
+        }
+
+        [Test]
+        public void CutAndCrossfillCrossover_Indexed2()
+        {
+            var a1 = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var a2 = new int[] { 9, 3, 7, 8, 2, 6, 5, 1, 4 };
+            var p1 = new Permutation(a1, false);
+            var p2 = new Permutation(a2, false);
+
+            var offspring = Permutation.CutAndCrossfillCrossover(p1, p2, 8);
+
+            Assert.That(offspring.ToArray(), Is.EqualTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }));
+        }
+
+        [Test]
+        public void CutAndCrossfillCrossover_Indexed_ArgumentChecks()
+        {
+            var a1 = new int[] { 1, 2, 3, 4, 5, 6 };
+            var a2 = new int[] { 1, 2, 3, 4, 5 };
+            var a3 = new int[] { 1, 2, 3, 4, 6, 5 };
+            var a4 = new int[] { 2, 3 };
+
+            var p1 = new Permutation(a1, false);
+            var p2 = new Permutation(a2, false);
+            var p3 = new Permutation(a1, true);
+            var p4 = new Permutation(a3, false);
+            var p5 = new Permutation(a4, true);
+
+            Action act1 = () => Permutation.CutAndCrossfillCrossover(p1, p2, 3);
+            Action act2 = () => Permutation.CutAndCrossfillCrossover(p3, p4, 3);
+            Action act3 = () => Permutation.CutAndCrossfillCrossover(p5, p5, 1);
+            Action act4 = () => Permutation.CutAndCrossfillCrossover(p1, p1, 0);
+            Action act5 = () => Permutation.CutAndCrossfillCrossover(p1, p1, 6);
+
+            Assert.That(act1, Throws.ArgumentException);
+            Assert.That(act2, Throws.ArgumentException);
+            Assert.That(act3, Throws.InvalidOperationException);
+            Assert.That(act4, Throws.TypeOf<ArgumentOutOfRangeException>());
+            Assert.That(act5, Throws.TypeOf<ArgumentOutOfRangeException>());
         }
     }
 }

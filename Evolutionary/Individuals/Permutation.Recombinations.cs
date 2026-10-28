@@ -179,9 +179,80 @@ public readonly partial struct Permutation
 
         var array = new int[p1.Count];
 
-        SpanExtensions.CutAndCrossfillCrossover(p1, p2, position, array);
+        CutAndCrossfillCrossover(p1, p2, position, array);
 
         return new Permutation(array, p1.IsCircular);
+    }
+
+    /// <summary>
+    /// Creates a child by a cut and crossfill crossover. The prefix of the
+    /// first parent is copied into the child, and the child is completed by
+    /// the remaining elements of the second parent in their original order.
+    /// </summary>
+    /// <param name="p1">The first parent.</param>
+    /// <param name="p2">The second parent.</param>
+    /// <param name="position">The number of elements that are copied from
+    /// the first parent.</param>
+    /// <returns>The child.</returns>
+    /// <exception cref="ArgumentException">Thrown if the element counts or
+    /// the circularity of both permutations differ.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the permutation
+    /// is too short for this operation.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the position
+    /// is out of the valid range.</exception>
+    public static Permutation CutAndCrossfillCrossover(Permutation p1, Permutation p2, int position)
+    {
+        if (p1.Count != p2.Count)
+        {
+            throw new ArgumentException("The element count differs.", nameof(p2));
+        }
+
+        if (p1.IsCircular != p2.IsCircular)
+        {
+            throw new ArgumentException("The circularity differs.", nameof(p2));
+        }
+
+        var min = (p1.IsCircular ? 1 : 0) + 1;
+        var max = p1.Count - 1;
+
+        if (max < min)
+        {
+            throw new InvalidOperationException("The permutation is to short for this operation.");
+        }
+
+        if (position < min || position > max)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(position),
+                position,
+                "The position must be between the minimum and the maximum valid cut position.");
+        }
+
+        var array = new int[p1.Count];
+
+        CutAndCrossfillCrossover(p1, p2, position, array);
+
+        return new Permutation(array, p1.IsCircular);
+    }
+
+    private static void CutAndCrossfillCrossover(ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, int position, Span<int> offspring)
+    {
+        // Copies the prefix of the first parent into the offspring and
+        // completes the offspring with the remaining elements of the
+        // second parent in their original order.
+        var span = p1.Slice(0, position);
+        span.CopyTo(offspring);
+
+        var j = 0;
+        for (var i = position; i < offspring.Length; i++)
+        {
+            while (j < p2.Length && span.IndexOf(p2[j]) != -1)
+            {
+                j++;
+            }
+            offspring[i] = p2[j];
+            j++;
+        }
     }
 
     /// <summary>
@@ -208,7 +279,7 @@ public readonly partial struct Permutation
 
         var array = new int[p1.Count];
 
-        SpanExtensions.CycleCrossover(p1, p2, array);
+        CycleCrossover(p1, p2, array);
 
         return new Permutation(array, p1.IsCircular);
     }
@@ -226,4 +297,36 @@ public readonly partial struct Permutation
     /// the circularity of both permutations differ.</exception>
     public static Permutation CycleCrossover(Permutation p1, Permutation p2, Random random)
         => CycleCrossover(p1, p2);
+
+    private static void CycleCrossover(ReadOnlySpan<int> p1, ReadOnlySpan<int> p2, Span<int> offspring)
+    {
+        // The offspring receives the elements of the first parent at the
+        // cycle positions and the elements of the second parent at the
+        // remaining positions.
+        offspring.Fill(-1);
+
+        var main = p1;
+        var complement = p2;
+
+        for (var i = 0; i < offspring.Length; i++)
+        {
+            if (offspring[i] != -1)
+            {
+                continue;
+            }
+
+            var j = i;
+
+            do
+            {
+                offspring[j] = main[j];
+                j = main.IndexOf(complement[j]);
+            }
+            while (j != i);
+
+            var tmp = main;
+            main = complement;
+            complement = tmp;
+        }
+    }
 }
