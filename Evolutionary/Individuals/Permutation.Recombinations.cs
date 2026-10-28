@@ -47,6 +47,10 @@ public readonly partial struct Permutation
     /// <returns>The child.</returns>
     /// <exception cref="ArgumentException">Thrown if the element counts or
     /// the circularity of both permutations differ.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the permutation
+    /// is too short for this operation.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if the start
+    /// position or the length is out of the valid range.</exception>
     public static Permutation PartiallyMappedCrossover(Permutation p1, Permutation p2, int start, int length)
     {
         if (p1.Count != p2.Count)
@@ -59,7 +63,31 @@ public readonly partial struct Permutation
             throw new ArgumentException("The circularity differs.", nameof(p2));
         }
 
-        // TODO: Range checks for start and length
+        var minStart = p1.IsCircular ? 1 : 0;
+        var maxStart = p1.Count - 2;
+
+        if (maxStart < minStart)
+        {
+            throw new InvalidOperationException("The permutation is to short for this operation.");
+        }
+
+        if (start < minStart || start > maxStart)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(start),
+                start,
+                "The start must be between the minimum and the maximum valid segment start position.");
+        }
+
+        var maxLength = Math.Min(p1.Count - start, p1.Count - 1);
+
+        if (length < 1 || length > maxLength)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(length),
+                length,
+                "The length must be between the minimum and the maximum valid segment length.");
+        }
 
         var array = new int[p1.Count];
 
