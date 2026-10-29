@@ -2,16 +2,15 @@ using System;
 using Evolutionary;
 using NUnit.Framework;
 
-
 namespace Evolutionary.Tests
 {
-    public class SpanExtensionsTests
+    public partial class PermutationTests
     {
         [Test]
         public void Swap()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan().Swap(3, 5);
+            Permutation.Swap(array.AsSpan(), 3, 5);
 
             Assert.That(array, Is.EqualTo(new[] { 1, 2, 3, 6, 5, 4, 7, 8, 9 }));
         }
@@ -20,7 +19,7 @@ namespace Evolutionary.Tests
         public void RightRotate()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan(3, 4).RightRotate();
+            Permutation.RightRotate(array.AsSpan(3, 4));
 
             Assert.That(array, Is.EqualTo(new[] { 1, 2, 3, 7, 4, 5, 6, 8, 9 }));
         }
@@ -43,7 +42,7 @@ namespace Evolutionary.Tests
         public void RightRotateWithArgument(int k, int[] expect)
         {
             var array = new int[] { 1, 2, 3, 4, 5 };
-            array.AsSpan().RightRotate(k);
+            Permutation.RightRotate(array.AsSpan(), k);
 
             Assert.That(array, Is.EqualTo(expect));
         }
@@ -52,7 +51,7 @@ namespace Evolutionary.Tests
         public void RightRotate_Single()
         {
             var array = new int[] { 2 };
-            array.AsSpan().RightRotate();
+            Permutation.RightRotate(array.AsSpan());
 
             Assert.That(array, Is.EqualTo(new[] { 2 }));
         }
@@ -65,7 +64,7 @@ namespace Evolutionary.Tests
         public void RightRotate_Single_WithArgument(int n)
         {
             var array = new int[] { 2 };
-            array.AsSpan().RightRotate(n);
+            Permutation.RightRotate(array.AsSpan(), n);
 
             Assert.That(array, Is.EqualTo(new[] { 2 }));
         }
@@ -74,7 +73,7 @@ namespace Evolutionary.Tests
         public void RightRotate_Empty()
         {
             var array = new int[] { };
-            array.AsSpan().RightRotate();
+            Permutation.RightRotate(array.AsSpan());
 
             Assert.That(array, Is.Empty);
         }
@@ -87,7 +86,7 @@ namespace Evolutionary.Tests
         public void RightRotate_Empty_WithArgument(int n)
         {
             var array = new int[] { };
-            array.AsSpan().RightRotate(n);
+            Permutation.RightRotate(array.AsSpan(), n);
 
             Assert.That(array, Is.Empty);
         }
@@ -96,7 +95,7 @@ namespace Evolutionary.Tests
         public void LeftRotate()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan(3, 4).LeftRotate();
+            Permutation.LeftRotate(array.AsSpan(3, 4));
 
             Assert.That(array, Is.EqualTo(new[] { 1, 2, 3, 5, 6, 7, 4, 8, 9 }));
         }
@@ -120,7 +119,7 @@ namespace Evolutionary.Tests
         public void LeftRotateWithArgument(int k, int[] expect)
         {
             var array = new int[] { 1, 2, 3, 4, 5 };
-            array.AsSpan().LeftRotate(k);
+            Permutation.LeftRotate(array.AsSpan(), k);
 
             Assert.That(array, Is.EqualTo(expect));
         }
@@ -129,7 +128,7 @@ namespace Evolutionary.Tests
         public void LeftRotate_Single()
         {
             var array = new int[] { 2 };
-            array.AsSpan().LeftRotate();
+            Permutation.LeftRotate(array.AsSpan());
 
             Assert.That(array, Is.EqualTo(new[] { 2 }));
         }
@@ -142,7 +141,7 @@ namespace Evolutionary.Tests
         public void LeftRotate_Single_WithArgument(int n)
         {
             var array = new int[] { 2 };
-            array.AsSpan().RightRotate(n);
+            Permutation.LeftRotate(array.AsSpan(), n);
 
             Assert.That(array, Is.EqualTo(new[] { 2 }));
         }
@@ -151,7 +150,7 @@ namespace Evolutionary.Tests
         public void LeftRotate_Empty()
         {
             var array = new int[] { };
-            array.AsSpan().RightRotate();
+            Permutation.LeftRotate(array.AsSpan());
 
             Assert.That(array, Is.Empty);
         }
@@ -164,16 +163,16 @@ namespace Evolutionary.Tests
         public void LeftRotate_Empty_WithArgument(int n)
         {
             var array = new int[] { };
-            array.AsSpan().RightRotate(n);
+            Permutation.LeftRotate(array.AsSpan(), n);
 
             Assert.That(array, Is.Empty);
         }
 
         [Test]
-        public void Scrumble()
+        public void Scramble()
         {
             var array = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            array.AsSpan().Scramble(new Random());
+            Permutation.Scramble(array.AsSpan(), new Random());
 
             Assert.That(array, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }));
         }

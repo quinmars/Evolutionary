@@ -15,7 +15,7 @@ public readonly partial struct Permutation
         var array = permutation.ToArray();
         var (a, b) = permutation.GetRandomIndexPair(random);
 
-        array.AsSpan().Swap(a, b);
+        Swap(array.AsSpan(), a, b);
         return new Permutation(array, permutation.IsCircular);
     }
 
@@ -34,7 +34,7 @@ public readonly partial struct Permutation
         var array = permutation.ToArray();
         var (a, b) = permutation.GetRandomIndexPair(random);
 
-        array.AsSpan(a, b - a).RightRotate();
+        RightRotate(array.AsSpan(a, b - a));
         return new Permutation(array, permutation.IsCircular);
     }
 
@@ -52,7 +52,7 @@ public readonly partial struct Permutation
         var array = permutation.ToArray();
         var (a, b) = permutation.GetRandomIndexPair(random);
 
-        array.AsSpan(a, b - a).Scramble(random);
+        Scramble(array.AsSpan(a, b - a), random);
         return new Permutation(array, permutation.IsCircular);
     }
 

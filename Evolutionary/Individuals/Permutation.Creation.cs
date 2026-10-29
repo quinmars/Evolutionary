@@ -13,7 +13,7 @@ public readonly partial struct Permutation
         var permutation = new Permutation(n, false);
         var array = permutation.ToArray();
 
-        array.AsSpan().Scramble(random);
+        Scramble(array.AsSpan(), random);
         return new Permutation(array, permutation.IsCircular);
     }
 
@@ -30,7 +30,7 @@ public readonly partial struct Permutation
         var permutation = new Permutation(n, true);
         var array = permutation.ToArray();
 
-        array.AsSpan(1).Scramble(random);
+        Scramble(array.AsSpan(1), random);
         return new Permutation(array, permutation.IsCircular);
     }
 }
