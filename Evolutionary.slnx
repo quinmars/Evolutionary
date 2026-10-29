@@ -2,6 +2,7 @@
   <Folder Name="/examples/">
     <Project Path="examples/EightQueens/EightQueens.csproj" />
     <Project Path="examples/OneMax/OneMax.csproj" />
+    <Project Path="examples/Sphere/Sphere.csproj" />
     <Project Path="examples/SquareRoot/SquareRoot.csproj" />
   </Folder>
   <Project Path="Evolutionary.Tests/Evolutionary.Tests.csproj" />
