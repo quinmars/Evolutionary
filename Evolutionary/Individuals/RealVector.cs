@@ -11,9 +11,12 @@ namespace Evolutionary;
 /// <remarks>
 /// A real-valued vector is the natural representation for continuous
 /// optimization problems like the minimization of benchmark functions. The
-/// default instance of the struct is an empty vector.
+/// default instance of the struct is an empty vector. The values are
+/// formatted with the invariant culture unless a format provider is
+/// specified - mathematical output is usually easier to read with a fixed
+/// culture.
 /// </remarks>
-public readonly partial struct RealVector<T>
+public readonly partial struct RealVector<T> : IFormattable
     where T : IFloatingPoint<T>
 {
     private readonly T[] _values;
@@ -58,6 +61,27 @@ public readonly partial struct RealVector<T>
     /// are formatted with the invariant culture.
     /// </summary>
     /// <returns>The string representation.</returns>
-    public override string ToString()
-        => "[" + string.Join(", ", Values.Select(v => v.ToString(null, CultureInfo.InvariantCulture))) + "]";
+    public override string ToString() => ToString(null, CultureInfo.InvariantCulture);
+
+    /// <summary>
+    /// Returns the values as string, e.g. <c>[1.50, -1.25]</c>. The values
+    /// are formatted with the given format string and the invariant
+    /// culture.
+    /// </summary>
+    /// <param name="format">The format to use for every value, or
+    /// <see langword="null"/> to use the default format.</param>
+    /// <returns>The string representation.</returns>
+    public string ToString(string? format) => ToString(format, CultureInfo.InvariantCulture);
+
+    /// <summary>
+    /// Returns the values as string, e.g. <c>[1.50, -1.25]</c>. The values
+    /// are formatted with the given format string.
+    /// </summary>
+    /// <param name="format">The format to use for every value, or
+    /// <see langword="null"/> to use the default format.</param>
+    /// <param name="formatProvider">The format provider to use, or
+    /// <see langword="null"/> to use the invariant culture.</param>
+    /// <returns>The string representation.</returns>
+    public string ToString(string? format, IFormatProvider? formatProvider)
+        => "[" + string.Join(", ", Values.Select(v => v.ToString(format, formatProvider ?? CultureInfo.InvariantCulture))) + "]";
 }

@@ -15,6 +15,7 @@ namespace Evolutionary.Tests
             Assert.That(vector.Count, Is.EqualTo(0));
             Assert.That(vector.ToArray(), Is.Empty);
             Assert.That(vector.ToString(), Is.EqualTo("[]"));
+            Assert.That(vector.ToString("F2"), Is.EqualTo("[]"));
         }
 
         [Test]

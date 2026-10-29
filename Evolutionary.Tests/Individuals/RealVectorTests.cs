@@ -45,6 +45,35 @@ namespace Evolutionary.Tests
             var vector = new RealVector<double>(new[] { 1.5, -2.5 });
 
             Assert.That(vector.ToString(), Is.EqualTo("[1.5, -2.5]"));
+            Assert.That(vector.ToString(null), Is.EqualTo("[1.5, -2.5]"));
+        }
+
+        [Test]
+        public void ToString_WithFormat_FormatsValues()
+        {
+            var vector = new RealVector<double>(new[] { 1.5, -2.5 });
+
+            Assert.That(vector.ToString("F2"), Is.EqualTo("[1.50, -2.50]"));
+            Assert.That(vector.ToString("G4"), Is.EqualTo("[1.5, -2.5]"));
+        }
+
+        [Test]
+        public void ToString_Interpolation_UsesTheFormat()
+        {
+            var vector = new RealVector<double>(new[] { 1.5, -2.5 });
+
+            // The interpolation format specifiers rely on IFormattable. The
+            // invariant culture is used if no format provider is specified.
+            Assert.That($"{vector:G4}", Is.EqualTo("[1.5, -2.5]"));
+            Assert.That($"{vector:F2}", Is.EqualTo("[1.50, -2.50]"));
+        }
+
+        [Test]
+        public void ToString_WithNullProvider_UsesInvariantCulture()
+        {
+            var vector = new RealVector<double>(new[] { 1.5, -2.5 });
+
+            Assert.That(((IFormattable)vector).ToString("F2", null), Is.EqualTo("[1.50, -2.50]"));
         }
 
         [Test]
