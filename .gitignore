@@ -482,5 +482,7 @@ $RECYCLE.BIN/
 *.swp
 
 # docfx build output
-/doc/api/
+/doc/api/*.yml
+/doc/api/*.manifest
 /doc/_site/
+/doc/obj/
