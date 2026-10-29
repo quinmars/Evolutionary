@@ -11,7 +11,6 @@ namespace Evolutionary.Tests
         {
             () => new Permutation(),
             () => new Permutation(Array.Empty<int>(), true),
-            () => new Permutation(Array.Empty<int>(), false),
             () => new Permutation(new int[]{ 2, 1 }, true),
             () => new Permutation(new int[]{ 1, 2 }, true),
             () => new Permutation(new int[]{ 2, 1 }, false),
@@ -38,8 +37,23 @@ namespace Evolutionary.Tests
             }
         }
 
+        public static IEnumerable<object[]> DefaultValueEqualityData => new object[][]
+        {
+            [new Permutation(), default(Permutation), true],
+            [new Permutation(), new Permutation(0), true],
+            [new Permutation(), new Permutation(Array.Empty<int>(), false), true],
+            [new Permutation(Array.Empty<int>(), true), default(Permutation), false],
+            [new Permutation(Array.Empty<int>(), false), default(Permutation), true],
+            [new Permutation(new int[] { }, false), default(Permutation), true],
+            [new Permutation(new int[] { }, false), new Permutation(Array.Empty<int>(), false), true],
+            [new Permutation(new int[] { }, true), default(Permutation), false],
+            [new Permutation(0), new Permutation(Array.Empty<int>(), false), true],
+            [new Permutation(0), new Permutation(Array.Empty<int>(), true), false]
+        };
+
         [TestCaseSource(nameof(ValueEqualityData))]
         [TestCaseSource(nameof(ReferenceEqualityData))]
+        [TestCaseSource(nameof(DefaultValueEqualityData))]
         [Test]
         public void Equality(Permutation a, Permutation b, bool shouldBeEqual)
         {

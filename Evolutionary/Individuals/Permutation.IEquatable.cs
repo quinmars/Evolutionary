@@ -14,12 +14,7 @@ public readonly partial struct Permutation : IEquatable<Permutation>
         &&
         (
             ReferenceEquals(_elements, other._elements)
-            ||
-            (
-                _elements != null
-                && other._elements != null
-                && _elements.SequenceEqual(other._elements)
-            )
+            || Elements.SequenceEqual(other.Elements)
         );
 
     /// <summary>
@@ -60,13 +55,10 @@ public readonly partial struct Permutation : IEquatable<Permutation>
 
         hash.Add(IsCircular);
 
-        if (_elements != null)
+        hash.Add(0);
+        foreach (var e in Elements)
         {
-            hash.Add(0);
-            foreach (var e in _elements)
-            {
-                hash.Add(e);
-            }
+            hash.Add(e);
         }
 
         return hash.ToHashCode();

@@ -8,6 +8,8 @@ public readonly partial struct Permutation
     /// <param name="permutation">The permutation to mutate.</param>
     /// <param name="random">The random number generator.</param>
     /// <returns>The mutated permutation.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the permutation
+    /// is too short for this operation.</exception>
     public static Permutation SwapMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
@@ -25,6 +27,8 @@ public readonly partial struct Permutation
     /// <param name="permutation">The permutation to mutate.</param>
     /// <param name="random">The random number generator.</param>
     /// <returns>The mutated permutation.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the permutation
+    /// is too short for this operation.</exception>
     public static Permutation InsertMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
@@ -41,6 +45,8 @@ public readonly partial struct Permutation
     /// <param name="permutation">The permutation to mutate.</param>
     /// <param name="random">The random number generator.</param>
     /// <returns>The mutated permutation.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the permutation
+    /// is too short for this operation.</exception>
     public static Permutation ScrambleMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();
@@ -57,6 +63,8 @@ public readonly partial struct Permutation
     /// <param name="permutation">The permutation to mutate.</param>
     /// <param name="random">The random number generator.</param>
     /// <returns>The mutated permutation.</returns>
+    /// <exception cref="InvalidOperationException">Thrown if the permutation
+    /// is too short for this operation.</exception>
     public static Permutation InversionMutation(Permutation permutation, Random random)
     {
         var array = permutation.ToArray();

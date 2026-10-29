@@ -13,12 +13,7 @@ public readonly partial struct BitString : IEquatable<BitString>
     /// <returns><see langword="true"/> if both bit strings are equal.</returns>
     public bool Equals(BitString other)
         => ReferenceEquals(_bits, other._bits)
-        ||
-        (
-            _bits != null
-            && other._bits != null
-            && _bits.SequenceEqual(other._bits)
-        );
+        || Bits.SequenceEqual(other.Bits);
 
     /// <summary>
     /// Indicates whether two bit strings are equal.
@@ -56,12 +51,9 @@ public readonly partial struct BitString : IEquatable<BitString>
     {
         var hash = new HashCode();
 
-        if (_bits != null)
+        foreach (var bit in Bits)
         {
-            foreach (var bit in _bits)
-            {
-                hash.Add(bit);
-            }
+            hash.Add(bit);
         }
 
         return hash.ToHashCode();

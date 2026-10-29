@@ -14,6 +14,8 @@ public readonly partial struct Permutation
     /// <returns>The child.</returns>
     /// <exception cref="ArgumentException">Thrown if the element counts or
     /// the circularity of both permutations differ.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if the permutation
+    /// is too short for this operation.</exception>
     public static Permutation PartiallyMappedCrossover(Permutation p1, Permutation p2, Random random)
     {
         if (p1.Count != p2.Count)

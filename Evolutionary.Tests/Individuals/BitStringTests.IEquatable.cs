@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -9,8 +10,7 @@ namespace Evolutionary.Tests
     {
         public static IEnumerable<Func<BitString>> BitStrings { get; } = new Func<BitString>[]
         {
-            // () => new BitString(),
-            () => new BitString(Array.Empty<bool>()),
+            () => new BitString(),
             () => new BitString([true]),
             () => new BitString([false]),
             () => new BitString([true, false]),
@@ -34,8 +34,19 @@ namespace Evolutionary.Tests
             }
         }
 
+        public static IEnumerable<object[]> DefaultValueEqualityData => new object[][]
+        {
+            [new BitString(), default(BitString), true],
+            [new BitString(), new BitString(0), true],
+            [new BitString(Array.Empty<bool>()), default(BitString), true],
+            [new BitString(new bool[] { }), default(BitString), true],
+            [new BitString(new bool[] { }), new BitString(Array.Empty<bool>()), true],
+            [new BitString(0), new BitString(Array.Empty<bool>()), true]
+        };
+
         [TestCaseSource(nameof(ValueEqualityData))]
         [TestCaseSource(nameof(ReferenceEqualityData))]
+        [TestCaseSource(nameof(DefaultValueEqualityData))]
         [Test]
         public void Equality(BitString a, BitString b, bool shouldBeEqual)
         {

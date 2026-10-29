@@ -7,16 +7,22 @@ namespace Evolutionary;
 /// <remarks>
 /// A bit string is the natural representation for selection problems like
 /// the OneMax problem or the knapsack problem, where each bit encodes a
-/// yes/no decision.
+/// yes/no decision. The default instance of the struct is an empty bit
+/// string.
 /// </remarks>
 public readonly partial struct BitString
 {
     private readonly bool[] _bits;
 
+    // The default instance of the struct has a null backing array. To
+    // always behave like an empty bit string, the following property
+    // must be used instead of the raw field.
+    private bool[] Bits => _bits ?? Array.Empty<bool>();
+
     /// <summary>
     /// Gets the number of bits.
     /// </summary>
-    public int Length => _bits.Length;
+    public int Length => Bits.Length;
 
     /// <summary>
     /// Initializes a new bit string with all bits set to
@@ -46,7 +52,7 @@ public readonly partial struct BitString
     public int PopCount()
     {
         var count = 0;
-        foreach (var bit in _bits)
+        foreach (var bit in Bits)
         {
             if (bit)
             {
@@ -61,12 +67,12 @@ public readonly partial struct BitString
     /// Returns a copy of the bits as array.
     /// </summary>
     /// <returns>The bits.</returns>
-    public bool[] ToArray() => (bool[])_bits.Clone();
+    public bool[] ToArray() => (bool[])Bits.Clone();
 
     /// <summary>
     /// Returns the bits as a string in binary literal notation prefixed
     /// with '0b', e.g. <c>0b101</c>.
     /// </summary>
     /// <returns>The string representation.</returns>
-    public override string ToString() => "0b" + new string(_bits.Select(b => b ? '1' : '0').ToArray());
+    public override string ToString() => "0b" + new string(Bits.Select(b => b ? '1' : '0').ToArray());
 }

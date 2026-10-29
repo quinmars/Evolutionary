@@ -6,11 +6,17 @@ namespace Evolutionary;
 /// </summary>
 /// <remarks>
 /// A permutation can either be linear or circular. A circular permutation
-/// treats the first and the last element as adjacent.
+/// treats the first and the last element as adjacent. The default instance
+/// of the struct is an empty linear permutation.
 /// </remarks>
 public readonly partial struct Permutation
 {
     private readonly int[] _elements;
+
+    // The default instance of the struct has a null backing array. To
+    // always behave like an empty linear permutation, the following
+    // property must be used instead of the raw field.
+    private int[] Elements => _elements ?? Array.Empty<int>();
 
     /// <summary>
     /// Gets a value indicating whether the permutation is circular.
@@ -72,9 +78,9 @@ public readonly partial struct Permutation
     /// <returns>The elements of the permutation.</returns>
     public int[] ToArray()
     {
-        var n = _elements.Length;
-        var ret = new int[n];
-        _elements.CopyTo(ret.AsSpan());
+        var elements = Elements;
+        var ret = new int[elements.Length];
+        elements.CopyTo(ret.AsSpan());
 
         return ret;
     }
@@ -85,6 +91,6 @@ public readonly partial struct Permutation
     /// <param name="permutation">The permutation.</param>
     public static implicit operator ReadOnlySpan<int>(Permutation permutation)
     {
-        return permutation._elements;
+        return permutation.Elements;
     }
 }
