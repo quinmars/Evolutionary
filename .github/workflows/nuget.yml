@@ -6,10 +6,12 @@ on:
   push:
     tags: ['v*']
 
-# Minimal privileges for the GITHUB_TOKEN. The NuGet API key is passed
-# directly to the push step and does not require any permissions.
+# Minimal privileges for the GITHUB_TOKEN. The NuGet publishing uses
+# trusted publishing: a short-lived GitHub OIDC token (id-token: write)
+# is exchanged for a temporary API key, so no secret is stored at all.
 permissions:
   contents: write
+  id-token: write
 
 jobs:
   publish:
@@ -36,9 +38,20 @@ jobs:
       - name: Build and pack the NuGet package
         run: dotnet pack Evolutionary/Evolutionary.csproj --configuration Release --output artifacts
 
+      # Trusted publishing: exchanges a short-lived GitHub OIDC token for
+      # a temporary NuGet API key (valid for 1 hour). The trust policy on
+      # nuget.org pins this to this repository and this workflow file, so
+      # no long-lived secret is needed.
+      - name: NuGet login (OIDC -> temporary API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          # Your nuget.org profile name (not your email address).
+          user: quinmars
+
       # The corresponding snupkg symbol package is pushed automatically.
       - name: Push the package to nuget.org
-        run: dotnet nuget push artifacts/Evolutionary.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+        run: dotnet nuget push artifacts/Evolutionary.*.nupkg --api-key ${{ steps.login.outputs.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
       - name: Create a GitHub release
         run: gh release create "$GITHUB_REF_NAME" artifacts/Evolutionary.*.nupkg --generate-notes
