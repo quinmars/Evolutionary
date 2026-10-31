@@ -4,7 +4,7 @@
     <PackageId>Evolutionary</PackageId>
     <Version>1.0.0</Version>
     <Authors>Peter Wehrfritz</Authors>
-    <Copyright>Copyright © 2021 Peter Wehrfritz</Copyright>
+    <Copyright>Copyright © 2021-2026 Peter Wehrfritz</Copyright>
     <Description>A small toolbox library for evolutionary algorithms. It provides the immutable data types and operators to write your own evolutionary algorithms.</Description>
     <PackageTags>evolutionary;genetic;algorithm;optimization;permutation;csharp</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -1,0 +1,46 @@
+name: NuGet
+
+# Pushing a v* tag (e.g. v1.0.0) builds and publishes the package to
+# nuget.org and creates a GitHub release.
+on:
+  push:
+    tags: ['v*']
+
+# Minimal privileges for the GITHUB_TOKEN. The NuGet API key is passed
+# directly to the push step and does not require any permissions.
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish to nuget.org
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+
+      # Fail early if the version in the csproj and the tag diverge.
+      - name: Verify the tag matches the package version
+        run: |
+          version=$(grep -oP '(?<=<Version>)[^<]+' Evolutionary/Evolutionary.csproj)
+          if [ "v$version" != "${{ github.ref_name }}" ]; then
+            echo "::error::The tag '${{ github.ref_name }}' does not match the package version '$version' in Evolutionary/Evolutionary.csproj"
+            exit 1
+          fi
+
+      - name: Build and pack the NuGet package
+        run: dotnet pack Evolutionary/Evolutionary.csproj --configuration Release --output artifacts
+
+      # The corresponding snupkg symbol package is pushed automatically.
+      - name: Push the package to nuget.org
+        run: dotnet nuget push artifacts/Evolutionary.*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+
+      - name: Create a GitHub release
+        run: gh release create "$GITHUB_REF_NAME" artifacts/Evolutionary.*.nupkg --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
