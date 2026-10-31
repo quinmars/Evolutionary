@@ -7,6 +7,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
+    <!-- License condition of Verify (SponsorCheck SC021): the project is
+         open source and does not generate revenue. -->
+    <Verify_SponsorshipExemption>OpenSource</Verify_SponsorshipExemption>
+    <Verify_SponsorshipExemptionUntil>2027-10</Verify_SponsorshipExemptionUntil>
   </PropertyGroup>
 
 </Project>

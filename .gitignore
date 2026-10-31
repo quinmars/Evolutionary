@@ -486,3 +486,6 @@ $RECYCLE.BIN/
 /doc/api/*.manifest
 /doc/_site/
 /doc/obj/
+
+# Verify received files (API snapshot tests)
+*.received.txt

@@ -1,0 +1,125 @@
+﻿namespace Evolutionary
+{
+    public readonly struct BitString : System.Collections.Generic.IEnumerable<bool>, System.Collections.Generic.IReadOnlyCollection<bool>, System.Collections.Generic.IReadOnlyList<bool>, System.Collections.IEnumerable, System.IEquatable<Evolutionary.BitString>
+    {
+        public BitString(bool[] bits) { }
+        public BitString(int n) { }
+        public int Count { get; }
+        public bool this[int index] { get; }
+        public int Length { get; }
+        public bool Equals(Evolutionary.BitString other) { }
+        public override bool Equals(object? obj) { }
+        public System.Collections.Generic.IEnumerator<bool> GetEnumerator() { }
+        public override int GetHashCode() { }
+        public int PopCount() { }
+        public bool[] ToArray() { }
+        public override string ToString() { }
+        public static Evolutionary.BitString CreateRandomly(int n, System.Random random) { }
+        public static Evolutionary.BitString FlipMutation(Evolutionary.BitString bitString, System.Random random, double probability) { }
+        public static Evolutionary.BitString OnePointCrossover(Evolutionary.BitString p1, Evolutionary.BitString p2, System.Random random) { }
+        public static Evolutionary.BitString UniformCrossover(Evolutionary.BitString p1, Evolutionary.BitString p2, System.Random random) { }
+        public static bool operator !=(Evolutionary.BitString lhs, Evolutionary.BitString rhs) { }
+        public static bool operator ==(Evolutionary.BitString lhs, Evolutionary.BitString rhs) { }
+    }
+    public static class Offspring
+    {
+        public static Evolutionary.Offspring<TIndividual> AddChildren<TIndividual>(this Evolutionary.Offspring<TIndividual> offspring, System.Collections.Generic.IEnumerable<TIndividual> children) { }
+        public static Evolutionary.Offspring<TIndividual> Eagerly<TIndividual>(this Evolutionary.Offspring<TIndividual> offspring) { }
+        public static Evolutionary.Offspring<TIndividual> Mutate<TIndividual>(this Evolutionary.Offspring<TIndividual> offspring, int count, System.Func<TIndividual, System.Random, TIndividual> mutate) { }
+        public static Evolutionary.Offspring<TIndividual> Recombine<TIndividual>(this Evolutionary.Offspring<TIndividual> offspring, int count, System.Func<TIndividual, TIndividual, System.Random, System.Collections.Generic.IEnumerable<TIndividual>> recombine) { }
+        public static Evolutionary.Offspring<TIndividual> Recombine<TIndividual>(this Evolutionary.Offspring<TIndividual> offspring, int count, System.Func<TIndividual, TIndividual, System.Random, TIndividual> recombine) { }
+        public static Evolutionary.Offspring<TIndividual> SelectElite<TIndividual>(this Evolutionary.Offspring<TIndividual> offspring, int count) { }
+        public static Evolutionary.Offspring<TIndividual> SelectSurvivors<TIndividual>(this Evolutionary.Offspring<TIndividual> offspring, int count) { }
+        public static Evolutionary.Population<TIndividual> ToPopulation<TIndividual>(this Evolutionary.Offspring<TIndividual> offspring) { }
+        public static Evolutionary.Offspring<TIndividual> WithChildren<TIndividual>(this Evolutionary.Offspring<TIndividual> offspring, System.Collections.Generic.IEnumerable<TIndividual> children) { }
+    }
+    public class Offspring<TIndividual>
+    {
+        public Offspring(Evolutionary.Population<TIndividual> parentPopulation, System.Collections.Generic.IEnumerable<TIndividual> randomParents, System.Collections.Generic.IEnumerable<TIndividual> children) { }
+        public System.Collections.Generic.IEnumerable<TIndividual> Children { get; }
+        public Evolutionary.Population<TIndividual> ParentPopulation { get; }
+        public System.Collections.Generic.IEnumerable<TIndividual> RandomParents { get; }
+    }
+    public readonly struct Permutation : System.Collections.Generic.IEnumerable<int>, System.Collections.Generic.IReadOnlyCollection<int>, System.Collections.Generic.IReadOnlyList<int>, System.Collections.IEnumerable, System.IEquatable<Evolutionary.Permutation>
+    {
+        public Permutation(int n) { }
+        public Permutation(int[] array, bool isCircular) { }
+        public Permutation(int n, bool isCircular) { }
+        public int Count { get; }
+        public bool IsCircular { get; }
+        public int this[int index] { get; }
+        public bool Equals(Evolutionary.Permutation other) { }
+        public override bool Equals(object? obj) { }
+        public System.Collections.Generic.IEnumerator<int> GetEnumerator() { }
+        public override int GetHashCode() { }
+        public int[] ToArray() { }
+        public static Evolutionary.Permutation CreateCircularRandomly(int n, System.Random random) { }
+        public static Evolutionary.Permutation CreateRandomly(int n, System.Random random) { }
+        public static Evolutionary.Permutation CutAndCrossfillCrossover(Evolutionary.Permutation p1, Evolutionary.Permutation p2, System.Random random) { }
+        public static Evolutionary.Permutation CutAndCrossfillCrossover(Evolutionary.Permutation p1, Evolutionary.Permutation p2, int position) { }
+        public static Evolutionary.Permutation CycleCrossover(Evolutionary.Permutation p1, Evolutionary.Permutation p2) { }
+        public static Evolutionary.Permutation CycleCrossover(Evolutionary.Permutation p1, Evolutionary.Permutation p2, System.Random random) { }
+        public static Evolutionary.Permutation InsertMutation(Evolutionary.Permutation permutation, System.Random random) { }
+        public static Evolutionary.Permutation InversionMutation(Evolutionary.Permutation permutation, System.Random random) { }
+        public static Evolutionary.Permutation PartiallyMappedCrossover(Evolutionary.Permutation p1, Evolutionary.Permutation p2, System.Random random) { }
+        public static Evolutionary.Permutation PartiallyMappedCrossover(Evolutionary.Permutation p1, Evolutionary.Permutation p2, int start, int length) { }
+        public static Evolutionary.Permutation ScrambleMutation(Evolutionary.Permutation permutation, System.Random random) { }
+        public static Evolutionary.Permutation SwapMutation(Evolutionary.Permutation permutation, System.Random random) { }
+        public static System.ReadOnlySpan<int> op_Implicit(Evolutionary.Permutation permutation) { }
+        public static bool operator !=(Evolutionary.Permutation lhs, Evolutionary.Permutation rhs) { }
+        public static bool operator ==(Evolutionary.Permutation lhs, Evolutionary.Permutation rhs) { }
+    }
+    public static class Population
+    {
+        public static Evolutionary.Population<TIndividual> AddIndividuals<TIndividual>(this Evolutionary.Population<TIndividual> population, System.Collections.Generic.IEnumerable<TIndividual> individuals) { }
+        public static Evolutionary.Population<TIndividual> AddRandomIndividuals<TIndividual>(this Evolutionary.Population<TIndividual> population, int count, System.Func<System.Random, TIndividual> randomIndividual) { }
+        public static Evolutionary.Population<TIndividual> Create<TIndividual>(System.Func<TIndividual, double> fitness) { }
+        public static Evolutionary.Population<TIndividual> Create<TIndividual>(System.Func<TIndividual, double> fitness, System.Random random) { }
+        public static Evolutionary.Offspring<TIndividual> SelectParentsByRank<TIndividual>(this Evolutionary.Population<TIndividual> population) { }
+    }
+    public class Population<TIndividual>
+    {
+        public Population(System.Func<TIndividual, double> fitness, System.Random random) { }
+        public Population(System.Func<TIndividual, double> fitness, System.Random random, System.Collections.Generic.IEnumerable<TIndividual> individuals) { }
+        public System.Func<TIndividual, double> Fitness { get; }
+        public System.Collections.Generic.IReadOnlyList<TIndividual> Individuals { get; }
+        public System.Random Random { get; }
+    }
+    public static class RandomExtensions
+    {
+        public static bool NextBoolean(this System.Random random) { }
+        public static double NextDouble(this System.Random random, double min, double max) { }
+        public static double NextNormal(this System.Random random) { }
+        public static double NextNormal(this System.Random random, double mu, double sigma) { }
+    }
+    public static class RealVector
+    {
+        public static Evolutionary.RealVector<T> ArithmeticCrossover<T>(Evolutionary.RealVector<T> p1, Evolutionary.RealVector<T> p2, System.Random random)
+            where T : System.Numerics.IFloatingPoint<T> { }
+        public static Evolutionary.RealVector<T> CreateRandomly<T>(int n, T min, T max, System.Random random)
+            where T : System.Numerics.IFloatingPoint<T> { }
+        public static Evolutionary.RealVector<T> GaussianMutation<T>(Evolutionary.RealVector<T> vector, System.Random random, double sigma)
+            where T : System.Numerics.IFloatingPoint<T> { }
+        public static Evolutionary.RealVector<T> UniformCrossover<T>(Evolutionary.RealVector<T> p1, Evolutionary.RealVector<T> p2, System.Random random)
+            where T : System.Numerics.IFloatingPoint<T> { }
+    }
+    public readonly struct RealVector<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.IReadOnlyCollection<T>, System.Collections.Generic.IReadOnlyList<T>, System.Collections.IEnumerable, System.IEquatable<Evolutionary.RealVector<T>>, System.IFormattable
+        where T : System.Numerics.IFloatingPoint<T>
+    {
+        public RealVector(T[] values) { }
+        public RealVector(int n) { }
+        public int Count { get; }
+        public T this[int index] { get; }
+        public int Length { get; }
+        public bool Equals(Evolutionary.RealVector<T> other) { }
+        public override bool Equals(object? obj) { }
+        public System.Collections.Generic.IEnumerator<T> GetEnumerator() { }
+        public override int GetHashCode() { }
+        public T[] ToArray() { }
+        public override string ToString() { }
+        public string ToString(string? format) { }
+        public string ToString(string? format, System.IFormatProvider? formatProvider) { }
+        public static bool operator !=(Evolutionary.RealVector<T> lhs, Evolutionary.RealVector<T> rhs) { }
+        public static bool operator ==(Evolutionary.RealVector<T> lhs, Evolutionary.RealVector<T> rhs) { }
+    }
+}

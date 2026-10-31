@@ -4,6 +4,15 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="NUnit" Version="5.0.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="6.3.1" />
+    <PackageReference Include="PublicApiGenerator" Version="11.5.4" />
+    <PackageReference Include="Verify.NUnit" Version="33.3.4" />
+  </ItemGroup>
+
+  <!-- Verify.NUnit injects a global 'using static VerifyNUnit.Verifier'
+       whose Throws method conflicts with NUnit's Throws assertions. -->
+  <ItemGroup>
+    <Using Remove="VerifyNUnit" />
+    <Using Remove="VerifyNUnit.Verifier" />
   </ItemGroup>
 
   <ItemGroup>
