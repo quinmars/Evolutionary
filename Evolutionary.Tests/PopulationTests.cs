@@ -16,44 +16,24 @@ namespace Evolutionary.Tests
         public void New_NullChecks()
         {
             Func<int, double> fitness = (x) => 0.0;
-            var random = new Random();
 
-            Action act1 = () => new Population<int>(null!, random);
+            Action act1 = () => new Population<int>(null!);
             Action act2 = () => new Population<int>(fitness, null!);
-            Action act3 = () => new Population<int>(fitness, random, null!);
-            Action act4 = () => new Population<int>(fitness, null!, new int[] { });
-            Action act5 = () => new Population<int>(null!, random, new int[] { });
+            Action act3 = () => new Population<int>(null!, new int[] { });
 
             Assert.That(act1, Throws.ArgumentNullException);
             Assert.That(act2, Throws.ArgumentNullException);
             Assert.That(act3, Throws.ArgumentNullException);
-            Assert.That(act4, Throws.ArgumentNullException);
-            Assert.That(act5, Throws.ArgumentNullException);
         }
 
         [Test]
-        public void Create1()
-        {
-            Func<double, double> fitness = x => Sq(x);
-            var random = new Random();
-
-            var population = Population.Create(fitness, random);
-
-            Assert.That(population.Fitness, Is.Not.Null);
-            Assert.That(population.Random, Is.Not.Null);
-            Assert.That(population.Individuals, Is.Not.Null);
-            Assert.That(population.Individuals, Is.Empty);
-        }
-
-        [Test]
-        public void Create2()
+        public void Create()
         {
             Func<double, double> fitness = x => Sq(x);
 
             var population = Population.Create(fitness);
 
             Assert.That(population.Fitness, Is.EqualTo(fitness));
-            Assert.That(population.Random, Is.Not.Null);
             Assert.That(population.Individuals, Is.Not.Null);
             Assert.That(population.Individuals, Is.Empty);
         }
@@ -61,13 +41,9 @@ namespace Evolutionary.Tests
         [Test]
         public void Create_NullChecks()
         {
-            Action act1 = () => Population.Create((Func<int, double>)null!, new Random());
-            Action act2 = () => Population.Create((int a) => 0.0, null!);
-            Action act3 = () => Population.Create((Func<int, double>)null!);
+            Action act1 = () => Population.Create((Func<int, double>)null!);
 
             Assert.That(act1, Throws.ArgumentNullException);
-            Assert.That(act2, Throws.ArgumentNullException);
-            Assert.That(act3, Throws.ArgumentNullException);
         }
 
         [Test]
@@ -109,11 +85,12 @@ namespace Evolutionary.Tests
         public void AddRandomIndividuals1()
         {
             Func<int, double> fitness = x => Sq(x);
+            var random = new Random();
 
             int i = 1;
             var population = Population
                 .Create(fitness)
-                .AddRandomIndividuals(10, _ => i++);
+                .AddRandomIndividuals(random, 10, _ => i++);
 
             Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
         }
@@ -122,12 +99,13 @@ namespace Evolutionary.Tests
         public void AddRandomIndividuals2()
         {
             Func<int, double> fitness = x => Sq(x);
+            var random = new Random();
 
             int i = 1;
             var population = Population
                 .Create(fitness)
-                .AddRandomIndividuals(4, _ => i++)
-                .AddRandomIndividuals(6, _ => i++);
+                .AddRandomIndividuals(random, 4, _ => i++)
+                .AddRandomIndividuals(random, 6, _ => i++);
 
             Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
         }
@@ -135,11 +113,13 @@ namespace Evolutionary.Tests
         [Test]
         public void AddRandomIndividuals_NullChecks()
         {
-            Action act1 = () => NonNullPopulation.AddRandomIndividuals(200, null!);
-            Action act2 = () => NullPopulation.AddRandomIndividuals(200, rnd => 0);
+            Action act1 = () => NonNullPopulation.AddRandomIndividuals(null!, 200, rnd => 0);
+            Action act2 = () => NullPopulation.AddRandomIndividuals(new Random(), 200, rnd => 0);
+            Action act3 = () => NonNullPopulation.AddRandomIndividuals(new Random(), 200, null!);
 
             Assert.That(act1, Throws.ArgumentNullException);
             Assert.That(act2, Throws.ArgumentNullException);
+            Assert.That(act3, Throws.ArgumentNullException);
         }
 
         [Test]
@@ -152,7 +132,7 @@ namespace Evolutionary.Tests
             var parents = Population
                 .Create(fitness)
                 .AddIndividuals(individuals)
-                .SelectParentsByRank()
+                .SelectParentsByRank(new Random(42))
                 .RandomParents;
 
             var count = individuals.Length;
@@ -180,7 +160,7 @@ namespace Evolutionary.Tests
         [Test]
         public void SelectParentsByRank_NullChecks()
         {
-            Action act = () => NullPopulation.SelectParentsByRank();
+            Action act = () => NullPopulation.SelectParentsByRank(new Random());
 
             Assert.That(act, Throws.ArgumentNullException);
         }

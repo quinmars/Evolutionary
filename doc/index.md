@@ -4,8 +4,8 @@ A small toolbox library for evolutionary algorithms. It does not implement one o
 
 The main logic uses only two immutable types that are transformed by operators. All operators are implemented as extension methods, hence it is easy to add custom operators.
 
-- [`Population<TIndividual>`](xref:Evolutionary.Population%601) – the collection of all individuals, the fitness function and the random number generator.
-- [`Offspring<TIndividual>`](xref:Evolutionary.Offspring%601) – besides a reference to the parent population, it offers a random enumeration of the parent individuals and an enumeration of the children generated so far.
+- [`Population<TIndividual>`](xref:Evolutionary.Population%601) – an immutable snapshot of all individuals and their fitness function.
+- [`Offspring<TIndividual>`](xref:Evolutionary.Offspring%601) – besides a reference to the parent population, it owns the random number generator, offers a random enumeration of the parent individuals and an enumeration of the children generated so far.
 
 For the individuals, the library ships three ready-made types — [`Permutation`](xref:Evolutionary.Permutation) for permutation-encoded, [`BitString`](xref:Evolutionary.BitString) for binary-encoded and [`RealVector<T>`](xref:Evolutionary.RealVector%601) for real-encoded problems. But you can add with little effort your own implementation for the individuals.
 

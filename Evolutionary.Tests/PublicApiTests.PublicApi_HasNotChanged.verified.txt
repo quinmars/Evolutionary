@@ -35,9 +35,10 @@
     }
     public class Offspring<TIndividual>
     {
-        public Offspring(Evolutionary.Population<TIndividual> parentPopulation, System.Collections.Generic.IEnumerable<TIndividual> randomParents, System.Collections.Generic.IEnumerable<TIndividual> children) { }
+        public Offspring(Evolutionary.Population<TIndividual> parentPopulation, System.Random random, System.Collections.Generic.IEnumerable<TIndividual> randomParents, System.Collections.Generic.IEnumerable<TIndividual> children) { }
         public System.Collections.Generic.IEnumerable<TIndividual> Children { get; }
         public Evolutionary.Population<TIndividual> ParentPopulation { get; }
+        public System.Random Random { get; }
         public System.Collections.Generic.IEnumerable<TIndividual> RandomParents { get; }
     }
     public readonly struct Permutation : System.Collections.Generic.IEnumerable<int>, System.Collections.Generic.IReadOnlyCollection<int>, System.Collections.Generic.IReadOnlyList<int>, System.Collections.IEnumerable, System.IEquatable<Evolutionary.Permutation>
@@ -72,18 +73,16 @@
     public static class Population
     {
         public static Evolutionary.Population<TIndividual> AddIndividuals<TIndividual>(this Evolutionary.Population<TIndividual> population, System.Collections.Generic.IEnumerable<TIndividual> individuals) { }
-        public static Evolutionary.Population<TIndividual> AddRandomIndividuals<TIndividual>(this Evolutionary.Population<TIndividual> population, int count, System.Func<System.Random, TIndividual> randomIndividual) { }
+        public static Evolutionary.Population<TIndividual> AddRandomIndividuals<TIndividual>(this Evolutionary.Population<TIndividual> population, System.Random random, int count, System.Func<System.Random, TIndividual> randomIndividual) { }
         public static Evolutionary.Population<TIndividual> Create<TIndividual>(System.Func<TIndividual, double> fitness) { }
-        public static Evolutionary.Population<TIndividual> Create<TIndividual>(System.Func<TIndividual, double> fitness, System.Random random) { }
-        public static Evolutionary.Offspring<TIndividual> SelectParentsByRank<TIndividual>(this Evolutionary.Population<TIndividual> population) { }
+        public static Evolutionary.Offspring<TIndividual> SelectParentsByRank<TIndividual>(this Evolutionary.Population<TIndividual> population, System.Random random) { }
     }
     public class Population<TIndividual>
     {
-        public Population(System.Func<TIndividual, double> fitness, System.Random random) { }
-        public Population(System.Func<TIndividual, double> fitness, System.Random random, System.Collections.Generic.IEnumerable<TIndividual> individuals) { }
+        public Population(System.Func<TIndividual, double> fitness) { }
+        public Population(System.Func<TIndividual, double> fitness, System.Collections.Generic.IEnumerable<TIndividual> individuals) { }
         public System.Func<TIndividual, double> Fitness { get; }
         public System.Collections.Generic.IReadOnlyList<TIndividual> Individuals { get; }
-        public System.Random Random { get; }
     }
     public static class RandomExtensions
     {

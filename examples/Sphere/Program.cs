@@ -30,9 +30,11 @@ Func<RealVector<double>, double> fitness = v =>
     return sum;
 };
 
+var random = new Random(12345);
+
 var population = Population
-    .Create(fitness, new Random(12345))
-    .AddRandomIndividuals(PopulationSize, rnd => RealVector.CreateRandomly(Dimensions, Min, Max, rnd));
+    .Create(fitness)
+    .AddRandomIndividuals(random, PopulationSize, rnd => RealVector.CreateRandomly(Dimensions, Min, Max, rnd));
 
 for (var i = 0; i < Generations; i++)
 {
@@ -40,7 +42,7 @@ for (var i = 0; i < Generations; i++)
     var sigma = MutationSigma / (1.0 + i / 10.0);
 
     population = population
-        .SelectParentsByRank()
+        .SelectParentsByRank(random)
         .Recombine(PopulationSize, RealVector.ArithmeticCrossover)
         .Mutate(PopulationSize, (v, rnd) => RealVector.GaussianMutation(v, rnd, sigma))
         .SelectElite(EliteCount)

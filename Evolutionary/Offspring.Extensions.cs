@@ -18,7 +18,7 @@ public static class Offspring
         ArgumentNullException.ThrowIfNull(offspring);
         ArgumentNullException.ThrowIfNull(children);
 
-        return new Offspring<TIndividual>(offspring.ParentPopulation, offspring.RandomParents, children);
+        return new Offspring<TIndividual>(offspring.ParentPopulation, offspring.Random, offspring.RandomParents, children);
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ public static class Offspring
     {
         ArgumentNullException.ThrowIfNull(offspring);
 
-        return new Population<TIndividual>(offspring.ParentPopulation.Fitness, offspring.ParentPopulation.Random, offspring.Children);
+        return new Population<TIndividual>(offspring.ParentPopulation.Fitness, offspring.Children);
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public static class Offspring
         ArgumentNullException.ThrowIfNull(offspring);
         ArgumentNullException.ThrowIfNull(recombine);
 
-        var random = offspring.ParentPopulation.Random;
+        var random = offspring.Random;
 
         var children = offspring.RandomParents
             .Zip(offspring.RandomParents, (a, b) => recombine(a, b, random))
@@ -118,7 +118,7 @@ public static class Offspring
         ArgumentNullException.ThrowIfNull(offspring);
         ArgumentNullException.ThrowIfNull(recombine);
 
-        var random = offspring.ParentPopulation.Random;
+        var random = offspring.Random;
 
         var children = offspring.RandomParents
             .Zip(offspring.RandomParents, (a, b) => recombine(a, b, random))
@@ -143,7 +143,7 @@ public static class Offspring
         ArgumentNullException.ThrowIfNull(offspring);
         ArgumentNullException.ThrowIfNull(mutate);
 
-        var random = offspring.ParentPopulation.Random;
+        var random = offspring.Random;
 
         var children = offspring.RandomParents
             .Select(p => mutate(p, random))

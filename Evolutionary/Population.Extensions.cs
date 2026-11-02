@@ -11,26 +11,12 @@ public static class Population
     /// </summary>
     /// <typeparam name="TIndividual">The individuals type.</typeparam>
     /// <param name="fitness">The fitness function.</param>
-    /// <param name="random">The random generator.</param>
-    /// <returns>The population.</returns>
-    public static Population<TIndividual> Create<TIndividual>(Func<TIndividual, double> fitness, Random random)
-    {
-        ArgumentNullException.ThrowIfNull(fitness);
-
-        return new Population<TIndividual>(fitness, random);
-    }
-
-    /// <summary>
-    /// Creates a new population with zero individuals.
-    /// </summary>
-    /// <typeparam name="TIndividual">The individuals type.</typeparam>
-    /// <param name="fitness">The fitness function.</param>
     /// <returns>The population.</returns>
     public static Population<TIndividual> Create<TIndividual>(Func<TIndividual, double> fitness)
     {
         ArgumentNullException.ThrowIfNull(fitness);
 
-        return new Population<TIndividual>(fitness, new Random());
+        return new Population<TIndividual>(fitness);
     }
 
     /// <summary>
@@ -39,15 +25,16 @@ public static class Population
     /// </summary>
     /// <typeparam name="TIndividual">The individuals type.</typeparam>
     /// <param name="population">The parent generation.</param>
+    /// <param name="random">The random generator that is used by the operators.</param>
     /// <returns>The offspring.</returns>
-    public static Offspring<TIndividual> SelectParentsByRank<TIndividual>(this Population<TIndividual> population)
+    public static Offspring<TIndividual> SelectParentsByRank<TIndividual>(this Population<TIndividual> population, Random random)
     {
         ArgumentNullException.ThrowIfNull(population);
+        ArgumentNullException.ThrowIfNull(random);
 
-        var random = population.Random;
         var randomParents = population.GetRandomIndividualsByRank(random);
 
-        return new Offspring<TIndividual>(population, randomParents, Enumerable.Empty<TIndividual>());
+        return new Offspring<TIndividual>(population, random, randomParents, Enumerable.Empty<TIndividual>());
     }
 
     /// <summary>
@@ -64,7 +51,7 @@ public static class Population
 
         var allIndividuals = population.Individuals.Concat(individuals);
 
-        return new Population<TIndividual>(population.Fitness, population.Random, allIndividuals);
+        return new Population<TIndividual>(population.Fitness, allIndividuals);
     }
 
     /// <summary>
@@ -72,15 +59,15 @@ public static class Population
     /// </summary>
     /// <typeparam name="TIndividual">The individuals type.</typeparam>
     /// <param name="population">The populations.</param>
+    /// <param name="random">The random generator that is passed to <paramref name="randomIndividual"/>.</param>
     /// <param name="count">The count of individuals to add.</param>
     /// <param name="randomIndividual">The function to generate the individuals.</param>
     /// <returns>The extended population.</returns>
-    public static Population<TIndividual> AddRandomIndividuals<TIndividual>(this Population<TIndividual> population, int count, Func<Random, TIndividual> randomIndividual)
+    public static Population<TIndividual> AddRandomIndividuals<TIndividual>(this Population<TIndividual> population, Random random, int count, Func<Random, TIndividual> randomIndividual)
     {
         ArgumentNullException.ThrowIfNull(population);
+        ArgumentNullException.ThrowIfNull(random);
         ArgumentNullException.ThrowIfNull(randomIndividual);
-
-        var random = population.Random;
 
         var individuals = Enumerable
             .Repeat(0, count)

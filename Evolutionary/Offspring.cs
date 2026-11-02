@@ -12,6 +12,11 @@ public class Offspring<TIndividual>
     public Population<TIndividual> ParentPopulation { get; }
 
     /// <summary>
+    /// Gets the random number generator that is used by the operators.
+    /// </summary>
+    public Random Random { get; }
+
+    /// <summary>
     /// A never ending enumeration of a random selection of the parents.
     /// </summary>
     public IEnumerable<TIndividual> RandomParents { get; }
@@ -25,15 +30,18 @@ public class Offspring<TIndividual>
     /// Creates a new offspring.
     /// </summary>
     /// <param name="parentPopulation">The parent population.</param>
+    /// <param name="random">The random generator that is used by the operators.</param>
     /// <param name="randomParents">A never ending random enumeration over the parents.</param>
     /// <param name="children">The children.</param>
-    public Offspring(Population<TIndividual> parentPopulation, IEnumerable<TIndividual> randomParents, IEnumerable<TIndividual> children)
+    public Offspring(Population<TIndividual> parentPopulation, Random random, IEnumerable<TIndividual> randomParents, IEnumerable<TIndividual> children)
     {
         ArgumentNullException.ThrowIfNull(parentPopulation);
+        ArgumentNullException.ThrowIfNull(random);
         ArgumentNullException.ThrowIfNull(randomParents);
         ArgumentNullException.ThrowIfNull(children);
 
         ParentPopulation = parentPopulation;
+        Random = random;
         RandomParents = randomParents;
         Children = children;
     }

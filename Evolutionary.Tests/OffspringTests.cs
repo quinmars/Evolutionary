@@ -12,22 +12,24 @@ namespace Evolutionary.Tests
         public Offspring<int> NullOffspring { get; } = null!;
         public Offspring<int> NonNullOffspring { get; } = Population
             .Create((int x) => Sq(x))
-            .SelectParentsByRank();
+            .SelectParentsByRank(new Random());
 
         [Test]
         public void New_NullCheck()
         {
             var array = new int[] { };
-
             var pop = Population.Create((int i) => 0.0);
+            var random = new Random();
 
-            Action act1 = () => new Offspring<int>(null!, array, array);
-            Action act2 = () => new Offspring<int>(pop, null!, array);
-            Action act3 = () => new Offspring<int>(pop, array, null!);
+            Action act1 = () => new Offspring<int>(null!, random, array, array);
+            Action act2 = () => new Offspring<int>(pop, null!, array, array);
+            Action act3 = () => new Offspring<int>(pop, random, null!, array);
+            Action act4 = () => new Offspring<int>(pop, random, array, null!);
 
             Assert.That(act1, Throws.ArgumentNullException);
             Assert.That(act2, Throws.ArgumentNullException);
             Assert.That(act3, Throws.ArgumentNullException);
+            Assert.That(act4, Throws.ArgumentNullException);
         }
 
         [Test]
@@ -44,12 +46,14 @@ namespace Evolutionary.Tests
         public void WithChildren()
         {
             Func<int, double> fitness = x => Sq(x);
+            var random = new Random();
 
             var offspring = Population.Create(fitness)
-                .SelectParentsByRank()
+                .SelectParentsByRank(random)
                 .WithChildren(new[] { 1, 2, 3 });
 
             Assert.That(offspring.Children, Is.EquivalentTo(new[] { 1, 2, 3 }));
+            Assert.That(offspring.Random, Is.SameAs(random));
         }
 
         [Test]
@@ -68,7 +72,7 @@ namespace Evolutionary.Tests
             Func<int, double> fitness = x => Sq(x);
 
             var offspring = Population.Create(fitness)
-                .SelectParentsByRank()
+                .SelectParentsByRank(new Random())
                 .WithChildren(new[] { 1, 2, 3 })
                 .AddChildren(new[] { 7, 8, 9 });
 
@@ -91,12 +95,11 @@ namespace Evolutionary.Tests
             var firstGen = Population.Create(fitness);
 
             var secondGen = firstGen
-                .SelectParentsByRank()
+                .SelectParentsByRank(new Random())
                 .WithChildren(new[] { 1, 2, 3 })
                 .ToPopulation();
 
             Assert.That(secondGen.Fitness, Is.EqualTo(firstGen.Fitness));
-            Assert.That(secondGen.Random, Is.EqualTo(firstGen.Random));
             Assert.That(secondGen.Individuals, Is.EquivalentTo(new[] { 1, 2, 3 }));
         }
 
@@ -108,7 +111,7 @@ namespace Evolutionary.Tests
             int i = 1;
             var population = Population
                 .Create(fitness)
-                .SelectParentsByRank()
+                .SelectParentsByRank(new Random())
                 .WithChildren(Enumerable.Repeat(0, 3).Select(_ => i++))
                 .ToPopulation();
 
@@ -136,6 +139,7 @@ namespace Evolutionary.Tests
 
             var offspring = new Offspring<int>(
                 population,
+                new Random(),
                 new int [] { 30, 31, 32, 33, 30, 31 },
                 new int [] { 20, 21 })
                 .SelectElite(4);
@@ -168,6 +172,7 @@ namespace Evolutionary.Tests
 
             var offspring = new Offspring<int>(
                 population,
+                new Random(),
                 new int [] { 30, 31, 32, 33, 30, 31 },
                 new int [] { 100 })
                 .Recombine(3, (a, b, r) => a + b);
@@ -186,6 +191,7 @@ namespace Evolutionary.Tests
 
             var offspring = new Offspring<int>(
                 population,
+                new Random(),
                 new int [] { 30, 31, 32, 33, 30, 31 },
                 new int [] { 100 })
                 .Recombine(3, (a, b, r) => new [] { a, b });
@@ -214,6 +220,7 @@ namespace Evolutionary.Tests
 
             var offspring = new Offspring<int>(
                 population,
+                new Random(),
                 new int [] { 30, 31, 32, 33, 30, 31 },
                 new int [] { 100 })
                 .Mutate(3, (a, r) => a + 100);
@@ -235,7 +242,7 @@ namespace Evolutionary.Tests
             Func<int, double> fitness = x => Sq(x);
 
             var offspring = Population.Create(fitness)
-                .SelectParentsByRank()
+                .SelectParentsByRank(new Random())
                 .WithChildren(new[] { 6, 5, 3, 1, 8, 2 })
                 .SelectSurvivors(3);
 
@@ -258,7 +265,7 @@ namespace Evolutionary.Tests
             int i = 1;
             var offspring = Population
                 .Create(fitness)
-                .SelectParentsByRank()
+                .SelectParentsByRank(new Random())
                 .WithChildren(Enumerable.Repeat(0, 3).Select(_ => i++))
                 .Eagerly();
 

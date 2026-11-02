@@ -14,11 +14,6 @@ public class Population<TIndividual>
     public Func<TIndividual, double> Fitness { get; }
 
     /// <summary>
-    /// Gets the random number generator that is used by the operators.
-    /// </summary>
-    public Random Random { get; }
-
-    /// <summary>
     /// The individuals of the population. The individuals are order by their fitness increasingly.
     /// Hence the first element is always the best fitting individual.
     /// </summary>
@@ -28,14 +23,11 @@ public class Population<TIndividual>
     /// Creates a new population with zero individuals.
     /// </summary>
     /// <param name="fitness">The fitness function.</param>
-    /// <param name="random">The random generator.</param>
-    public Population(Func<TIndividual, double> fitness, Random random)
+    public Population(Func<TIndividual, double> fitness)
     {
         ArgumentNullException.ThrowIfNull(fitness);
-        ArgumentNullException.ThrowIfNull(random);
 
         Fitness = fitness;
-        Random = random;
         Individuals = _emptyIndividuals;
     }
 
@@ -43,16 +35,13 @@ public class Population<TIndividual>
     /// Creates a new population with some individuals.
     /// </summary>
     /// <param name="fitness">The fitness function.</param>
-    /// <param name="random">The random generator.</param>
     /// <param name="individuals">The individuals.</param>
-    public Population(Func<TIndividual, double> fitness, Random random, IEnumerable<TIndividual> individuals)
+    public Population(Func<TIndividual, double> fitness, IEnumerable<TIndividual> individuals)
     {
         ArgumentNullException.ThrowIfNull(fitness);
-        ArgumentNullException.ThrowIfNull(random);
         ArgumentNullException.ThrowIfNull(individuals);
 
         Fitness = fitness;
-        Random = random;
         Individuals = individuals
             .OrderBy(fitness)
             .ToList();

@@ -11,15 +11,20 @@ const double MutationProbability = 1.0 / Length;
 // number of ones: an individual with all bits set has fitness 0.
 Func<BitString, double> fitness = bits => Length - bits.PopCount();
 
+// The random number generator is passed explicitly to every operation
+// that starts a new generation. Since it is not owned by the population,
+// several offspring generations can be bred independently in parallel.
+var random = new Random(12345);
+
 var population = Population
-    .Create(fitness, new Random(12345))
-    .AddRandomIndividuals(30, rnd => BitString.CreateRandomly(Length, rnd));
+    .Create(fitness)
+    .AddRandomIndividuals(random, 30, rnd => BitString.CreateRandomly(Length, rnd));
 
 int i;
 for (i = 0; i < 200; i++)
 {
     population = population
-        .SelectParentsByRank()
+        .SelectParentsByRank(random)
         .Recombine(20, BitString.UniformCrossover)
         .Mutate(20, (bits, rnd) => BitString.FlipMutation(bits, rnd, MutationProbability))
         .SelectElite(2)

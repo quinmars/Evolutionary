@@ -163,14 +163,16 @@ public class RunViewModel : ReactiveObject
 
         var n = param.QueenCount;
 
+        var random = new Random();
+
         return Observable
             .Repeat(Unit.Default, Scheduler.Default)
             .Scan(
                 seed: Population
                     .Create(fitness)
-                    .AddRandomIndividuals(20, rnd => Permutation.CreateRandomly(n, rnd)),
+                    .AddRandomIndividuals(random, 20, rnd => Permutation.CreateRandomly(n, rnd)),
                 accumulator: (population, _) => population
-                    .SelectParentsByRank()
+                    .SelectParentsByRank(random)
                     .SelectElite(param.EliteSelection)
                     .Recombine(param.CycleCrossover, Permutation.CycleCrossover)
                     .Recombine(param.PartiallyMappedCrossover, Permutation.PartiallyMappedCrossover)
