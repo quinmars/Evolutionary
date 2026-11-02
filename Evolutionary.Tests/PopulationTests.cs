@@ -72,54 +72,65 @@ namespace Evolutionary.Tests
         }
 
         [Test]
+        public void AddIndividuals3()
+        {
+            Func<int, double> fitness = x => Sq(x);
+
+            int i = 1;
+            var population = Population
+                .Create(fitness)
+                .AddIndividuals(10, () => i++);
+
+            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
+        }
+
+        [Test]
+        public void AddIndividuals4()
+        {
+            Func<int, double> fitness = x => Sq(x);
+
+            int i = 1;
+            var population = Population
+                .Create(fitness)
+                .AddIndividuals(4, new Random(), _ => i++)
+                .AddIndividuals(6, new Random(), _ => i++);
+
+            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
+        }
+
+        [Test]
+        public void AddIndividuals5()
+        {
+            Func<int, double> fitness = x => Sq(x);
+
+            var population = Population
+                .Create(fitness)
+                .AddIndividuals(4, 100, p => p + 1)
+                .AddIndividuals(6, 200, p => p + 1);
+
+            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 101, 101, 101, 101, 201, 201, 201, 201, 201, 201 }));
+        }
+
+        [Test]
         public void AddIndividuals_NullChecks()
         {
             Action act1 = () => NonNullPopulation.AddIndividuals(null!);
             Action act2 = () => NullPopulation.AddIndividuals(new[] { 1 });
-
-            Assert.That(act1, Throws.ArgumentNullException);
-            Assert.That(act2, Throws.ArgumentNullException);
-        }
-
-        [Test]
-        public void AddRandomIndividuals1()
-        {
-            Func<int, double> fitness = x => Sq(x);
-            var random = new Random();
-
-            int i = 1;
-            var population = Population
-                .Create(fitness)
-                .AddRandomIndividuals(random, 10, _ => i++);
-
-            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
-        }
-
-        [Test]
-        public void AddRandomIndividuals2()
-        {
-            Func<int, double> fitness = x => Sq(x);
-            var random = new Random();
-
-            int i = 1;
-            var population = Population
-                .Create(fitness)
-                .AddRandomIndividuals(random, 4, _ => i++)
-                .AddRandomIndividuals(random, 6, _ => i++);
-
-            Assert.That(population.Individuals, Is.EquivalentTo(new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }));
-        }
-
-        [Test]
-        public void AddRandomIndividuals_NullChecks()
-        {
-            Action act1 = () => NonNullPopulation.AddRandomIndividuals(null!, 200, rnd => 0);
-            Action act2 = () => NullPopulation.AddRandomIndividuals(new Random(), 200, rnd => 0);
-            Action act3 = () => NonNullPopulation.AddRandomIndividuals(new Random(), 200, null!);
+            Action act3 = () => NonNullPopulation.AddIndividuals(10, (Func<int>)null!);
+            Action act4 = () => NullPopulation.AddIndividuals(10, () => 0);
+            Action act5 = () => NonNullPopulation.AddIndividuals(10, new Random(), (Func<Random, int>)null!);
+            Action act6 = () => NullPopulation.AddIndividuals(10, new Random(), rnd => 0);
+            Action act7 = () => NonNullPopulation.AddIndividuals(10, new Random(), new Random(), (Func<Random, Random, int>)null!);
+            Action act8 = () => NullPopulation.AddIndividuals(10, new Random(), new Random(), (a, b) => 0);
 
             Assert.That(act1, Throws.ArgumentNullException);
             Assert.That(act2, Throws.ArgumentNullException);
             Assert.That(act3, Throws.ArgumentNullException);
+            Assert.That(act4, Throws.ArgumentNullException);
+            Assert.That(act5, Throws.ArgumentNullException);
+            Assert.That(act6, Throws.ArgumentNullException);
+            Assert.That(act7, Throws.ArgumentNullException);
+            Assert.That(act8, Throws.ArgumentNullException);
         }
 
         [Test]

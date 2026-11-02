@@ -34,7 +34,7 @@ var random = new Random(12345);
 
 var population = Population
     .Create(fitness)
-    .AddRandomIndividuals(random, PopulationSize, rnd => RealVector.CreateRandomly(Dimensions, Min, Max, rnd));
+    .AddIndividuals(PopulationSize, () => RealVector.CreateRandomly(Dimensions, Min, Max, random));
 
 for (var i = 0; i < Generations; i++)
 {

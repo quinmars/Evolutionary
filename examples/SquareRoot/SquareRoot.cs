@@ -1,4 +1,4 @@
-﻿//
+//
 // In this example we calculate the square root of 2.
 //
 using Evolutionary;
@@ -19,7 +19,7 @@ var random = new Random();
 
 var population = Population
     .Create(fitness)
-    .AddRandomIndividuals(random, 20, rnd => rnd.NextDouble(0, dataSet));
+    .AddIndividuals(20, () => random.NextDouble(0, dataSet));
 
 // We will iterate here over 50 generations. A more sophisticated approach
 // would be to consider the development of the fitness value of the best

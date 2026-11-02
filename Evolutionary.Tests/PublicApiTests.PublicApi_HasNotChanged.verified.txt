@@ -73,7 +73,9 @@
     public static class Population
     {
         public static Evolutionary.Population<TIndividual> AddIndividuals<TIndividual>(this Evolutionary.Population<TIndividual> population, System.Collections.Generic.IEnumerable<TIndividual> individuals) { }
-        public static Evolutionary.Population<TIndividual> AddRandomIndividuals<TIndividual>(this Evolutionary.Population<TIndividual> population, System.Random random, int count, System.Func<System.Random, TIndividual> randomIndividual) { }
+        public static Evolutionary.Population<TIndividual> AddIndividuals<TIndividual>(this Evolutionary.Population<TIndividual> population, int count, System.Func<TIndividual> individual) { }
+        public static Evolutionary.Population<TIndividual> AddIndividuals<TIndividual, TParam>(this Evolutionary.Population<TIndividual> population, int count, TParam param, System.Func<TParam, TIndividual> individual) { }
+        public static Evolutionary.Population<TIndividual> AddIndividuals<TIndividual, TParam1, TParam2>(this Evolutionary.Population<TIndividual> population, int count, TParam1 param1, TParam2 param2, System.Func<TParam1, TParam2, TIndividual> individual) { }
         public static Evolutionary.Population<TIndividual> Create<TIndividual>(System.Func<TIndividual, double> fitness) { }
         public static Evolutionary.Offspring<TIndividual> SelectParentsByRank<TIndividual>(this Evolutionary.Population<TIndividual> population, System.Random random) { }
     }

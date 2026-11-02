@@ -18,7 +18,7 @@ var random = new Random(12345);
 
 var population = Population
     .Create(fitness)
-    .AddRandomIndividuals(random, 30, rnd => BitString.CreateRandomly(Length, rnd));
+    .AddIndividuals(30, Length, random, BitString.CreateRandomly);
 
 int i;
 for (i = 0; i < 200; i++)

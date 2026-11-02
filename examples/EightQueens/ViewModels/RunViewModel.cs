@@ -170,7 +170,7 @@ public class RunViewModel : ReactiveObject
             .Scan(
                 seed: Population
                     .Create(fitness)
-                    .AddRandomIndividuals(random, 20, rnd => Permutation.CreateRandomly(n, rnd)),
+                    .AddIndividuals(20, n, random, Permutation.CreateRandomly),
                 accumulator: (population, _) => population
                     .SelectParentsByRank(random)
                     .SelectElite(param.EliteSelection)
