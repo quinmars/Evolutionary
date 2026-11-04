@@ -1,6 +1,6 @@
 # Evolutionary
 
-[![Actions Status](https://github.com/quinmars/evolutionary/workflows/Unit%20Tests/badge.svg)](https://github.com/quinmars/evolutionary/actions)
+[![nuget](https://img.shields.io/nuget/v/Evolutionary)](https://www.nuget.org/packages/Evolutionary) [![Actions Status](https://github.com/quinmars/evolutionary/workflows/Unit%20Tests/badge.svg)](https://github.com/quinmars/evolutionary/actions)
 
 <img src="brand/evolutionary-finch.svg" width="96" align="right" alt="Evolutionary – Darwinfink, in Kohle">
 
@@ -8,6 +8,10 @@ Evolutionary algorithms come in many different flavors. The representation of th
 
 Therefore `Evolutionary` uses for the main logic only two immutable types that are transformed  by operators. All operators are implemented as extensions method. Hence, it is easy to add custom operators. The `Population<TIndividual>` class is an immutable snapshot that comprises the collection of all individuals and the fitness function. The `Offspring<TIndividual>` generation happens with the offspring class. Besides a reference to the parent populations, it owns the random number generator, offers a random enumeration of the parent individuals and an enumerations of the children generated so far. Once the generation phase is finished, a new population will be generated from the offspring.
 The library requires [.NET 10](https://dotnet.microsoft.com/download/dotnet/10.0).
+
+## Documentation
+
+The complete API documentation is available at [https://quinmars.github.io/Evolutionary/](https://quinmars.github.io/Evolutionary/). It is rebuilt and published automatically with every push to the master branch.
 
 ## A complete example
 
